@@ -1,0 +1,21 @@
+@import "../../../common.scss";
+
+.box-of-card {
+  position: relative;
+  flex-grow: 1;
+
+  & > * {
+    display: inline-block;
+  }
+}
+
+.box-of-card-sprite {
+  position: relative;
+  @extend %centerize;
+}
+
+.animated-played-card {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}

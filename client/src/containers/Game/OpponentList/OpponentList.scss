@@ -1,0 +1,24 @@
+@import "../../../utilities/scss/functions/createPixelBorder.scss";
+@import "../../../common.scss";
+
+.opponent-list {
+  @extend %grid-container;
+  margin: 4px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.opponent-card {
+  @extend %grid-container;
+  margin: 4px;
+  box-shadow: createPixelBorder(4px, #2b2e4a);
+}
+
+.opponent-name {
+  background-color: #903749;
+  color: #ffffff;
+  text-align: center;
+  padding: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 4px solid #2b2e4a;
+}

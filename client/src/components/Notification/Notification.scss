@@ -1,0 +1,38 @@
+$border-width: 4px;
+
+@mixin notiVariant($border-color, $background-color, $shadow-color) {
+  box-shadow: $border-width 0px 0px 0px $border-color, (-$border-width) 0px 0px 0px $border-color,
+    0px (-$border-width) 0px 0px $border-color, inset 0px (-$border-width * 2) 0px 0px $shadow-color;
+  background-color: $background-color;
+}
+
+.notification {
+  width: 70%;
+  margin: $border-width auto 0px auto;
+  padding: $border-width * 2;
+  color: white;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.3s;
+
+  &.hide {
+    transform: translateY(calc(100% + #{$border-width}));
+  }
+
+  &.error {
+    @include notiVariant(#5e140b, #ff1b00, #bc1400);
+  }
+
+  &.info {
+    @include notiVariant(#16474a, #1ca27f, #136c55);
+  }
+
+  &.warning {
+    @include notiVariant(#746029, #d1b41a, #907c12);
+  }
+
+  &.success {
+    @include notiVariant(#246b24, #47ac18, #3a8b14);
+  }
+}

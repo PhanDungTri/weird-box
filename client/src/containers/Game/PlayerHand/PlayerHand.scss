@@ -1,0 +1,8 @@
+@import "../../../common.scss";
+
+.player-hand {
+  @extend %grid-container;
+  margin: 8px;
+  grid-template-columns: repeat(6, auto);
+  justify-content: center;
+}

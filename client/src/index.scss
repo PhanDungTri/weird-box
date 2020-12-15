@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "Dogica Pixel";
+  src: url("./assets/fonts/dogicapixel.ttf");
+}
+
+@font-face {
+  font-family: "Free Pixel";
+  src: url("./assets/fonts/FreePixel.ttf");
+}
+
+html {
+  font-size: 12px;
+  font-family: "Free Pixel";
+  image-rendering: optimizeSpeed;
+  image-rendering: pixelated;
+}
+
+#notification {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+}

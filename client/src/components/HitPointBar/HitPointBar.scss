@@ -1,0 +1,24 @@
+@import "../../utilities/scss/functions/createPixelBorder.scss";
+
+.hit-point-bar {
+  position: relative;
+  margin: 8px;
+  box-shadow: createPixelBorder(4px, #2b2e4a);
+}
+
+.hit-point {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: bold;
+  color: #2b2e4a;
+}
+
+.hit-point-percent {
+  background-color: #47ac18;
+  height: 16px;
+  box-shadow: inset 0px 8px 0px 0px #99e550;
+  transition: 0.3s;
+}
