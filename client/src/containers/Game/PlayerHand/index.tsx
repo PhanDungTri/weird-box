@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useTransition, animated } from "react-spring";
 import { useRecoilValue } from "recoil";
 import Card from "../../../components/Card";
 import useSocketEvent from "../../../hooks/useSocketEvent";
@@ -12,6 +13,21 @@ const PlayerHand = (): JSX.Element => {
   const self = useRef<HTMLDivElement>(null);
   const [cardList, setCardList] = useState<ICard[]>([]);
   const { chosenCard, chooseCard } = useGameContext();
+  const transitions = useTransition(cardList, (card) => card.id, {
+    from: {
+      position: "relative",
+      transform: "translateY(40px)",
+      opacity: 0.5,
+    },
+    enter: {
+      transform: "translateY(0px)",
+      scale: 1,
+      opacity: 1,
+    },
+    leave: {
+      opacity: 0,
+    },
+  });
 
   const addCard = (card: ICard) => setCardList((cards) => [...cards, card]);
 
@@ -30,8 +46,10 @@ const PlayerHand = (): JSX.Element => {
   return (
     <>
       <div className="player-hand" ref={self}>
-        {cardList.map((c) => (
-          <Card card={c} key={c.id} onChoose={() => playCard(c.id)} isChosen={chosenCard === c.id} />
+        {transitions.map(({ item, key, props }) => (
+          <animated.div key={key} style={props}>
+            <Card card={item} key={item.id} onChoose={() => playCard(item.id)} isChosen={chosenCard === item.id} />
+          </animated.div>
         ))}
       </div>
     </>

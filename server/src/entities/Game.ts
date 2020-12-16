@@ -3,6 +3,7 @@ import generateUniqueId from "../utilities/generateUniqueId";
 import Card, { CardAction } from "./Card";
 import Deck from "./Deck";
 import Player from "./Player";
+import ANIMATION_DURATION from "../../../shared/animationDuration";
 
 const STARTING_HAND = 5;
 
@@ -101,7 +102,7 @@ class Game {
       });
     }
 
-    this.nextPlayer();
+    setTimeout(this.nextPlayer.bind(this), ANIMATION_DURATION.ConsumeCard);
   }
 
   public nextPlayer(): void {

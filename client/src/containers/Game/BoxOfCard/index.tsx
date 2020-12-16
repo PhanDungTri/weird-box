@@ -8,6 +8,7 @@ import BoxOfCardDealCardSprite from "../../../assets/sprites/box_of_cards_deal_c
 import BoxOfCardSprite from "../../../assets/sprites/box_of_cards.png";
 import "./BoxOfCard.scss";
 import { animated, useTransition } from "react-spring";
+import ANIMATION_DURATION from "../../../../../shared/animationDuration";
 
 interface IGameUpdateRes {
   playedCard: ICard;
@@ -36,12 +37,12 @@ const BoxOfCard = (): JSX.Element => {
     setChargePoint(chargePoint);
     setPlayerCard(playedCard);
     setConsumeAnimation(true);
-    setTimeout(() => setConsumeAnimation(false), 600);
+    setTimeout(() => setConsumeAnimation(false), ANIMATION_DURATION.ConsumeCard);
   };
 
   const dealCard = (): void => {
     setDealCardAnimation(true);
-    setTimeout(() => setDealCardAnimation(false), 700);
+    setTimeout(() => setDealCardAnimation(false), ANIMATION_DURATION.DealCard);
   };
 
   useSocketEvent("update game", updateGame);
