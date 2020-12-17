@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SOCKET_EVENT from "../../../../shared/socketEvent";
+import SOCKET_EVENT from "../../../../shared/src/socketEvent";
 import { useGameContext } from "../../containers/Game/Game.context";
 import useSocketEvent from "../../hooks/useSocketEvent";
 import "./HitPointBar.scss";

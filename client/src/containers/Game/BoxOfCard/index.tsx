@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { animated, useTransition } from "react-spring";
-import ANIMATION_DURATION from "../../../../../shared/animationDuration";
-import SOCKET_EVENT from "../../../../../shared/socketEvent";
+import ANIMATION_DURATION from "../../../../../shared/src/animationDuration";
+import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
 import BoxOfCardSprite from "../../../assets/sprites/box_of_cards.png";
 import BoxOfCardDealCardSprite from "../../../assets/sprites/box_of_cards_deal_card.png";
 import Card from "../../../components/Card";

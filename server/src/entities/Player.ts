@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import SOCKET_EVENT from "../../../shared/socketEvent";
+import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import Card from "./Card";
 import Game from "./Game";
