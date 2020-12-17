@@ -21,17 +21,10 @@ const useStepAnimation = ({ step, tick, repeat = -1, start = true }: AnimationPa
   const isMaxStep = useRef(currentStep === step - 1);
   const repeatCounter = useRef(0);
 
-  const reset = (): void => {
-    frame.current = 0;
-    isMaxStep.current = false;
-    repeatCounter.current = 0;
-    setCurrentStep(0);
-  };
-
   const animate = (): void => {
     if (isMaxStep.current && repeat !== -1) {
       if (repeat === 0 || repeatCounter.current === repeat) {
-        reset();
+        setTrigger(false);
         return;
       }
 
@@ -54,6 +47,12 @@ const useStepAnimation = ({ step, tick, repeat = -1, start = true }: AnimationPa
 
   useEffect(() => {
     if (trigger && step > 1) animate();
+    else {
+      frame.current = 0;
+      isMaxStep.current = false;
+      repeatCounter.current = 0;
+      setCurrentStep(0);
+    }
   }, [trigger]);
 
   return { currentStep, animate: setTrigger };

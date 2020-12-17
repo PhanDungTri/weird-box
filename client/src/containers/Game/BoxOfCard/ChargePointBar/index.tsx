@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ANIMATION_DURATION from "../../../../../../shared/animationDuration";
 import useSocketEvent from "../../../../hooks/useSocketEvent";
 import useStepAnimation from "../../../../hooks/useStepAnimation";
 import "./ChargePointBar.scss";
@@ -29,7 +28,6 @@ const ChargePointBar = ({ value }: ChargePointProps): JSX.Element => {
 
   const dealCard = (): void => {
     animate(true);
-    setTimeout(() => animate(false), ANIMATION_DURATION.DealCard);
   };
 
   useSocketEvent("take card", dealCard);
