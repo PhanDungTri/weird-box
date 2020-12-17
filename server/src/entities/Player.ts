@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+import SOCKET_EVENT from "../../../shared/socketEvent";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import Card from "./Card";
 import Game from "./Game";
@@ -10,7 +11,7 @@ class Player {
   private hitPoint = 0;
 
   constructor(private socket: Socket) {
-    socket.on("play card", this.playCard.bind(this));
+    socket.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
   }
 
   public setGame(game: Game): void {
@@ -46,18 +47,20 @@ class Player {
         this.game.consumeCard(card);
         this.response("play card ok");
       } else {
-        this.response("error", "Not your turn");
+        this.response(SOCKET_EVENT.Error, "Not your turn");
       }
     }
+
+    // TODO validate card and check if player is in any game.
   }
 
   public response(event: string, data?: unknown): void {
     this.socket.emit(event, data);
   }
 
-  public takeCard(card: Card): void {
-    this.cards.push(card);
-    this.response("take card", card);
+  public takeCards(...cards: Card[]): void {
+    this.cards.push(...cards);
+    this.response("take card", cards);
   }
 
   public takeDamage(damage: number): void {
@@ -65,7 +68,7 @@ class Player {
     if (this.hitPoint < 0) this.hitPoint = 0;
 
     if (this.game) {
-      this.game.notifyAll("player HP changed", {
+      this.game.notifyAll(SOCKET_EVENT.HitPointChanged, {
         id: this.getId(),
         difference: -damage,
       });

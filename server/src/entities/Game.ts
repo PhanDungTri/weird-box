@@ -1,9 +1,10 @@
+import ANIMATION_DURATION from "../../../shared/animationDuration";
+import SOCKET_EVENT from "../../../shared/socketEvent";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import generateUniqueId from "../utilities/generateUniqueId";
 import Card, { CardAction } from "./Card";
 import Deck from "./Deck";
 import Player from "./Player";
-import ANIMATION_DURATION from "../../../shared/animationDuration";
 
 const STARTING_HAND = 5;
 
@@ -28,27 +29,34 @@ class Game {
     return this.chargePoint;
   }
 
-  private dealCard(player: Player): void {
+  private dealCard(): Card {
     if (this.drawDeck.getSize() === 0) {
       this.drawDeck = Deck.copy(this.discardDeck);
       this.drawDeck.shuffle();
       this.discardDeck.clear();
     }
 
-    const card = this.drawDeck.pop();
-
-    if (card) {
-      player.takeCard(card);
-    }
-
+    return this.drawDeck.pop() as Card;
     // TODO handle null card error
   }
 
   public start(): void {
+    /**
+     * WHY?
+     * If for each card given to a player, there is an event sent to a client then the server will sends up to 20 same events to the clients.
+     * To reduce the number of events, the server will wait for the players to take enough number of starting cards before sending the events to client.
+     * With above approach, the server will only send up to 4 events to all clients in the game.
+     */
+    const startingHands: Card[][] = [];
+
     for (let i = 0; i < STARTING_HAND; i++) {
-      for (const p of this.players) {
-        this.dealCard(p);
+      for (let j = 0; j < this.players.length; j++) {
+        startingHands[j].push(this.dealCard());
       }
+    }
+
+    for (let j = 0; j < this.players.length; j++) {
+      this.players[j].takeCards(...startingHands[j]);
     }
 
     this.nextPlayer();
@@ -76,6 +84,8 @@ class Game {
   }
 
   public consumeCard(card: Card): void {
+    this.notifyAll(SOCKET_EVENT.CardPlayed, card);
+
     let penalty = 0;
 
     if (card.getAction() === CardAction.Charge)
@@ -90,16 +100,14 @@ class Game {
 
     if (penalty > 0) {
       this.chargePoint = 0;
+      this.notifyAll(SOCKET_EVENT.ChargePointBarExplode);
       this.getCurrentPlayer().takeDamage(penalty);
     }
 
     this.discardDeck.push(card);
 
     for (const p of this.players) {
-      p.response("update game", {
-        playedCard: card,
-        chargePoint: this.chargePoint,
-      });
+      p.response(SOCKET_EVENT.ChargePointChanged, this.chargePoint);
     }
 
     setTimeout(this.nextPlayer.bind(this), ANIMATION_DURATION.ConsumeCard);
@@ -115,11 +123,11 @@ class Game {
 
     const currentPlayer = this.getCurrentPlayer();
 
-    currentPlayer.response("info", "It's your turn");
-    this.dealCard(currentPlayer);
+    currentPlayer.response(SOCKET_EVENT.Info, "It's your turn");
+    currentPlayer.takeCards(this.dealCard());
   }
 
-  public notifyAll(event: string, data: unknown): void {
+  public notifyAll(event: string, data?: unknown): void {
     this.players.forEach((p) => p.response(event, data));
   }
 }
