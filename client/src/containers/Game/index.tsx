@@ -20,7 +20,7 @@ const Game = (): JSX.Element => {
   });
 
   return (
-    <div className="game-layout" onClick={() => chooseCard("")}>
+    <div className="game" onClick={() => chooseCard("")}>
       <OpponentList />
       <BoxOfCard />
       {maxHP > 0 && <PlayerStatus />}

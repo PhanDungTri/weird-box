@@ -42,7 +42,7 @@ const BoxOfCard = (): JSX.Element => {
 
   const dealCard = (): void => {
     setDealCardAnimation(true);
-    setTimeout(() => setDealCardAnimation(false), ANIMATION_DURATION.DealCard);
+    setTimeout(() => setDealCardAnimation(false), 10000);
   };
 
   useSocketEvent("update game", updateGame);
@@ -51,8 +51,8 @@ const BoxOfCard = (): JSX.Element => {
   return (
     <div className="box-of-card">
       <div className="box-of-card-sprite">
-        {!dealCardAnimation ? (
-          <Sprite key="deal" size={[59, 59]} scale={3} src={BoxOfCardDealCardSprite} step={10} tick={3} />
+        {dealCardAnimation ? (
+          <Sprite key="deal" size={[59, 59]} scale={3} src={BoxOfCardDealCardSprite} step={10} tick={3} repeat={0} />
         ) : (
           <Sprite key="idle" size={[59, 59]} scale={3} src={BoxOfCardSprite} />
         )}

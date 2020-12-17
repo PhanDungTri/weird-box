@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import ANIMATION_DURATION from "../../../../../../shared/animationDuration";
+import useSocketEvent from "../../../../hooks/useSocketEvent";
+import useStepAnimation from "../../../../hooks/useStepAnimation";
 import "./ChargePointBar.scss";
 
 interface ChargePointProps {
@@ -17,9 +20,19 @@ const charge = (value: number): boolean[] => {
   return arr;
 };
 
+const offset = [0, 4, 4, 16, 16, 16, -12, -20, 4, 0];
+
 const ChargePointBar = ({ value }: ChargePointProps): JSX.Element => {
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(value));
   const [state, setState] = useState<ChargePointBarState>("safe");
+  const { currentStep, animate } = useStepAnimation({ step: offset.length, tick: 3, repeat: 0, start: false });
+
+  const dealCard = (): void => {
+    animate(true);
+    setTimeout(() => animate(false), ANIMATION_DURATION.DealCard);
+  };
+
+  useSocketEvent("take card", dealCard);
 
   useEffect(() => {
     setNodeStatus(charge(value));
@@ -30,7 +43,12 @@ const ChargePointBar = ({ value }: ChargePointProps): JSX.Element => {
   }, [value]);
 
   return (
-    <div className={`charge-point-bar ${state}`}>
+    <div
+      className={`charge-point-bar ${state}`}
+      style={{
+        transform: `translate(calc(-50% - 8px), ${offset[currentStep]}px)`,
+      }}
+    >
       {nodes.map((isCharged, i) => (
         <div className={`charge-point ${!isCharged ? "empty" : ""}`} key={i} />
       ))}
