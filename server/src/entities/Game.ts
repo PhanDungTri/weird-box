@@ -1,5 +1,5 @@
-import ANIMATION_DURATION from "../../../shared/animationDuration";
-import SOCKET_EVENT from "../../../shared/socketEvent";
+import ANIMATION_DURATION from "../../../shared/src/animationDuration";
+import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import generateUniqueId from "../utilities/generateUniqueId";
 import Card, { CardAction } from "./Card";
@@ -73,15 +73,16 @@ class Game {
 
     const currentPlayer = this.getCurrentPlayer();
 
-    currentPlayer.response(SOCKET_EVENT.Info, "It's your turn");
+    this.notifyAll(SOCKET_EVENT.StartTurn, currentPlayer.getId());
     currentPlayer.takeCards(this.dealCard());
+    currentPlayer.response(SOCKET_EVENT.Info, "It's your turn");
   }
 
   public addPlayer(player: Player): void {
     player.setGame(this);
     this.players.push(player);
 
-    player.response("get game info", {
+    player.response(SOCKET_EVENT.GetGameInfo, {
       maxHP: this.maxHP,
     });
 

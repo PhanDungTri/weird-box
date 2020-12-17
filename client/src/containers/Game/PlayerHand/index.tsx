@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { useRecoilValue } from "recoil";
-import SOCKET_EVENT from "../../../../../shared/socketEvent";
+import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
 import Card from "../../../components/Card";
 import useSocketEvent from "../../../hooks/useSocketEvent";
 import ICard from "../../../interfaces/ICard";
@@ -13,7 +13,7 @@ const PlayerHand = (): JSX.Element => {
   const socket = useRecoilValue(socketState);
   const self = useRef<HTMLDivElement>(null);
   const [hand, setHand] = useState<ICard[]>([]);
-  const { chosenCard, chooseCard } = useGameContext();
+  const { chosenCard, chooseCard, currentPlayer } = useGameContext();
   const transitions = useTransition(hand, (card) => card.id, {
     from: {
       position: "relative",
@@ -37,7 +37,7 @@ const PlayerHand = (): JSX.Element => {
   const playCard = (id: string): void => {
     // TODO check if in-turn
     if (chosenCard !== id) chooseCard(id);
-    else {
+    else if (currentPlayer === socket.id) {
       socket.emit(SOCKET_EVENT.PlayCard, id);
       socket.once(SOCKET_EVENT.CardPlayed, () => {
         setHand(hand.filter((c) => c.id !== id));

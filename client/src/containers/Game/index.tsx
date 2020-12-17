@@ -1,23 +1,14 @@
 import React from "react";
 import Notification from "../../components/Notification";
-import { GameContextProvider, useGameContext } from "./Game.context";
-import PlayerHand from "./PlayerHand";
 import BoxOfCard from "./BoxOfCard";
-import PlayerStatus from "./PlayerStatus";
-import OpponentList from "./OpponentList";
-import useSocketEvent from "../../hooks/useSocketEvent";
+import { GameContextProvider, useGameContext } from "./Game.context";
 import "./Game.scss";
-
-interface GameInfoRes {
-  maxHP: number;
-}
+import OpponentList from "./OpponentList";
+import PlayerHand from "./PlayerHand";
+import PlayerStatus from "./PlayerStatus";
 
 const Game = (): JSX.Element => {
-  const { chooseCard, setMaxHP, maxHP } = useGameContext();
-
-  useSocketEvent("get game info", ({ maxHP }: GameInfoRes) => {
-    setMaxHP(maxHP);
-  });
+  const { chooseCard, maxHP } = useGameContext();
 
   return (
     <div className="game" onClick={() => chooseCard("")}>
