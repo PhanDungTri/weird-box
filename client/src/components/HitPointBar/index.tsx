@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SOCKET_EVENT from "../../../../shared/socketEvent";
 import { useGameContext } from "../../containers/Game/Game.context";
 import useSocketEvent from "../../hooks/useSocketEvent";
 import "./HitPointBar.scss";
@@ -22,7 +23,7 @@ const HitPointBar = ({ owner }: HitPointBarProps): JSX.Element => {
     }
   };
 
-  useSocketEvent("player HP changed", changeHitPoint);
+  useSocketEvent(SOCKET_EVENT.HitPointChanged, changeHitPoint);
 
   return (
     <div className="hit-point-bar">

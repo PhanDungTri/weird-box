@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
-import { useTransition, animated } from "react-spring";
+import { animated, useTransition } from "react-spring";
 import { useRecoilValue } from "recoil";
+import SOCKET_EVENT from "../../../../../shared/socketEvent";
 import Card from "../../../components/Card";
 import useSocketEvent from "../../../hooks/useSocketEvent";
 import ICard from "../../../interfaces/ICard";
@@ -11,9 +12,9 @@ import "./PlayerHand.scss";
 const PlayerHand = (): JSX.Element => {
   const socket = useRecoilValue(socketState);
   const self = useRef<HTMLDivElement>(null);
-  const [cardList, setCardList] = useState<ICard[]>([]);
+  const [hand, setHand] = useState<ICard[]>([]);
   const { chosenCard, chooseCard } = useGameContext();
-  const transitions = useTransition(cardList, (card) => card.id, {
+  const transitions = useTransition(hand, (card) => card.id, {
     from: {
       position: "relative",
       transform: "translateY(40px)",
@@ -29,16 +30,17 @@ const PlayerHand = (): JSX.Element => {
     },
   });
 
-  const addCard = (card: ICard) => setCardList((cards) => [...cards, card]);
+  const addCards = (cards: ICard[]) => setHand((list) => [...list, ...cards]);
 
-  useSocketEvent("take card", addCard);
+  useSocketEvent(SOCKET_EVENT.TakeCard, addCards);
 
   const playCard = (id: string): void => {
+    // TODO check if in-turn
     if (chosenCard !== id) chooseCard(id);
     else {
-      socket.emit("play card", id);
-      socket.once("play card ok", () => {
-        setCardList(cardList.filter((c) => c.id !== id));
+      socket.emit(SOCKET_EVENT.PlayCard, id);
+      socket.once(SOCKET_EVENT.CardPlayed, () => {
+        setHand(hand.filter((c) => c.id !== id));
       });
     }
   };

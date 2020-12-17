@@ -35,9 +35,9 @@ class Game {
       this.drawDeck.shuffle();
       this.discardDeck.clear();
     }
+    // TODO handle null card error
 
     return this.drawDeck.pop() as Card;
-    // TODO handle null card error
   }
 
   public start(): void {
@@ -51,6 +51,7 @@ class Game {
 
     for (let i = 0; i < STARTING_HAND; i++) {
       for (let j = 0; j < this.players.length; j++) {
+        if (!startingHands[j]) startingHands[j] = [];
         startingHands[j].push(this.dealCard());
       }
     }
@@ -60,6 +61,20 @@ class Game {
     }
 
     this.nextPlayer();
+  }
+
+  public nextPlayer(): void {
+    if (this.currentPlayerIndex === -1) {
+      this.currentPlayerIndex = 0;
+    } else {
+      this.currentPlayerIndex =
+        (this.currentPlayerIndex + 1) % this.players.length;
+    }
+
+    const currentPlayer = this.getCurrentPlayer();
+
+    currentPlayer.response(SOCKET_EVENT.Info, "It's your turn");
+    currentPlayer.takeCards(this.dealCard());
   }
 
   public addPlayer(player: Player): void {
@@ -100,35 +115,25 @@ class Game {
 
     if (penalty > 0) {
       this.chargePoint = 0;
-      this.notifyAll(SOCKET_EVENT.ChargePointBarExplode);
+      this.notifyAll(
+        SOCKET_EVENT.ChargePointBarExplode,
+        undefined,
+        ANIMATION_DURATION.ConsumeCard
+      );
       this.getCurrentPlayer().takeDamage(penalty);
     }
 
     this.discardDeck.push(card);
-
-    for (const p of this.players) {
-      p.response(SOCKET_EVENT.ChargePointChanged, this.chargePoint);
-    }
-
-    setTimeout(this.nextPlayer.bind(this), ANIMATION_DURATION.ConsumeCard);
+    this.notifyAll(
+      SOCKET_EVENT.ChargePointChanged,
+      this.chargePoint,
+      ANIMATION_DURATION.ConsumeCard
+    );
+    this.nextPlayer();
   }
 
-  public nextPlayer(): void {
-    if (this.currentPlayerIndex === -1) {
-      this.currentPlayerIndex = 0;
-    } else {
-      this.currentPlayerIndex =
-        (this.currentPlayerIndex + 1) % this.players.length;
-    }
-
-    const currentPlayer = this.getCurrentPlayer();
-
-    currentPlayer.response(SOCKET_EVENT.Info, "It's your turn");
-    currentPlayer.takeCards(this.dealCard());
-  }
-
-  public notifyAll(event: string, data?: unknown): void {
-    this.players.forEach((p) => p.response(event, data));
+  public notifyAll(event: string, data?: unknown, wait = 0): void {
+    this.players.forEach((p) => p.response(event, data, wait));
   }
 }
 

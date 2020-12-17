@@ -1,23 +1,19 @@
 import React, { useState } from "react";
+import { animated, useTransition } from "react-spring";
+import ANIMATION_DURATION from "../../../../../shared/animationDuration";
+import SOCKET_EVENT from "../../../../../shared/socketEvent";
+import BoxOfCardSprite from "../../../assets/sprites/box_of_cards.png";
+import BoxOfCardDealCardSprite from "../../../assets/sprites/box_of_cards_deal_card.png";
 import Card from "../../../components/Card";
 import Sprite from "../../../components/Sprite";
 import useSocketEvent from "../../../hooks/useSocketEvent";
 import ICard from "../../../interfaces/ICard";
-import ChargePointBar from "./ChargePointBar";
-import BoxOfCardDealCardSprite from "../../../assets/sprites/box_of_cards_deal_card.png";
-import BoxOfCardSprite from "../../../assets/sprites/box_of_cards.png";
 import "./BoxOfCard.scss";
-import { animated, useTransition } from "react-spring";
-import ANIMATION_DURATION from "../../../../../shared/animationDuration";
-
-interface IGameUpdateRes {
-  playedCard: ICard;
-  chargePoint: number;
-}
+import ChargePointBar from "./ChargePointBar";
 
 const BoxOfCard = (): JSX.Element => {
   const [chargePoint, setChargePoint] = useState(0);
-  const [playedCard, setPlayerCard] = useState<ICard>();
+  const [playedCard, setPlayedCard] = useState<ICard>();
   const [consumeAnimation, setConsumeAnimation] = useState(false);
   const [dealCardAnimation, setDealCardAnimation] = useState(false);
   const transitions = useTransition(consumeAnimation, null, {
@@ -33,20 +29,24 @@ const BoxOfCard = (): JSX.Element => {
     },
   });
 
-  const updateGame = ({ chargePoint, playedCard }: IGameUpdateRes): void => {
-    setChargePoint(chargePoint);
-    setPlayerCard(playedCard);
-    setConsumeAnimation(true);
-    setTimeout(() => setConsumeAnimation(false), ANIMATION_DURATION.ConsumeCard);
+  const updateChargePoint = (point: number): void => {
+    setChargePoint(point);
   };
 
   const dealCard = (): void => {
     setDealCardAnimation(true);
-    setTimeout(() => setDealCardAnimation(false), 10000);
+    setTimeout(() => setDealCardAnimation(false), ANIMATION_DURATION.DealCard);
   };
 
-  useSocketEvent("update game", updateGame);
-  useSocketEvent("take card", dealCard);
+  const showPlayedCard = (card: ICard): void => {
+    setPlayedCard(card);
+    setConsumeAnimation(true);
+    setTimeout(() => setConsumeAnimation(false), ANIMATION_DURATION.ConsumeCard);
+  };
+
+  useSocketEvent(SOCKET_EVENT.ChargePointChanged, updateChargePoint);
+  useSocketEvent(SOCKET_EVENT.TakeCard, dealCard);
+  useSocketEvent(SOCKET_EVENT.CardPlayed, showPlayedCard);
 
   return (
     <div className="box-of-card">

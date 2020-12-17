@@ -45,7 +45,6 @@ class Player {
     if (card && this.game) {
       if (this.game.getCurrentPlayer() === this) {
         this.game.consumeCard(card);
-        this.response("play card ok");
       } else {
         this.response(SOCKET_EVENT.Error, "Not your turn");
       }
@@ -54,13 +53,14 @@ class Player {
     // TODO validate card and check if player is in any game.
   }
 
-  public response(event: string, data?: unknown): void {
-    this.socket.emit(event, data);
+  public response(event: string, data?: unknown, wait = 0): void {
+    if (wait > 0) setTimeout(() => this.socket.emit(event, data), wait);
+    else this.socket.emit(event, data);
   }
 
   public takeCards(...cards: Card[]): void {
     this.cards.push(...cards);
-    this.response("take card", cards);
+    this.response(SOCKET_EVENT.TakeCard, cards);
   }
 
   public takeDamage(damage: number): void {

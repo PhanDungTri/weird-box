@@ -1,6 +1,7 @@
 enum SOCKET_EVENT {
   Error = "error",
   Info = "info",
+  TakeCard = "take card",
   PlayCard = "play card",
   CardPlayed = "card played",
   ConsumeCard = "consume card",
