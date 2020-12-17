@@ -1,11 +1,10 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
 import HitPointBar from "../../../components/HitPointBar";
-import { socketState } from "../../../state";
+import useSocketId from "../../../hooks/useSocketId";
 import "./PlayerStatus.scss";
 
 const PlayerStatus = (): JSX.Element => {
-  const socketId = useRecoilValue(socketState).id;
+  const socketId = useSocketId();
 
   return (
     <div className="player-status">
