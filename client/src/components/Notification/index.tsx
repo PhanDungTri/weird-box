@@ -1,33 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import NOTI_VARIANT from "../../constants/NOTI_VARIANT";
 import useSocketEvent from "../../hooks/useSocketEvent";
+import notificationState from "../../state/notificationState";
 import "./Notification.scss";
 
-enum NOTI_VARIANT {
-  Error = "error",
-  Warning = "warning",
-  Info = "info",
-  Success = "success",
-}
-
 const Notification = (): JSX.Element => {
-  const [isShown, setIsShown] = useState(false);
-  const [variant, setVariant] = useState<NOTI_VARIANT>(NOTI_VARIANT.Info);
-  const [message, setMessage] = useState("");
+  const { variant, message, show } = useRecoilValue(notificationState);
+  const setNotification = useSetRecoilState(notificationState);
 
-  const show = (variant: NOTI_VARIANT) => (message: string) => {
-    setIsShown(true);
-    setMessage(message);
-    setVariant(variant);
-
-    setTimeout(() => setIsShown(false), 2000);
+  const showNotification = (variant: NOTI_VARIANT) => (message: string) => {
+    setNotification({ variant, message, show: true });
   };
 
-  useSocketEvent("error", show(NOTI_VARIANT.Error));
-  useSocketEvent("info", show(NOTI_VARIANT.Info));
+  useEffect(() => {
+    if (show && message) {
+      setTimeout(() => setNotification((state) => ({ ...state, show: false })), 2000);
+    }
+  }, [show]);
+
+  useSocketEvent("error", showNotification(NOTI_VARIANT.Error));
+  useSocketEvent("info", showNotification(NOTI_VARIANT.Info));
 
   return createPortal(
-    <div className={`notification ${variant} ${isShown ? "" : "hide"}`}>{message}</div>,
+    <div className={`notification ${variant} ${show ? "" : "hide"}`}>{message}</div>,
     document.getElementById("notification") as HTMLElement
   );
 };

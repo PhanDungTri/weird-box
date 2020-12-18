@@ -1,16 +1,19 @@
 import React, { useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
 import Card from "../../../components/Card";
+import NOTI_VARIANT from "../../../constants/NOTI_VARIANT";
 import useSocketEvent from "../../../hooks/useSocketEvent";
 import ICard from "../../../interfaces/ICard";
 import { socketState } from "../../../state";
+import notificationState from "../../../state/notificationState";
 import { useGameContext } from "../Game.context";
 import "./PlayerHand.scss";
 
 const PlayerHand = (): JSX.Element => {
   const socket = useRecoilValue(socketState);
+  const setNotification = useSetRecoilState(notificationState);
   const self = useRef<HTMLDivElement>(null);
   const [hand, setHand] = useState<ICard[]>([]);
   const { chosenCard, chooseCard, currentPlayer } = useGameContext();
@@ -41,6 +44,12 @@ const PlayerHand = (): JSX.Element => {
       socket.emit(SOCKET_EVENT.PlayCard, id);
       socket.once(SOCKET_EVENT.CardPlayed, () => {
         setHand(hand.filter((c) => c.id !== id));
+      });
+    } else {
+      setNotification({
+        message: "Not your turn!",
+        variant: NOTI_VARIANT.Error,
+        show: true,
       });
     }
   };
