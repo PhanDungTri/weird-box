@@ -73,9 +73,15 @@ class Game {
 
     const currentPlayer = this.getCurrentPlayer();
 
-    this.notifyAll(SOCKET_EVENT.StartTurn, currentPlayer.getId());
     currentPlayer.takeCards(this.dealCard());
-    currentPlayer.response(SOCKET_EVENT.Info, "It's your turn");
+
+    setTimeout(
+      (() => {
+        this.notifyAll(SOCKET_EVENT.StartTurn, currentPlayer.getId());
+        currentPlayer.response(SOCKET_EVENT.Info, "It's your turn");
+      }).bind(this),
+      ANIMATION_DURATION.TakeCard
+    );
   }
 
   public addPlayer(player: Player): void {
@@ -103,6 +109,7 @@ class Game {
     this.notifyAll(SOCKET_EVENT.CardPlayed, card);
 
     let penalty = 0;
+    let timeline = 0;
 
     if (card.getAction() === CardAction.Charge)
       this.chargePoint += card.getPowerPoint();
@@ -114,23 +121,24 @@ class Game {
       penalty = this.chargePoint - 10;
     }
 
+    timeline += ANIMATION_DURATION.ConsumeCard;
+
     if (penalty > 0) {
       this.chargePoint = 0;
       this.notifyAll(
-        SOCKET_EVENT.ChargePointBarExplode,
+        SOCKET_EVENT.ChargePointBarOvercharged,
         undefined,
-        ANIMATION_DURATION.ConsumeCard
+        timeline
       );
       this.getCurrentPlayer().takeDamage(penalty);
     }
 
     this.discardDeck.push(card);
-    this.notifyAll(
-      SOCKET_EVENT.ChargePointChanged,
-      this.chargePoint,
-      ANIMATION_DURATION.ConsumeCard
-    );
-    this.nextPlayer();
+    this.notifyAll(SOCKET_EVENT.ChargePointChanged, this.chargePoint, timeline);
+
+    timeline += ANIMATION_DURATION.ChargePointChange;
+
+    setTimeout(this.nextPlayer.bind(this), timeline);
   }
 
   public notifyAll(event: string, data?: unknown, wait = 0): void {

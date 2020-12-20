@@ -6,10 +6,9 @@ enum SOCKET_EVENT {
   PlayCard = "play card",
   CardPlayed = "card played",
   ConsumeCard = "consume card",
-  ChargePointBarExplode = "charge point bar explode",
+  ChargePointBarOvercharged = "charge point bar overcharged",
   HitPointChanged = "hit point changed",
   ChargePointChanged = "charge point changed",
-  DealCard = "deal card",
   StartTurn = "start turn",
 }
 

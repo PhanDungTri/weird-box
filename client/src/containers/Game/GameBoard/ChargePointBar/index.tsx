@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
+import SOCKET_EVENT from "../../../../../../shared/src/socketEvent";
 import useSocketEvent from "../../../../hooks/useSocketEvent";
 import useStepAnimation from "../../../../hooks/useStepAnimation";
 import "./ChargePointBar.scss";
-
-interface ChargePointProps {
-  value: number;
-}
 
 type ChargePointBarState = "safe" | "warning" | "danger";
 
@@ -19,18 +16,26 @@ const charge = (value: number): boolean[] => {
   return arr;
 };
 
+// Animation keyframes.
 const offset = [0, 4, 4, 16, 16, 16, -12, -20, 4, 0];
 
-const ChargePointBar = ({ value }: ChargePointProps): JSX.Element => {
+const ChargePointBar = (): JSX.Element => {
+  const [value, setValue] = useState(0);
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(value));
   const [state, setState] = useState<ChargePointBarState>("safe");
   const { currentStep, animate } = useStepAnimation({ step: offset.length, tick: 3, repeat: 0, start: false });
 
+  // Moving up and down when the box of card does the dealing job.
   const dealCard = (): void => {
     animate(true);
   };
 
-  useSocketEvent("take card", dealCard);
+  const updateChargePoint = (point: number): void => {
+    setValue(point);
+  };
+
+  useSocketEvent(SOCKET_EVENT.ChargePointChanged, updateChargePoint);
+  useSocketEvent(SOCKET_EVENT.TakeCard, dealCard);
 
   useEffect(() => {
     setNodeStatus(charge(value));

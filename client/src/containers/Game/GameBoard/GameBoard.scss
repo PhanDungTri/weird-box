@@ -1,17 +1,10 @@
-@import "../../../common.scss";
-
-.box-of-card {
+.game-board {
   position: relative;
   flex-grow: 1;
 
   & > * {
     display: inline-block;
   }
-}
-
-.box-of-card-sprite {
-  position: relative;
-  @extend %centerize;
 }
 
 .animated-played-card {

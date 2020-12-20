@@ -1,6 +1,6 @@
 import React from "react";
 import Notification from "../../components/Notification";
-import BoxOfCard from "./BoxOfCard";
+import GameBoard from "./GameBoard";
 import { GameContextProvider, useGameContext } from "./Game.context";
 import "./Game.scss";
 import OpponentList from "./OpponentList";
@@ -13,7 +13,7 @@ const Game = (): JSX.Element => {
   return (
     <div className="game" onClick={() => chooseCard("")}>
       <OpponentList />
-      <BoxOfCard />
+      <GameBoard />
       {maxHP > 0 && <PlayerStatus />}
       <PlayerHand />
       <Notification />
