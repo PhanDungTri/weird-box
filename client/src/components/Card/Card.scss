@@ -51,7 +51,16 @@ $color-reflection: #ffffff;
   }
 
   &.action {
+    -webkit-text-stroke: 1px $color-content-border;
     bottom: -$content-border-width;
     transform: translate(-50%, 25%);
+
+    &.add {
+      color: green;
+    }
+
+    &.minus {
+      color: red;
+    }
   }
 }

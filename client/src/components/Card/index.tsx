@@ -22,7 +22,7 @@ const Card = ({ onChoose = dummyFn, isChosen = false, card }: CardProps): JSX.El
     <div className={`card ${isChosen ? "chosen" : ""}`} onClick={chooseMe}>
       <div className="card-content">
         <div className="card-spec power-point">{card.powerPoint}</div>
-        <div className="card-spec action">{card.action ? "+" : "-"}</div>
+        <div className={`card-spec action ${card.action ? "add" : "minus"}`}>{card.action ? "+" : "-"}</div>
       </div>
     </div>
   );
