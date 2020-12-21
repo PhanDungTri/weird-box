@@ -2,7 +2,7 @@ import ANIMATION_DURATION from "../../../shared/src/animationDuration";
 import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import generateUniqueId from "../utilities/generateUniqueId";
-import Card, { CardAction } from "./Card";
+import Card, { CARD_ACTION } from "./Card";
 import Deck from "./Deck";
 import Player from "./Player";
 
@@ -111,7 +111,7 @@ class Game {
     let penalty = 0;
     let timeline = 0;
 
-    if (card.getAction() === CardAction.Charge)
+    if (card.getAction() === CARD_ACTION.Charge)
       this.chargePoint += card.getPowerPoint();
     else this.chargePoint -= card.getPowerPoint();
 
