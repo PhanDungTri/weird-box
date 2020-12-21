@@ -1,5 +1,5 @@
 import EFFECT_NAME from "../../../shared/src/effectName";
-import Card, { CARD_ACTION } from "./Card";
+import Card from "./Card";
 
 interface DeckOptions {
   isEmpty: boolean;
@@ -10,14 +10,10 @@ const generateCards = (): Card[] => {
 
   // power point is from 0 - 9
   for (let i = 0; i < 10; i++) {
-    for (const action in CARD_ACTION) {
-      const actionValue = parseInt(action);
-      if (!isNaN(actionValue)) {
-        Object.values(EFFECT_NAME).forEach((eff) => {
-          cards.push(...new Array<Card>(4).fill(new Card(i, actionValue, eff)));
-        });
-      }
-    }
+    Object.values(EFFECT_NAME).forEach((eff) => {
+      cards.push(...new Array<Card>(4).fill(new Card(i, eff)));
+      cards.push(...new Array<Card>(4).fill(new Card(-i, eff)));
+    });
   }
 
   return cards;
