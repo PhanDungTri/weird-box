@@ -1,17 +1,17 @@
 import EFFECT_NAME from "../../../../shared/src/effectName";
 import Game from "../Game";
+import Player from "../Player";
 import Effect from "./Effect";
 
 class PunchEffect extends Effect {
-  constructor(game: Game) {
-    super(EFFECT_NAME.Punch, game);
+  constructor(game: Game, source: Player) {
+    super(EFFECT_NAME.Punch, game, source);
     this.power = -this.game.getChargePoint();
   }
 
   public execute(): void {
-    const currentPlayer = this.game.getCurrentPlayer();
     this.game.getPlayers().forEach((p) => {
-      if (p !== currentPlayer) {
+      if (p !== this.source) {
         p.takeEffect(this);
       }
     });
