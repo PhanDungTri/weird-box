@@ -11,10 +11,15 @@ const generateCards = (): Card[] => {
   // power point is from 0 - 9
   for (let i = 0; i < 10; i++) {
     Object.values(EFFECT_NAME).forEach((eff) => {
-      cards.push(...new Array<Card>(4).fill(new Card(i, eff)));
-      cards.push(...new Array<Card>(4).fill(new Card(-i, eff)));
+      // each type of card has 4 cards in deck
+      for (let j = 0; j < 4; j++) {
+        cards.push(new Card(i, eff));
+        cards.push(new Card(-i, eff));
+      }
     });
   }
+
+  console.table(cards);
 
   return cards;
 };
