@@ -3,10 +3,12 @@ import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import Card from "./Card";
 import Effect from "./effects/Effect";
+import OverTimeEffect from "./effects/OverTimeEffect";
 import Game from "./Game";
 
 class Player {
   private cards: Card[] = [];
+  private effects: OverTimeEffect[] = [];
   private game: Game | null = null;
   private name = "Name";
   private hitPoint = 0;
@@ -76,11 +78,18 @@ class Player {
   }
 
   public takeEffect(effect: Effect): void {
-    this.changeHitPoint(effect.getPower());
+    if (effect instanceof OverTimeEffect) {
+      this.effects.push(effect);
+    }
+
     this.game?.notifyAll(SOCKET_EVENT.TakeEffect, {
       id: this.getId(),
       effect: effect.name,
     });
+  }
+
+  public sanitize(): void {
+    this.effects = [];
   }
 }
 
