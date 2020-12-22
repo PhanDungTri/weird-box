@@ -1,14 +1,15 @@
 import EFFECT_NAME from "../../../../shared/src/effectName";
+import Game from "../Game";
 import Effect from "./Effect";
 import PunchEffect from "./PunchEffect";
 import VoidEffect from "./VoidEffect";
 
-const createEffect = (name: EFFECT_NAME): Effect => {
+const createEffect = (name: EFFECT_NAME, game: Game): Effect => {
   switch (name) {
     case EFFECT_NAME.Punch:
-      return new PunchEffect();
+      return new PunchEffect(game);
     default:
-      return new VoidEffect();
+      return new VoidEffect(game);
   }
 };
 

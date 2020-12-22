@@ -2,6 +2,7 @@ import { Socket } from "socket.io";
 import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import Card from "./Card";
+import Effect from "./effects/Effect";
 import Game from "./Game";
 
 class Player {
@@ -42,8 +43,8 @@ class Player {
   private playCard(id: string): void {
     const card = this.getCardById(id);
 
-    if (card && this.game) {
-      if (this.game.getCurrentPlayer() === this) {
+    if (card) {
+      if (this.game?.getCurrentPlayer() === this) {
         this.game.consumeCard(card);
       } else {
         this.response(SOCKET_EVENT.Error, "Not your turn");
@@ -63,16 +64,23 @@ class Player {
     this.response(SOCKET_EVENT.TakeCard, cards);
   }
 
-  public takeDamage(damage: number): void {
-    this.hitPoint -= damage;
+  public changeHitPoint(difference: number): void {
+    this.hitPoint += difference;
     if (this.hitPoint < 0) this.hitPoint = 0;
+    else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    if (this.game) {
-      this.game.notifyAll(SOCKET_EVENT.HitPointChanged, {
-        id: this.getId(),
-        difference: -damage,
-      });
-    }
+    this.game?.notifyAll(SOCKET_EVENT.HitPointChanged, {
+      id: this.getId(),
+      difference,
+    });
+  }
+
+  public takeEffect(effect: Effect): void {
+    this.changeHitPoint(effect.getPower());
+    this.game?.notifyAll(SOCKET_EVENT.TakeEffect, {
+      id: this.getId(),
+      effect: effect.name,
+    });
   }
 }
 

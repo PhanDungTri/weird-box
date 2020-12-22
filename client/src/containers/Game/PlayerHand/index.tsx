@@ -59,7 +59,7 @@ const PlayerHand = (): JSX.Element => {
       <div className="player-hand" ref={self}>
         {transitions.map(({ item, key, props }) => (
           <animated.div key={key} style={props}>
-            <Card card={item} key={item.id} onChoose={() => playCard(item.id)} isChosen={chosenCard === item.id} />
+            <Card card={item} onChoose={() => playCard(item.id)} isChosen={chosenCard === item.id} />
           </animated.div>
         ))}
       </div>

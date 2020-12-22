@@ -4,6 +4,7 @@ import { PlayerInfo } from "../interfaces/PlayerInfo";
 import generateUniqueId from "../utilities/generateUniqueId";
 import Card from "./Card";
 import Deck from "./Deck";
+import createEffect from "./effects/createEffect";
 import Player from "./Player";
 
 const STARTING_HAND = 5;
@@ -27,6 +28,10 @@ class Game {
 
   public getChargePoint(): number {
     return this.chargePoint;
+  }
+
+  public getPlayers(): Player[] {
+    return this.players;
   }
 
   private dealCard(): Card {
@@ -108,14 +113,14 @@ class Game {
   public consumeCard(card: Card): void {
     let penalty = 0;
     let timeline = 0;
+    const newChargePoint = this.chargePoint + card.getPowerPoint();
 
     this.notifyAll(SOCKET_EVENT.CardPlayed, card);
-    this.chargePoint += card.getPowerPoint();
 
-    if (this.chargePoint < 0) {
-      penalty = Math.abs(this.chargePoint);
-    } else if (this.chargePoint > 10) {
-      penalty = this.chargePoint - 10;
+    if (newChargePoint < 0) {
+      penalty = Math.abs(newChargePoint);
+    } else if (newChargePoint > 10) {
+      penalty = newChargePoint - 10;
     }
 
     timeline += ANIMATION_DURATION.ConsumeCard;
@@ -127,7 +132,11 @@ class Game {
         undefined,
         timeline
       );
-      this.getCurrentPlayer().takeDamage(penalty);
+      this.getCurrentPlayer().changeHitPoint(-penalty);
+    } else {
+      const effect = createEffect(card.getEffect(), this);
+      effect.execute();
+      this.chargePoint = newChargePoint;
     }
 
     this.discardDeck.push(card);
