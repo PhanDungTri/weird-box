@@ -65,15 +65,16 @@ class Game {
       this.players[j].takeCards(...startingHands[j]);
     }
 
-    this.nextPlayer();
+    this.newTurn();
   }
 
-  public nextPlayer(): void {
+  public newTurn(): void {
+    this.players.forEach((p) => p.triggerEffects());
+
     if (this.currentPlayerIndex === -1) {
       this.currentPlayerIndex = 0;
     } else {
-      this.currentPlayerIndex =
-        (this.currentPlayerIndex + 1) % this.players.length;
+      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     }
 
     const currentPlayer = this.getCurrentPlayer();
@@ -127,15 +128,10 @@ class Game {
 
     if (penalty > 0) {
       this.chargePoint = 0;
-      this.notifyAll(
-        SOCKET_EVENT.ChargePointBarOvercharged,
-        undefined,
-        timeline
-      );
+      this.notifyAll(SOCKET_EVENT.ChargePointBarOvercharged, undefined, timeline);
       this.getCurrentPlayer().changeHitPoint(-penalty);
     } else {
-      const effect = createEffect(card.getEffect(), this);
-      effect.execute();
+      createEffect(card.getEffect(), this, this.getCurrentPlayer());
       this.chargePoint = newChargePoint;
     }
 
@@ -144,7 +140,7 @@ class Game {
 
     timeline += ANIMATION_DURATION.ChargePointChange;
 
-    setTimeout(this.nextPlayer.bind(this), timeline);
+    setTimeout(this.newTurn.bind(this), timeline);
   }
 
   public notifyAll(event: string, data?: unknown, wait = 0): void {

@@ -1,19 +1,52 @@
 import EFFECT_NAME from "../../../../shared/src/effectName";
 import Game from "../Game";
 import Player from "../Player";
-import Effect from "./Effect";
 import HealEffect from "./HealEffect";
+import PoisonEffect from "./PoisonEffect";
 import PunchEffect from "./PunchEffect";
-import VoidEffect from "./VoidEffect";
 
-const createEffect = (name: EFFECT_NAME, game: Game, source: Player): Effect => {
+const createPunchEffect = (game: Game, source: Player): void => {
+  const effect = new PunchEffect(game.getChargePoint());
+
+  game.getPlayers().forEach((p) => {
+    if (p !== source) {
+      p.takeEffect(effect);
+      p.changeHitPoint(-effect.getPower());
+    }
+  });
+};
+
+const createHealEffect = (game: Game, source: Player): void => {
+  const effect = new HealEffect(game.getChargePoint());
+
+  source.takeEffect(effect);
+  source.sanitize();
+  source.changeHitPoint(effect.getPower());
+};
+
+const createPoisonEffect = (game: Game, source: Player): void => {
+  game.getPlayers().forEach((p) => {
+    if (p !== source) {
+      const effect = new PoisonEffect(game.getChargePoint(), p);
+
+      p.takeEffect(effect);
+    }
+  });
+};
+
+const createEffect = (name: EFFECT_NAME, game: Game, source: Player): void => {
   switch (name) {
-    case EFFECT_NAME.Punch:
-      return new PunchEffect(game, source);
-    case EFFECT_NAME.Heal:
-      return new HealEffect(game, source);
-    default:
-      return new VoidEffect(game, source);
+    case EFFECT_NAME.Punch: {
+      createPunchEffect(game, source);
+      break;
+    }
+    case EFFECT_NAME.Heal: {
+      createHealEffect(game, source);
+      break;
+    }
+    case EFFECT_NAME.Poison: {
+      createPoisonEffect(game, source);
+    }
   }
 };
 

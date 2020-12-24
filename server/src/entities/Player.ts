@@ -88,6 +88,14 @@ class Player {
     });
   }
 
+  public removeEffect(effect: OverTimeEffect): void {
+    this.effects = this.effects.filter((eff) => eff !== effect);
+  }
+
+  public triggerEffects(): void {
+    this.effects.forEach((eff) => eff.tick());
+  }
+
   public sanitize(): void {
     this.effects = [];
   }

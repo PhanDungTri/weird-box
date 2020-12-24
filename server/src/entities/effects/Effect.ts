@@ -1,17 +1,13 @@
 import EFFECT_NAME from "../../../../shared/src/effectName";
-import Game from "../Game";
-import Player from "../Player";
 
 abstract class Effect {
-  protected power = -1;
+  protected power = 0;
 
-  constructor(public readonly name: EFFECT_NAME, protected game: Game, protected source: Player) {}
+  constructor(public readonly name: EFFECT_NAME) {}
 
   public getPower(): number {
     return this.power;
   }
-
-  public abstract execute(): void;
 }
 
 export default Effect;

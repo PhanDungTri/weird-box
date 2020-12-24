@@ -19,7 +19,13 @@ const HitPointBar = ({ owner }: HitPointBarProps): JSX.Element => {
 
   const changeHitPoint = ({ id, difference }: PlayerHPChangedRes) => {
     if (id === owner) {
-      setHP((currentHP) => currentHP + difference);
+      setHP((currentHP) => {
+        const newHP = currentHP + difference;
+
+        if (newHP < 0) return 0;
+        if (newHP > 100) return 100;
+        return newHP;
+      });
     }
   };
 

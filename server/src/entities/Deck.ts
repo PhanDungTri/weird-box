@@ -19,8 +19,6 @@ const generateCards = (): Card[] => {
     });
   }
 
-  console.table(cards);
-
   return cards;
 };
 
