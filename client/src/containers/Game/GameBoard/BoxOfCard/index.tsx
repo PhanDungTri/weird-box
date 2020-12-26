@@ -5,7 +5,6 @@ import DealCardSprite from "../../../../assets/sprites/box_of_cards_deal_card.pn
 import OverChargedSprite from "../../../../assets/sprites/box_of_cards_overcharged.png";
 import Sprite from "../../../../components/Sprite";
 import useSocketEvent from "../../../../hooks/useSocketEvent";
-import "../../../../styles/common/centerize.scss";
 
 type State = "idle" | "deal" | "overcharged";
 
@@ -21,7 +20,16 @@ const setSprite = (state: State): JSX.Element => {
       step: 10,
     };
 
-  return <Sprite key={state} size={[59, 59]} scale={3} {...spriteProps} tick={3} />;
+  return (
+    <Sprite
+      centerize
+      key={state === "overcharged" ? "idle" : state}
+      size={[59, 59]}
+      scale={3}
+      {...spriteProps}
+      tick={3}
+    />
+  );
 };
 
 const BoxOfCard = (): JSX.Element => {
@@ -40,11 +48,9 @@ const BoxOfCard = (): JSX.Element => {
 
   return (
     <>
-      <div className="centerize">{setSprite(state)}</div>
+      {setSprite(state)}
       {state === "overcharged" && (
-        <div className="centerize">
-          <Sprite key="overcharged" size={[59, 59]} scale={3} tick={3} step={9} src={OverChargedSprite} />
-        </div>
+        <Sprite centerize key="overcharged" size={[59, 59]} scale={3} tick={3} step={9} src={OverChargedSprite} />
       )}
     </>
   );

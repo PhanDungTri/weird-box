@@ -30,7 +30,6 @@ $color-reflection: #ffffff;
   position: absolute;
   border: $content-border-width solid transparent;
   border-image: url(../../assets/sprites/card_content_frame.png) 12 round;
-  @extend .centerize;
   width: 1rem;
   height: 3rem;
 }

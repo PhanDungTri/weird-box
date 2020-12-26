@@ -3,7 +3,7 @@ import Effect from "./Effect";
 
 class PunchEffect extends Effect {
   constructor(chargePoint: number) {
-    super(EFFECT_NAME.Heal);
+    super(EFFECT_NAME.Punch);
     this.power = chargePoint;
   }
 }

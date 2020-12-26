@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import useStepAnimation from "../../hooks/useStepAnimation";
 import "./Sprite.scss";
+import "../../styles/common/centerize.scss";
 
 interface Props {
   size: [number, number];
@@ -8,17 +9,17 @@ interface Props {
   scale?: number;
   step?: number;
   tick?: number;
-  children?: React.ReactNode;
   repeat?: number;
+  centerize?: boolean;
 }
 
-const Sprite = ({ src, step = 1, tick = 1, size, scale = 1, repeat = -1 }: Props): JSX.Element => {
+const Sprite = ({ src, step = 1, tick = 1, size, scale = 1, repeat = -1, centerize = false }: Props): JSX.Element => {
   const { currentStep } = useStepAnimation({ step, tick, repeat, start: true });
   const [width, height] = useRef(size.map((s) => s * scale)).current;
 
   return (
     <div
-      className="sprite"
+      className={`sprite ${centerize ? "centerize" : ""}`}
       style={{
         width: width + "px",
         height: height + "px",

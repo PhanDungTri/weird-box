@@ -1,12 +1,8 @@
 import React, { useState } from "react";
-import HitPointBar from "../../../components/HitPointBar";
 import useSocketEvent from "../../../hooks/useSocketEvent";
 import "./OpponentList.scss";
-
-interface IPlayer {
-  id: string;
-  name: string;
-}
+import IPlayer from "../../../interfaces/IPlayer";
+import Opponent from "./Opponent";
 
 const OpponentList = (): JSX.Element => {
   const [opponents, setOpponentList] = useState<IPlayer[]>([]);
@@ -18,12 +14,7 @@ const OpponentList = (): JSX.Element => {
   return (
     <div className="opponent-list">
       {opponents.map((o) => (
-        <div className="opponent-card" key={o.id}>
-          <div className="opponent-name">{o.name}</div>
-          <div />
-          <div />
-          <HitPointBar owner={o.id} />
-        </div>
+        <Opponent key={o.id} {...o} />
       ))}
     </div>
   );

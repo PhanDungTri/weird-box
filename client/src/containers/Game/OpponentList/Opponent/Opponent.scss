@@ -1,12 +1,3 @@
-@import "../../../styles/utilities/createPixelBorder.scss";
-@import "../../../common.scss";
-
-.opponent-list {
-  @extend %grid-container;
-  margin: 4px;
-  grid-template-columns: repeat(3, 1fr);
-}
-
 .opponent-card {
   position: relative;
   @extend %grid-container;
