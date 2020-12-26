@@ -41,9 +41,7 @@ const Card = ({ onChoose = dummyFn, isChosen = false, card }: CardProps): JSX.El
     <div className={`card ${isChosen ? "chosen" : ""}`} onClick={chooseMe}>
       <div className="card-content centerize">
         <div className="card-spec power-point">{Math.abs(card.powerPoint)}</div>
-        <div className="card-spec centerize">
-          <Sprite src={setSprite(card.effect, card.powerPoint >= 0)} size={[24, 24]} />
-        </div>
+        <Sprite src={setSprite(card.effect, card.powerPoint >= 0)} size={[24, 24]} centerize />
         <div className="card-spec action">{card.powerPoint >= 0 ? "+" : "-"}</div>
       </div>
     </div>
