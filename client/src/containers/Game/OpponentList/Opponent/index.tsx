@@ -5,6 +5,7 @@ import HitPointBar from "../../../../components/HitPointBar";
 import Sprite from "../../../../components/Sprite";
 import useSocketEvent from "../../../../hooks/useSocketEvent";
 import PunchEffectAnimation from "../../../../assets/sprites/punch_animation.png";
+import HealEffectAnimation from "../../../../assets/sprites/heal_animation.png";
 
 interface IPlayer {
   id: string;
@@ -25,6 +26,19 @@ const setEffectAnimation = (effect: EFFECT_NAME): JSX.Element => {
           step={7}
           tick={2}
           src={PunchEffectAnimation}
+          repeat={0}
+          size={[62, 46]}
+          scale={2}
+          centerize
+        />
+      );
+    case EFFECT_NAME.Heal:
+      return (
+        <Sprite
+          key={EFFECT_NAME.Heal}
+          step={8}
+          tick={2}
+          src={HealEffectAnimation}
           repeat={0}
           size={[62, 46]}
           scale={2}
