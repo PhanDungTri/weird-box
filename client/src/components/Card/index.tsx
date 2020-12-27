@@ -6,6 +6,7 @@ import PunchEffectSprite from "../../assets/sprites/punch.png";
 import ChargeSprite from "../../assets/sprites/charge.png";
 import ConsumeSprite from "../../assets/sprites/consume.png";
 import PoisonEffectSprite from "../../assets/sprites/poison.png";
+import HealEffectSprite from "../../assets/sprites/heal.png";
 import EFFECT_NAME from "../../../../shared/src/effectName";
 import Sprite from "../Sprite";
 
@@ -15,6 +16,8 @@ const setSprite = (effectName: EFFECT_NAME, isCharge: boolean): string => {
       return PunchEffectSprite;
     case EFFECT_NAME.Poison:
       return PoisonEffectSprite;
+    case EFFECT_NAME.Heal:
+      return HealEffectSprite;
     default: {
       return isCharge ? ChargeSprite : ConsumeSprite;
     }
