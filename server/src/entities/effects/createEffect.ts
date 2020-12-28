@@ -11,7 +11,7 @@ const createPunchEffect = (game: Game, source: Player): void => {
   game.getPlayers().forEach((p) => {
     if (p !== source) {
       p.takeEffect(effect);
-      p.changeHitPoint(-effect.getPower());
+      setTimeout(() => p.changeHitPoint(-effect.getPower()), 600);
     }
   });
 };
@@ -21,7 +21,7 @@ const createHealEffect = (game: Game, source: Player): void => {
 
   source.takeEffect(effect);
   source.sanitize();
-  source.changeHitPoint(effect.getPower());
+  setTimeout(() => source.changeHitPoint(effect.getPower()), 600);
 };
 
 const createPoisonEffect = (game: Game, source: Player): void => {
