@@ -21,4 +21,12 @@
   height: 16px;
   box-shadow: inset 0px 8px 0px 0px #99e550;
   transition: 0.3s;
+
+  &.helper {
+    position: absolute;
+    top: 0;
+    background-color: red;
+    box-shadow: none;
+    z-index: -1;
+  }
 }

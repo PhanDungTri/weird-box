@@ -16,6 +16,7 @@ interface PlayerHPChangedRes {
 const HitPointBar = ({ owner }: HitPointBarProps): JSX.Element => {
   const { maxHP } = useGameContext();
   const [hp, setHP] = useState(maxHP);
+  const [helperHP, setHelperHP] = useState(hp);
 
   const changeHitPoint = ({ id, difference }: PlayerHPChangedRes) => {
     if (id === owner) {
@@ -24,6 +25,9 @@ const HitPointBar = ({ owner }: HitPointBarProps): JSX.Element => {
 
         if (newHP < 0) return 0;
         if (newHP > 100) return 100;
+
+        setTimeout(() => setHelperHP(newHP), 600);
+
         return newHP;
       });
     }
@@ -33,6 +37,7 @@ const HitPointBar = ({ owner }: HitPointBarProps): JSX.Element => {
 
   return (
     <div className="hit-point-bar">
+      <div className="hit-point-percent helper" style={{ width: `${(helperHP * 100) / maxHP}%` }} />
       <div className="hit-point-percent" style={{ width: `${(hp * 100) / maxHP}%` }} />
       <div className="hit-point">{hp}</div>
     </div>
