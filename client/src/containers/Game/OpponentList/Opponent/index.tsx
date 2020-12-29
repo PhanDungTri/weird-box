@@ -70,7 +70,7 @@ const Opponent = (props: IPlayer): JSX.Element => {
   useSocketEvent(SOCKET_EVENT.TakeEffect, (data: IEffectRes) => {
     if (data.id === props.id) {
       setEffect(data.effect);
-      setTimeout(() => setEffect(EFFECT_NAME.Void), 500);
+      setTimeout(() => setEffect(EFFECT_NAME.Void), 600);
     }
   });
 
