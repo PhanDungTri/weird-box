@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import EFFECT_NAME from "../../../../../../shared/src/effectName";
 import SOCKET_EVENT from "../../../../../../shared/src/socketEvent";
+import HealEffectAnimation from "../../../../assets/sprites/heal_animation.png";
+import PoisonEffectAnimation from "../../../../assets/sprites/poison_animation.png";
+import PunchEffectAnimation from "../../../../assets/sprites/punch_animation.png";
 import HitPointBar from "../../../../components/HitPointBar";
 import Sprite from "../../../../components/Sprite";
 import useSocketEvent from "../../../../hooks/useSocketEvent";
-import PunchEffectAnimation from "../../../../assets/sprites/punch_animation.png";
-import HealEffectAnimation from "../../../../assets/sprites/heal_animation.png";
-import PoisonEffectAnimation from "../../../../assets/sprites/poison_animation.png";
-
-interface IPlayer {
-  id: string;
-  name: string;
-}
+import IPlayer from "../../../../interfaces/IPlayer";
 
 interface IEffectRes {
   id: string;

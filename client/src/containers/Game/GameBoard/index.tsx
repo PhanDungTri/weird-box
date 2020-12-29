@@ -5,9 +5,9 @@ import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
 import Card from "../../../components/Card";
 import useSocketEvent from "../../../hooks/useSocketEvent";
 import ICard from "../../../interfaces/ICard";
-import "./GameBoard.scss";
-import ChargePointBar from "./ChargePointBar";
 import BoxOfCard from "./BoxOfCard";
+import ChargePointBar from "./ChargePointBar";
+import "./GameBoard.scss";
 
 const GameBoard = (): JSX.Element => {
   const [playedCard, setPlayedCard] = useState<ICard>();

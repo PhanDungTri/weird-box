@@ -93,7 +93,14 @@ class Player {
   }
 
   public triggerEffects(): void {
-    this.effects.forEach((eff) => eff.tick());
+    this.effects.forEach((eff) => {
+      eff.tick();
+
+      this.game?.notifyAll(SOCKET_EVENT.TakeEffect, {
+        id: this.getId(),
+        effect: eff.name,
+      });
+    });
   }
 
   public sanitize(): void {

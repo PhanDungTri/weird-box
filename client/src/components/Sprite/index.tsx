@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import useStepAnimation from "../../hooks/useStepAnimation";
 import "./Sprite.scss";
-import "../../styles/common/centerize.scss";
 
 interface Props {
   size: [number, number];

@@ -35,8 +35,6 @@ const PlayerHand = (): JSX.Element => {
 
   const addCards = (cards: ICard[]) => setHand((list) => [...list, ...cards]);
 
-  useSocketEvent(SOCKET_EVENT.TakeCard, addCards);
-
   const playCard = (id: string): void => {
     // TODO check if in-turn
     if (chosenCard !== id) chooseCard(id);
@@ -53,6 +51,8 @@ const PlayerHand = (): JSX.Element => {
       });
     }
   };
+
+  useSocketEvent(SOCKET_EVENT.TakeCard, addCards);
 
   return (
     <>

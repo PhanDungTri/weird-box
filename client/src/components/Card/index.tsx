@@ -1,14 +1,13 @@
 import React from "react";
-import ICard from "../../interfaces/ICard";
-import "./Card.scss";
-import "../../styles/common/centerize.scss";
-import PunchEffectSprite from "../../assets/sprites/punch.png";
+import EFFECT_NAME from "../../../../shared/src/effectName";
 import ChargeSprite from "../../assets/sprites/charge.png";
 import ConsumeSprite from "../../assets/sprites/consume.png";
-import PoisonEffectSprite from "../../assets/sprites/poison.png";
 import HealEffectSprite from "../../assets/sprites/heal.png";
-import EFFECT_NAME from "../../../../shared/src/effectName";
+import PoisonEffectSprite from "../../assets/sprites/poison.png";
+import PunchEffectSprite from "../../assets/sprites/punch.png";
+import ICard from "../../interfaces/ICard";
 import Sprite from "../Sprite";
+import "./Card.scss";
 
 const setSprite = (effectName: EFFECT_NAME, isCharge: boolean): string => {
   switch (effectName) {

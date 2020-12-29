@@ -1,8 +1,8 @@
 import React from "react";
 import Notification from "../../components/Notification";
-import GameBoard from "./GameBoard";
 import { GameContextProvider, useGameContext } from "./Game.context";
 import "./Game.scss";
+import GameBoard from "./GameBoard";
 import OpponentList from "./OpponentList";
 import PlayerHand from "./PlayerHand";
 import PlayerStatus from "./PlayerStatus";

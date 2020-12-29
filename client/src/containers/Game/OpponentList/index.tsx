@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import useSocketEvent from "../../../hooks/useSocketEvent";
-import "./OpponentList.scss";
 import IPlayer from "../../../interfaces/IPlayer";
 import Opponent from "./Opponent";
+import "./OpponentList.scss";
 
 const OpponentList = (): JSX.Element => {
   const [opponents, setOpponentList] = useState<IPlayer[]>([]);
