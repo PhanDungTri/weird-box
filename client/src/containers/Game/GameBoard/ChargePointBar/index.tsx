@@ -47,13 +47,13 @@ const ChargePointBar = (): JSX.Element => {
 
   return (
     <div
-      className={`charge-point-bar ${state}`}
+      className={`charge-point -${state}`}
       style={{
         transform: `translate(calc(-50% - 8px), ${offset[currentStep]}px)`,
       }}
     >
       {nodes.map((isCharged, i) => (
-        <div className={`charge-point ${!isCharged ? "empty" : ""}`} key={i} />
+        <div className={`charge-point__node ${!isCharged ? "-empty" : ""}`} key={i} />
       ))}
     </div>
   );

@@ -1,3 +1,4 @@
+import ANIMATION_DURATION from "../../../../shared/src/animationDuration";
 import EFFECT_NAME from "../../../../shared/src/effectName";
 import Game from "../Game";
 import Player from "../Player";
@@ -11,7 +12,7 @@ const createPunchEffect = (game: Game, source: Player): void => {
   game.getPlayers().forEach((p) => {
     if (p !== source) {
       p.takeEffect(effect);
-      setTimeout(() => p.changeHitPoint(-effect.getPower()), 600);
+      setTimeout(() => p.changeHitPoint(-effect.getPower()), ANIMATION_DURATION.TakeEffect);
     }
   });
 };
@@ -21,7 +22,7 @@ const createHealEffect = (game: Game, source: Player): void => {
 
   source.takeEffect(effect);
   source.sanitize();
-  setTimeout(() => source.changeHitPoint(effect.getPower()), 600);
+  setTimeout(() => source.changeHitPoint(effect.getPower()), ANIMATION_DURATION.TakeEffect);
 };
 
 const createPoisonEffect = (game: Game, source: Player): void => {

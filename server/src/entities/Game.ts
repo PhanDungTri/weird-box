@@ -132,6 +132,7 @@ class Game {
       this.getCurrentPlayer().changeHitPoint(-penalty);
     } else {
       createEffect(card.getEffect(), this, this.getCurrentPlayer());
+      timeline += ANIMATION_DURATION.TakeEffect;
       this.chargePoint = newChargePoint;
     }
 

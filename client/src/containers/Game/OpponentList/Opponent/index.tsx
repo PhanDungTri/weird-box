@@ -8,6 +8,7 @@ import HitPointBar from "../../../../components/HitPointBar";
 import Sprite from "../../../../components/Sprite";
 import useSocketEvent from "../../../../hooks/useSocketEvent";
 import IPlayer from "../../../../interfaces/IPlayer";
+import "./Opponent.scss";
 
 interface IEffectRes {
   id: string;
@@ -71,8 +72,8 @@ const Opponent = (props: IPlayer): JSX.Element => {
   });
 
   return (
-    <div className="opponent-card" key={props.id}>
-      <div className="opponent-name">{props.name}</div>
+    <div className="opponent" key={props.id}>
+      <div className="opponent__name">{props.name}</div>
       <div />
       <HitPointBar owner={props.id} />
       {setEffectAnimation(effect)}

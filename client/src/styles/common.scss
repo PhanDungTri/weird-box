@@ -1,11 +1,6 @@
-.centerize {
+.-centerize {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-%grid-container {
-  display: grid;
-  gap: 4px;
 }

@@ -24,7 +24,7 @@ const Notification = (): JSX.Element => {
   useSocketEvent("info", showNotification(NOTI_VARIANT.Info));
 
   return createPortal(
-    <div className={`notification ${variant} ${show ? "" : "hide"}`}>{message}</div>,
+    <div className={`notification -${variant} ${show ? "" : "-hide"}`}>{message}</div>,
     document.getElementById("notification") as HTMLElement
   );
 };

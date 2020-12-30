@@ -1,7 +1,6 @@
-@import "../../../styles/common/grid-container.scss";
-
 .player-status {
-  @extend %grid-container;
+  display: grid;
+  gap: 4px;
   margin: 24px 8px;
   grid-template-columns: 1fr 2fr;
 }

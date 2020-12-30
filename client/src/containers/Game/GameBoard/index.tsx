@@ -41,7 +41,7 @@ const GameBoard = (): JSX.Element => {
         transitions.map(
           ({ item, key, props }) =>
             item && (
-              <animated.div className="animated-played-card" key={key} style={props}>
+              <animated.div className="game-board__played-card" key={key} style={props}>
                 <Card card={playedCard} />
               </animated.div>
             )

@@ -18,7 +18,7 @@ const Sprite = ({ src, step = 1, tick = 1, size, scale = 1, repeat = -1, centeri
 
   return (
     <div
-      className={`sprite ${centerize ? "centerize" : ""}`}
+      className={`sprite ${centerize ? "-centerize" : ""}`}
       style={{
         width: width + "px",
         height: height + "px",

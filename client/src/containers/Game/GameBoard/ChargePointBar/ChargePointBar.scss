@@ -1,4 +1,5 @@
-@import "../../../../constant.scss";
+@import "../../../../styles/constant.scss";
+@import "../../../../styles/utilities/createPixelBorder.scss";
 
 $node-border-width: 4px;
 $color-border: #2e1710;
@@ -9,16 +10,8 @@ $position-x: calc(-50% - #{$node-border-width} * 2);
 }
 
 .charge-point {
-  padding-top: 40%;
-
-  &.empty {
-    background-color: $color-border !important;
-    box-shadow: inset 0px ($node-border-width * 2) 0px 0px #a79995 !important;
-  }
-}
-
-.charge-point-bar {
-  @extend %grid-container;
+  display: grid;
+  gap: 4px;
   position: absolute;
   left: 50%;
   top: calc(50% - #{$box-of-card-size} / 2);
@@ -31,19 +24,28 @@ $position-x: calc(-50% - #{$node-border-width} * 2);
   border: $node-border-width solid $color-border;
   box-shadow: createPixelBorder($node-border-width, #ad9587);
 
-  &.safe .charge-point {
+  &__node {
+    padding-top: 40%;
+
+    &.-empty {
+      background-color: $color-border !important;
+      box-shadow: inset 0px ($node-border-width * 2) 0px 0px #a79995 !important;
+    }
+  }
+
+  &.-safe &__node {
     transition: 0.5s;
     background-color: #99e550;
     @include shadingChargePoint(#6abe30);
   }
 
-  &.warning .charge-point {
+  &.-warning &__node {
     transition: 0.5s;
     background-color: #ffd04c;
     @include shadingChargePoint(#d19c07);
   }
 
-  &.danger .charge-point {
+  &.-danger &__node {
     transition: 0.5s;
     background-color: #ff4412;
     @include shadingChargePoint(#9e371c);

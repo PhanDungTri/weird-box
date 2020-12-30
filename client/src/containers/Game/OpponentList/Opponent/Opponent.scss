@@ -1,16 +1,20 @@
-.opponent-card {
+@import "../../../../styles/utilities/createPixelBorder.scss";
+
+.opponent {
   position: relative;
-  @extend %grid-container;
+  display: grid;
+  gap: 4px;
+  margin: 4px;
   margin: 4px;
   box-shadow: createPixelBorder(4px, #2b2e4a);
-}
 
-.opponent-name {
-  background-color: #903749;
-  color: #ffffff;
-  text-align: center;
-  padding: 8px;
-  font-size: 18px;
-  font-weight: bold;
-  border-bottom: 4px solid #2b2e4a;
+  &__name {
+    background-color: #903749;
+    color: #ffffff;
+    text-align: center;
+    padding: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 4px solid #2b2e4a;
+  }
 }

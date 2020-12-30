@@ -1,3 +1,5 @@
+@import "../../styles/utilities/createPixelBorder.scss";
+
 $border-width: 2px;
 $content-border-width: $border-width * 6;
 $color-border: #2f2f2f;
@@ -18,36 +20,36 @@ $color-reflection: #ffffff;
   transition: 0.2s;
   user-select: none;
 
-  &.chosen {
+  &.-chosen {
     transform: translateY(-30px);
   }
-}
 
-.card-content {
-  position: absolute;
-  border: $content-border-width solid transparent;
-  border-image: url(../../assets/sprites/card_content_frame.png) 12 round;
-  width: 1rem;
-  height: 3rem;
-}
-
-.card-spec {
-  position: absolute;
-  display: inline-block;
-  background-color: $color-background;
-  color: $color-content-border;
-  font-family: "Dogica Pixel";
-  font-size: 10px;
-  font-weight: bold;
-  left: 50%;
-
-  &.power-point {
-    top: -$content-border-width;
-    transform: translate(-50%, -25%);
+  &__content {
+    position: absolute;
+    border: $content-border-width solid transparent;
+    border-image: url(../../assets/sprites/card_content_frame.png) 12 round;
+    width: 1rem;
+    height: 3rem;
   }
 
-  &.action {
-    bottom: -$content-border-width;
-    transform: translate(-50%, 25%);
+  &__spec {
+    position: absolute;
+    display: inline-block;
+    background-color: $color-background;
+    color: $color-content-border;
+    font-family: "Dogica Pixel";
+    font-size: 10px;
+    font-weight: bold;
+    left: 50%;
+
+    &.-power-point {
+      top: -$content-border-width;
+      transform: translate(-50%, -25%);
+    }
+
+    &.-action {
+      bottom: -$content-border-width;
+      transform: translate(-50%, 25%);
+    }
   }
 }

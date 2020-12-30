@@ -2,13 +2,9 @@
   position: relative;
   flex-grow: 1;
 
-  & > * {
-    display: inline-block;
+  &__played-card {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
-}
-
-.animated-played-card {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
