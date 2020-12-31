@@ -8,6 +8,10 @@ abstract class OverTimeEffect extends Effect {
   }
 
   public abstract tick(): void;
+
+  public getDuration(): number {
+    return this.duration;
+  }
 }
 
 export default OverTimeEffect;

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import EFFECT_CATEGORY from "../../../../shared/src/effectCategory";
 import EFFECT_NAME from "../../../../shared/src/effectName";
 import SOCKET_EVENT from "../../../../shared/src/socketEvent";
 import useSocketEvent from "../../hooks/useSocketEvent";
@@ -13,7 +12,7 @@ interface EffectListProps {
 interface IEffect {
   id: string;
   name: EFFECT_NAME;
-  category: EFFECT_CATEGORY;
+  duration: number;
 }
 
 interface ITakeEffectRes {
@@ -25,7 +24,7 @@ const EffectList = (props: EffectListProps): JSX.Element => {
   const [effects, setEffectList] = useState<IEffect[]>([]);
 
   useSocketEvent(SOCKET_EVENT.TakeEffect, (data: ITakeEffectRes) => {
-    if (data.id === props.owner && data.effect.category === EFFECT_CATEGORY.OverTime) {
+    if (data.id === props.owner && data.effect.duration > 0) {
       setEffectList((list) => [...list, data.effect]);
     }
   });
@@ -33,7 +32,7 @@ const EffectList = (props: EffectListProps): JSX.Element => {
   return (
     <div className="effect-list">
       {effects.map((eff) => (
-        <EffectTracker key={eff.id} />
+        <EffectTracker key={eff.id} id={eff.id} />
       ))}
     </div>
   );

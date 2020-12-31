@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EFFECT_NAME from "../../../../../../shared/src/effectName";
-import EFFECT_CATEGORY from "../../../../../../shared/src/effectCategory";
 import SOCKET_EVENT from "../../../../../../shared/src/socketEvent";
 import HealEffectAnimation from "../../../../assets/sprites/heal_animation.png";
 import PoisonEffectAnimation from "../../../../assets/sprites/poison_animation.png";
@@ -17,7 +16,7 @@ interface IEffectRes {
   effect: {
     id: string;
     name: EFFECT_NAME;
-    category: EFFECT_CATEGORY;
+    duration: number;
   };
 }
 
@@ -70,12 +69,16 @@ const setEffectAnimation = (effect: EFFECT_NAME): JSX.Element => {
 const Opponent = (props: IPlayer): JSX.Element => {
   const [effect, setEffect] = useState<EFFECT_NAME>(EFFECT_NAME.Void);
 
-  useSocketEvent(SOCKET_EVENT.TakeEffect, (data: IEffectRes) => {
+  const animate = (data: IEffectRes) => {
+    // TODO test here!
     if (data.id === props.id) {
       setEffect(data.effect.name);
       setTimeout(() => setEffect(EFFECT_NAME.Void), 600);
     }
-  });
+  };
+
+  useSocketEvent(SOCKET_EVENT.TakeEffect, animate);
+  useSocketEvent(SOCKET_EVENT.TickEffect, animate);
 
   return (
     <div className="opponent" key={props.id}>
