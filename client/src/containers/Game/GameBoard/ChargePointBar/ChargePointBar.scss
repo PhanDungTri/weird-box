@@ -26,6 +26,7 @@ $position-x: calc(-50% - #{$node-border-width} * 2);
 
   &__node {
     padding-top: 40%;
+    transition: 0.5s;
 
     &.-empty {
       background-color: $color-border !important;
@@ -34,19 +35,16 @@ $position-x: calc(-50% - #{$node-border-width} * 2);
   }
 
   &.-safe &__node {
-    transition: 0.5s;
     background-color: #99e550;
     @include shadingChargePoint(#6abe30);
   }
 
   &.-warning &__node {
-    transition: 0.5s;
     background-color: #ffd04c;
     @include shadingChargePoint(#d19c07);
   }
 
   &.-danger &__node {
-    transition: 0.5s;
     background-color: #ff4412;
     @include shadingChargePoint(#9e371c);
   }
