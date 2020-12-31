@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import EFFECT_NAME from "../../../../../../shared/src/effectName";
+import EFFECT_CATEGORY from "../../../../../../shared/src/effectCategory";
 import SOCKET_EVENT from "../../../../../../shared/src/socketEvent";
 import HealEffectAnimation from "../../../../assets/sprites/heal_animation.png";
 import PoisonEffectAnimation from "../../../../assets/sprites/poison_animation.png";
 import PunchEffectAnimation from "../../../../assets/sprites/punch_animation.png";
+import EffectList from "../../../../components/EffectList";
 import HitPointBar from "../../../../components/HitPointBar";
 import Sprite from "../../../../components/Sprite";
 import useSocketEvent from "../../../../hooks/useSocketEvent";
@@ -12,7 +14,11 @@ import "./Opponent.scss";
 
 interface IEffectRes {
   id: string;
-  effect: EFFECT_NAME;
+  effect: {
+    id: string;
+    name: EFFECT_NAME;
+    category: EFFECT_CATEGORY;
+  };
 }
 
 const setEffectAnimation = (effect: EFFECT_NAME): JSX.Element => {
@@ -66,7 +72,7 @@ const Opponent = (props: IPlayer): JSX.Element => {
 
   useSocketEvent(SOCKET_EVENT.TakeEffect, (data: IEffectRes) => {
     if (data.id === props.id) {
-      setEffect(data.effect);
+      setEffect(data.effect.name);
       setTimeout(() => setEffect(EFFECT_NAME.Void), 600);
     }
   });
@@ -74,7 +80,7 @@ const Opponent = (props: IPlayer): JSX.Element => {
   return (
     <div className="opponent" key={props.id}>
       <div className="opponent__name">{props.name}</div>
-      <div />
+      <EffectList owner={props.id} />
       <HitPointBar owner={props.id} />
       {setEffectAnimation(effect)}
     </div>

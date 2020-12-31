@@ -1,0 +1,8 @@
+@import "../../../styles/utilities/createPixelBorder.scss";
+
+.effect-tracker {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  box-shadow: createPixelBorder(2px, #2b2e4a);
+}

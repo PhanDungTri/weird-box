@@ -11,6 +11,7 @@ enum SOCKET_EVENT {
   ChargePointChanged = "charge point changed",
   StartTurn = "start turn",
   TakeEffect = "take effect",
+  TickEffect = "tick effect",
 }
 
 export default SOCKET_EVENT;
