@@ -69,7 +69,7 @@ class Game {
   }
 
   public newTurn(): void {
-    this.players.forEach((p) => p.triggerEffects());
+    this.players.forEach((p) => p.tickEffects());
 
     if (this.currentPlayerIndex === -1) {
       this.currentPlayerIndex = 0;

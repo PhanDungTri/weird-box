@@ -95,7 +95,7 @@ class Player {
     this.effects = this.effects.filter((eff) => eff !== effect);
   }
 
-  public triggerEffects(): void {
+  public tickEffects(): void {
     this.effects.forEach((eff) => {
       eff.tick();
 

@@ -18,10 +18,28 @@ const EffectList = (props: EffectListProps): JSX.Element => {
     }
   });
 
+  useSocketEvent(SOCKET_EVENT.TickEffect, (data: IEffectEvent) => {
+    if (data.target === props.owner) {
+      setEffectList((list) => {
+        if (data.effect.duration === 0) {
+          return list.filter((eff) => eff.id !== data.effect.id);
+        }
+
+        const index = list.findIndex((eff) => eff.id === data.effect.id);
+
+        if (index === -1) return list;
+
+        const updatedList = [...list];
+        updatedList[index].duration = data.effect.duration;
+        return updatedList;
+      });
+    }
+  });
+
   return (
     <div className="effect-list">
       {effects.map((eff) => (
-        <EffectTracker key={eff.id} id={eff.id} />
+        <EffectTracker key={eff.id} id={eff.id} duration={eff.duration} />
       ))}
     </div>
   );
