@@ -1,4 +1,5 @@
 import EFFECT_NAME from "../../../../shared/src/effectName";
+import { IEffect } from "../../../../shared/src/interfaces/Effect";
 import generateUniqueId from "../../utilities/generateUniqueId";
 
 abstract class Effect {
@@ -11,6 +12,14 @@ abstract class Effect {
 
   public getPower(): number {
     return this.power;
+  }
+
+  public toJsonData(): IEffect {
+    return {
+      id: this.id,
+      name: this.name,
+      duration: 0,
+    };
   }
 }
 

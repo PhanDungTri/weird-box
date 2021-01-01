@@ -7,14 +7,6 @@ interface EffectTrackerProps {
   id: string;
 }
 
-interface ITakeEffectRes {
-  id: string;
-  effect: {
-    id: string;
-    duration: number;
-  };
-}
-
 const EffectTracker = (props: EffectTrackerProps): JSX.Element => {
   return (
     <div className="effect-tracker">

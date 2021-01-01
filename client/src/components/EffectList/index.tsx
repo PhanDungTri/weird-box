@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EFFECT_NAME from "../../../../shared/src/effectName";
+import { IEffect, IEffectEvent } from "../../../../shared/src/interfaces/Effect";
 import SOCKET_EVENT from "../../../../shared/src/socketEvent";
 import useSocketEvent from "../../hooks/useSocketEvent";
 import "./EffectList.scss";
@@ -9,22 +9,11 @@ interface EffectListProps {
   owner: string;
 }
 
-interface IEffect {
-  id: string;
-  name: EFFECT_NAME;
-  duration: number;
-}
-
-interface ITakeEffectRes {
-  id: string;
-  effect: IEffect;
-}
-
 const EffectList = (props: EffectListProps): JSX.Element => {
   const [effects, setEffectList] = useState<IEffect[]>([]);
 
-  useSocketEvent(SOCKET_EVENT.TakeEffect, (data: ITakeEffectRes) => {
-    if (data.id === props.owner && data.effect.duration > 0) {
+  useSocketEvent(SOCKET_EVENT.TakeEffect, (data: IEffectEvent) => {
+    if (data.target === props.owner && data.effect.duration > 0) {
       setEffectList((list) => [...list, data.effect]);
     }
   });

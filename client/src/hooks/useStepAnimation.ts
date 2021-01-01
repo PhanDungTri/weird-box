@@ -20,6 +20,7 @@ const useStepAnimation = ({ step, tick, repeat = -1, start = true }: AnimationPa
   const frame = useRef(0); // wait for `tick` frames before performing next step
   const isMaxStep = useRef(currentStep === step - 1);
   const repeatCounter = useRef(0);
+  const requestId = useRef<number>();
 
   const animate = (): void => {
     if (isMaxStep.current && repeat !== -1) {
@@ -42,7 +43,7 @@ const useStepAnimation = ({ step, tick, repeat = -1, start = true }: AnimationPa
       return (cur + 1) % step;
     });
     frame.current = 0;
-    requestAnimationFrame(animate);
+    requestId.current = requestAnimationFrame(animate);
   };
 
   useEffect(() => {
@@ -53,6 +54,12 @@ const useStepAnimation = ({ step, tick, repeat = -1, start = true }: AnimationPa
       repeatCounter.current = 0;
       setCurrentStep(0);
     }
+
+    return (): void => {
+      if (requestId.current) {
+        cancelAnimationFrame(requestId.current);
+      }
+    };
   }, [trigger]);
 
   return { currentStep, animate: setTrigger };

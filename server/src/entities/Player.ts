@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import SOCKET_EVENT from "../../../shared/src/socketEvent";
+import { IEffectEvent } from "../../../shared/src/interfaces/Effect";
 import { PlayerInfo } from "../interfaces/PlayerInfo";
 import Card from "./Card";
 import Effect from "./effects/Effect";
@@ -78,21 +79,16 @@ class Player {
   }
 
   public takeEffect(effect: Effect): void {
-    let duration = 0;
-
     if (effect instanceof OverTimeEffect) {
       this.effects.push(effect);
-      duration = effect.getDuration();
     }
 
-    this.game?.notifyAll(SOCKET_EVENT.TakeEffect, {
-      id: this.getId(),
-      effect: {
-        id: effect.id,
-        name: effect.name,
-        duration,
-      },
-    });
+    const data: IEffectEvent = {
+      target: this.getId(),
+      effect: effect.toJsonData(),
+    };
+
+    this.game?.notifyAll(SOCKET_EVENT.TakeEffect, data);
   }
 
   public removeEffect(effect: OverTimeEffect): void {
@@ -103,14 +99,12 @@ class Player {
     this.effects.forEach((eff) => {
       eff.tick();
 
-      this.game?.notifyAll(SOCKET_EVENT.TickEffect, {
-        id: this.getId(),
-        effect: {
-          id: eff.id,
-          effect: eff.name,
-          duration: eff.getDuration(),
-        },
-      });
+      const data: IEffectEvent = {
+        target: this.getId(),
+        effect: eff.toJsonData(),
+      };
+
+      this.game?.notifyAll(SOCKET_EVENT.TickEffect, data);
     });
   }
 
