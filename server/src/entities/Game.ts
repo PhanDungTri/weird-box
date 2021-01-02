@@ -5,12 +5,14 @@ import generateUniqueId from "../utilities/generateUniqueId";
 import Card from "./Card";
 import Deck from "./Deck";
 import createEffect from "./effects/createEffect";
+import GameCommunicator from "./GameCommunicator";
 import Player from "./Player";
 
 const STARTING_HAND = 5;
 
 class Game {
   public readonly id = generateUniqueId();
+  public readonly communicator = new GameCommunicator(this);
   private chargePoint = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck({ isEmpty: true });
@@ -100,11 +102,8 @@ class Game {
 
     for (const p of this.players) {
       p.response(
-        "update opponent list",
-        this.players.reduce<PlayerInfo[]>((opponents, pl) => {
-          if (pl !== p) opponents.push(pl.getInfo());
-          return opponents;
-        }, [])
+        SOCKET_EVENT.GetPlayerList,
+        this.players.map((p) => p.toJsonData())
       );
     }
 

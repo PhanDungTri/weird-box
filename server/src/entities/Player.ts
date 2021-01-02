@@ -6,6 +6,7 @@ import Card from "./Card";
 import Effect from "./effects/Effect";
 import OverTimeEffect from "./effects/OverTimeEffect";
 import Game from "./Game";
+import { IPlayer } from "../../../shared/src/interfaces/Player";
 
 class Player {
   private cards: Card[] = [];
@@ -33,14 +34,6 @@ class Player {
 
   public getId(): string {
     return this.socket.id;
-  }
-
-  public getInfo(): PlayerInfo {
-    return {
-      id: this.socket.id,
-      name: this.name,
-      hitPoint: this.hitPoint,
-    };
   }
 
   private playCard(id: string): void {
@@ -72,7 +65,7 @@ class Player {
     if (this.hitPoint < 0) this.hitPoint = 0;
     else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    this.game?.notifyAll(SOCKET_EVENT.HitPointChanged, {
+    this.game?.communicator.dispatchChangeHitPoint({
       id: this.getId(),
       difference,
     });
@@ -110,6 +103,15 @@ class Player {
 
   public sanitize(): void {
     this.effects = [];
+  }
+
+  public toJsonData(): IPlayer {
+    return {
+      id: this.getId(),
+      name: this.name,
+      hp: this.hitPoint,
+      effects: this.effects.map((eff) => eff.toJsonData()),
+    };
   }
 }
 

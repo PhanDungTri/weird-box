@@ -18,19 +18,17 @@ const HitPointBar = ({ owner }: HitPointBarProps): JSX.Element => {
   const [hp, setHP] = useState(maxHP);
   const [secondaryHP, setSecondaryHP] = useState(hp);
 
-  const changeHitPoint = ({ id, difference }: PlayerHPChangedRes) => {
-    if (id === owner) {
-      setHP((currentHP) => {
-        const newHP = currentHP + difference;
-
-        if (newHP < 0) return 0;
-        if (newHP > 100) return 100;
-
-        setTimeout(() => setSecondaryHP(newHP), 600);
-
-        return newHP;
-      });
-    }
+  const changeHitPoint = (data: any) => {
+    console.log(data);
+    // if (id === owner) {
+    //   setHP((currentHP) => {
+    //     const newHP = currentHP + difference;
+    //     if (newHP < 0) return 0;
+    //     if (newHP > 100) return 100;
+    //     setTimeout(() => setSecondaryHP(newHP), 600);
+    //     return newHP;
+    //   });
+    // }
   };
 
   useSocketEvent(SOCKET_EVENT.HitPointChanged, changeHitPoint);
