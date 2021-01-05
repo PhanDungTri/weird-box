@@ -6,7 +6,7 @@ import Card from "../../../components/Card";
 import NOTI_VARIANT from "../../../constants/NOTI_VARIANT";
 import useSocketEvent from "../../../hooks/useSocketEvent";
 import ICard from "../../../interfaces/ICard";
-import { socketState } from "../../../state";
+import socketState from "../../../state/socketState";
 import notificationState from "../../../state/notificationState";
 import { useGameContext } from "../Game.context";
 import "./PlayerHand.scss";

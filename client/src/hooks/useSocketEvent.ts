@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { socketState } from "../state";
+import socketState from "../state/socketState";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type EventHandler = (args: any) => void;
