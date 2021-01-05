@@ -13,6 +13,7 @@ enum SOCKET_EVENT {
   StartTurn = "start turn",
   TakeEffect = "take effect",
   TickEffect = "tick effect",
+  Sanitize = "sanitize",
 }
 
 export default SOCKET_EVENT;

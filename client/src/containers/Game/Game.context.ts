@@ -79,6 +79,13 @@ const gameContext = () => {
     );
   });
 
+  useSocketEvent(SOCKET_EVENT.Sanitize, (data: string) => {
+    setEffectList((list) => ({
+      ...list,
+      [data]: {},
+    }));
+  });
+
   useSocketEvent(SOCKET_EVENT.TakeEffect, (data: IEffectEvent) => {
     animateEffect(data);
     if (data.effect.duration > 0) updateEffectListOfPlayer(data);

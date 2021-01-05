@@ -99,6 +99,7 @@ class Player {
 
   public sanitize(): void {
     this.effects = [];
+    this.game?.notifyAll(SOCKET_EVENT.Sanitize, this.getId());
   }
 
   public toJsonData(): IPlayer {
