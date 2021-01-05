@@ -1,19 +1,19 @@
-import Game from "./Game";
-import { IChangeHitPoint } from "../../../shared/src/interfaces/HitPoint";
+import { IPlayer } from "../../../shared/src/interfaces/Player";
 import SOCKET_EVENT from "../../../shared/src/socketEvent";
+import Game from "./Game";
 
 class GameCommunicator {
-  public readonly dispatchChangeHitPoint: (payload: IChangeHitPoint) => void;
+  public readonly dispatchChangeHitPoint: (payload: Omit<IPlayer, "name">) => void;
 
   constructor(private game: Game) {
     this.dispatchChangeHitPoint = this.debounceChangeHitPoint();
   }
 
-  private debounceChangeHitPoint(): (payload: IChangeHitPoint) => void {
+  private debounceChangeHitPoint(): (payload: Omit<IPlayer, "name">) => void {
     let timeout: NodeJS.Timeout;
-    let data: IChangeHitPoint[] = [];
+    let data: Omit<IPlayer, "name">[] = [];
 
-    return (payload: IChangeHitPoint): void => {
+    return (payload: Omit<IPlayer, "name">): void => {
       if (timeout) {
         clearTimeout(timeout);
       }

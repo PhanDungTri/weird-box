@@ -1,6 +1,5 @@
 import ANIMATION_DURATION from "../../../shared/src/animationDuration";
 import SOCKET_EVENT from "../../../shared/src/socketEvent";
-import { PlayerInfo } from "../interfaces/PlayerInfo";
 import generateUniqueId from "../utilities/generateUniqueId";
 import Card from "./Card";
 import Deck from "./Deck";

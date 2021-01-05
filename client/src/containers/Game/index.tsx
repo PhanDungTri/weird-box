@@ -8,13 +8,13 @@ import PlayerHand from "./PlayerHand";
 import PlayerStatus from "./PlayerStatus";
 
 const Game = (): JSX.Element => {
-  const { chooseCard, maxHP } = useGameContext();
+  const { resetChosenCard } = useGameContext();
 
   return (
-    <div className="game" onClick={() => chooseCard("")}>
+    <div className="game" onClick={resetChosenCard}>
       <OpponentList />
       <GameBoard />
-      {maxHP > 0 && <PlayerStatus />}
+      <PlayerStatus />
       <PlayerHand />
       <Notification />
     </div>

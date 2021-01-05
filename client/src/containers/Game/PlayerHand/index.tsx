@@ -16,7 +16,8 @@ const PlayerHand = (): JSX.Element => {
   const setNotification = useSetRecoilState(notificationState);
   const self = useRef<HTMLDivElement>(null);
   const [hand, setHand] = useState<ICard[]>([]);
-  const { chosenCard, chooseCard, currentPlayer } = useGameContext();
+  const { chosenCard, setChosenCard, currentPlayer } = useGameContext();
+
   const transitions = useTransition(hand, (card) => card.id, {
     from: {
       position: "relative",
@@ -33,11 +34,9 @@ const PlayerHand = (): JSX.Element => {
     },
   });
 
-  const addCards = (cards: ICard[]) => setHand((list) => [...list, ...cards]);
-
   const playCard = (id: string): void => {
     // TODO check if in-turn
-    if (chosenCard !== id) chooseCard(id);
+    if (chosenCard !== id) setChosenCard(id);
     else if (currentPlayer === socket.id) {
       socket.emit(SOCKET_EVENT.PlayCard, id);
       socket.once(SOCKET_EVENT.CardPlayed, () => {
@@ -52,7 +51,7 @@ const PlayerHand = (): JSX.Element => {
     }
   };
 
-  useSocketEvent(SOCKET_EVENT.TakeCard, addCards);
+  useSocketEvent(SOCKET_EVENT.TakeCard, (cards: ICard[]) => setHand((list) => [...list, ...cards]));
 
   return (
     <>

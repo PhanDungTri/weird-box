@@ -1,12 +1,11 @@
 import { Socket } from "socket.io";
-import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import { IEffectEvent } from "../../../shared/src/interfaces/Effect";
-import { PlayerInfo } from "../interfaces/PlayerInfo";
+import { IPlayer } from "../../../shared/src/interfaces/Player";
+import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import Card from "./Card";
 import Effect from "./effects/Effect";
 import OverTimeEffect from "./effects/OverTimeEffect";
 import Game from "./Game";
-import { IPlayer } from "../../../shared/src/interfaces/Player";
 
 class Player {
   private cards: Card[] = [];
@@ -65,10 +64,7 @@ class Player {
     if (this.hitPoint < 0) this.hitPoint = 0;
     else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    this.game?.communicator.dispatchChangeHitPoint({
-      id: this.getId(),
-      difference,
-    });
+    this.game?.communicator.dispatchChangeHitPoint(this.toJsonData());
   }
 
   public takeEffect(effect: Effect): void {
@@ -110,7 +106,6 @@ class Player {
       id: this.getId(),
       name: this.name,
       hp: this.hitPoint,
-      effects: this.effects.map((eff) => eff.toJsonData()),
     };
   }
 }

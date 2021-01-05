@@ -2,16 +2,25 @@ import React from "react";
 import EffectAnimation from "../../../../components/EffectAnimation";
 import EffectList from "../../../../components/EffectList";
 import HitPointBar from "../../../../components/HitPointBar";
-import IPlayer from "../../../../interfaces/IPlayer";
+import { useGameContext } from "../../Game.context";
 import "./Opponent.scss";
 
-const Opponent = (props: IPlayer): JSX.Element => {
+interface OpponentProps {
+  id: string;
+}
+
+const Opponent = ({ id }: OpponentProps): JSX.Element => {
+  const { maxHP, getPlayerById, getEffectsOfPlayer, getEffectAnimationOfPlayer } = useGameContext();
+  const effectList = getEffectsOfPlayer(id);
+  const { name, hp } = getPlayerById(id);
+  const effectAnimation = getEffectAnimationOfPlayer(id);
+
   return (
-    <div className="opponent" key={props.id}>
-      <div className="opponent__name">{props.name}</div>
-      <EffectList owner={props.id} />
-      <HitPointBar owner={props.id} />
-      <EffectAnimation owner={props.id} />
+    <div className="opponent">
+      <div className="opponent__name">{name}</div>
+      <EffectList effects={effectList} />
+      <HitPointBar hp={hp} maxHP={maxHP} />
+      <EffectAnimation effect={effectAnimation} />
     </div>
   );
 };
