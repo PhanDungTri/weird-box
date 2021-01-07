@@ -1,17 +1,18 @@
 import React from "react";
-import useSocketId from "../../../hooks/useSocketId";
-import { useGameContext } from "../Game.context";
+import { IPlayer } from "../../../../../shared/src/interfaces/Player";
+import socket from "../../../global/socket";
+import { usePlayerListState } from "../state";
 import Opponent from "./Opponent";
 import "./OpponentList.scss";
 
 const OpponentList = (): JSX.Element => {
-  const socketId = useSocketId();
-  const { playerList } = useGameContext();
+  const { id } = socket;
+  const players = usePlayerListState() as IPlayer[];
 
   return (
     <div className="opponent-list">
-      {Object.values(playerList)
-        .filter((p) => p.id !== socketId)
+      {players
+        .filter((p) => p.id !== id)
         .map((o) => (
           <Opponent key={o.id} {...o} />
         ))}

@@ -1,17 +1,17 @@
 import React from "react";
 import Notification from "../../components/Notification";
-import { GameContextProvider, useGameContext } from "./Game.context";
 import "./Game.scss";
 import GameBoard from "./GameBoard";
 import OpponentList from "./OpponentList";
 import PlayerHand from "./PlayerHand";
 import PlayerStatus from "./PlayerStatus";
+import { useChosenCardState } from "./state";
 
 const Game = (): JSX.Element => {
-  const { resetChosenCard } = useGameContext();
+  const { unchooseCard } = useChosenCardState();
 
   return (
-    <div className="game" onClick={resetChosenCard}>
+    <div className="game" onClick={unchooseCard}>
       <OpponentList />
       <GameBoard />
       <PlayerStatus />
@@ -21,12 +21,4 @@ const Game = (): JSX.Element => {
   );
 };
 
-const GameContext = (): JSX.Element => {
-  return (
-    <GameContextProvider>
-      <Game />
-    </GameContextProvider>
-  );
-};
-
-export default GameContext;
+export default Game;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SOCKET_EVENT from "../../../../../../shared/src/socketEvent";
-import useSocketEvent from "../../../../hooks/useSocketEvent";
+import socket from "../../../../global/socket";
 import useStepAnimation from "../../../../hooks/useStepAnimation";
 import "./ChargePointBar.scss";
 
@@ -34,9 +34,6 @@ const ChargePointBar = (): JSX.Element => {
     setValue(point);
   };
 
-  useSocketEvent(SOCKET_EVENT.ChargePointChanged, updateChargePoint);
-  useSocketEvent(SOCKET_EVENT.TakeCard, dealCard);
-
   useEffect(() => {
     setNodeStatus(charge(value));
 
@@ -44,6 +41,17 @@ const ChargePointBar = (): JSX.Element => {
     else if (value >= 5 && value < 8) setState("warning");
     else setState("danger");
   }, [value]);
+
+  useEffect(() => {
+    socket.on(SOCKET_EVENT.ChargePointChanged, updateChargePoint);
+    socket.on(SOCKET_EVENT.TakeCard, dealCard);
+
+    return (): void => {
+      console.log("off");
+      socket.off(SOCKET_EVENT.ChargePointChanged);
+      socket.off(SOCKET_EVENT.TakeCard);
+    };
+  }, []);
 
   return (
     <div

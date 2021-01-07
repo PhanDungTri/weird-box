@@ -1,22 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { animated, useTransition } from "react-spring";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
 import Card from "../../../components/Card";
 import NOTI_VARIANT from "../../../constants/NOTI_VARIANT";
-import useSocketEvent from "../../../hooks/useSocketEvent";
+import socket from "../../../global/socket";
 import ICard from "../../../interfaces/ICard";
-import socketState from "../../../state/socketState";
-import notificationState from "../../../state/notificationState";
-import { useGameContext } from "../Game.context";
+import useNotificationState from "../../../state/notificationState";
+import { useChosenCardState, useCurrentPlayerState } from "../state";
 import "./PlayerHand.scss";
 
 const PlayerHand = (): JSX.Element => {
-  const socket = useRecoilValue(socketState);
-  const setNotification = useSetRecoilState(notificationState);
-  const self = useRef<HTMLDivElement>(null);
-  const [hand, setHand] = useState<ICard[]>([]);
-  const { chosenCard, setChosenCard, currentPlayer } = useGameContext();
+  const { chosenCard, chooseCard } = useChosenCardState();
+  const currentPlayer = useCurrentPlayerState();
+  const setNotification = useNotificationState().set;
+  const [hand, setHand] = React.useState<ICard[]>([]);
 
   const transitions = useTransition(hand, (card) => card.id, {
     from: {
@@ -36,7 +33,7 @@ const PlayerHand = (): JSX.Element => {
 
   const playCard = (id: string): void => {
     // TODO check if in-turn
-    if (chosenCard !== id) setChosenCard(id);
+    if (chosenCard !== id) chooseCard(id);
     else if (currentPlayer === socket.id) {
       socket.emit(SOCKET_EVENT.PlayCard, id);
       socket.once(SOCKET_EVENT.CardPlayed, () => {
@@ -51,11 +48,18 @@ const PlayerHand = (): JSX.Element => {
     }
   };
 
-  useSocketEvent(SOCKET_EVENT.TakeCard, (cards: ICard[]) => setHand((list) => [...list, ...cards]));
+  useEffect(() => {
+    socket.on(SOCKET_EVENT.TakeCard, (cards: ICard[]) => setHand((list) => [...list, ...cards]));
+
+    return (): void => {
+      console.log("off");
+      socket.off(SOCKET_EVENT.TakeCard);
+    };
+  }, []);
 
   return (
     <>
-      <div className="player-hand" ref={self}>
+      <div className="player-hand">
         {transitions.map(({ item, key, props }) => (
           <animated.div key={key} style={props}>
             <Card card={item} onChoose={() => playCard(item.id)} isChosen={chosenCard === item.id} />

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import ANIMATION_DURATION from "../../../../../shared/src/animationDuration";
 import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
 import Card from "../../../components/Card";
-import useSocketEvent from "../../../hooks/useSocketEvent";
+import socket from "../../../global/socket";
 import ICard from "../../../interfaces/ICard";
 import BoxOfCard from "./BoxOfCard";
 import ChargePointBar from "./ChargePointBar";
@@ -31,7 +31,14 @@ const GameBoard = (): JSX.Element => {
     setTimeout(() => setConsumeAnimation(false), ANIMATION_DURATION.ConsumeCard);
   };
 
-  useSocketEvent(SOCKET_EVENT.CardPlayed, showPlayedCard);
+  useEffect(() => {
+    socket.on(SOCKET_EVENT.CardPlayed, showPlayedCard);
+
+    return (): void => {
+      console.log("off");
+      socket.off(SOCKET_EVENT.CardPlayed);
+    };
+  }, []);
 
   return (
     <div className="game-board">

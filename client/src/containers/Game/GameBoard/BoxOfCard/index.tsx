@@ -4,7 +4,7 @@ import IdleSprite from "../../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../../assets/sprites/box_of_cards_overcharged.png";
 import Sprite from "../../../../components/Sprite";
-import useSocketEvent from "../../../../hooks/useSocketEvent";
+import socket from "../../../../global/socket";
 
 type State = "idle" | "deal" | "overcharged";
 
@@ -35,9 +35,6 @@ const setSprite = (state: State): JSX.Element => {
 const BoxOfCard = (): JSX.Element => {
   const [state, setState] = useState<State>("idle");
 
-  useSocketEvent(SOCKET_EVENT.TakeCard, () => setState("deal"));
-  useSocketEvent(SOCKET_EVENT.ChargePointBarOvercharged, () => setState("overcharged"));
-
   useEffect(() => {
     const resetState = setTimeout(() => setState("idle"), 600);
 
@@ -45,6 +42,17 @@ const BoxOfCard = (): JSX.Element => {
       clearTimeout(resetState);
     };
   }, [state]);
+
+  useEffect(() => {
+    socket.on(SOCKET_EVENT.TakeCard, () => setState("deal"));
+    socket.on(SOCKET_EVENT.ChargePointBarOvercharged, () => setState("overcharged"));
+
+    return (): void => {
+      console.log("off");
+      socket.off(SOCKET_EVENT.TakeCard);
+      socket.off(SOCKET_EVENT.ChargePointBarOvercharged);
+    };
+  }, []);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { createState, State, useState } from "@hookstate/core";
 import NOTI_VARIANT from "../constants/NOTI_VARIANT";
 
 interface NotificationState {
@@ -7,13 +7,12 @@ interface NotificationState {
   show: boolean;
 }
 
-const notificationState = atom<NotificationState>({
-  key: "notificationState",
-  default: {
-    variant: NOTI_VARIANT.Info,
-    message: "",
-    show: false,
-  },
+const notificationState = createState<NotificationState>({
+  variant: NOTI_VARIANT.Info,
+  message: "",
+  show: false,
 });
 
-export default notificationState;
+const useNotificationState = (): State<NotificationState> => useState(notificationState);
+
+export default useNotificationState;

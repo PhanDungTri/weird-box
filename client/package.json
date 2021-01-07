@@ -10,11 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hookstate/core": "^3.0.2",
     "constate": "^3.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-spring": "^8.0.27",
-    "recoil": "^0.1.2",
     "socket.io-client": "^3.0.3",
     "styled-components": "^5.2.1"
   },

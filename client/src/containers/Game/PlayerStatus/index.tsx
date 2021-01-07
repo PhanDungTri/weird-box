@@ -1,17 +1,18 @@
 import React from "react";
+import { IPlayer } from "../../../../../shared/src/interfaces/Player";
 import HitPointBar from "../../../components/HitPointBar";
-import useSocketId from "../../../hooks/useSocketId";
-import { useGameContext } from "../Game.context";
+import socket from "../../../global/socket";
+import { useGameState, usePlayerListState } from "../state";
 import "./PlayerStatus.scss";
 
 const PlayerStatus = (): JSX.Element => {
-  const socketId = useSocketId();
-  const { maxHP, getPlayerById } = useGameContext();
-  const player = getPlayerById(socketId);
+  const { id } = socket;
+  const { maxHP } = useGameState();
+  const player = usePlayerListState(id) as IPlayer;
 
   return (
     <div className="player-status">
-      <HitPointBar maxHP={maxHP} hp={player?.hp || 0} />
+      <HitPointBar maxHP={maxHP} hp={player.hp} />
       <div></div>
     </div>
   );
