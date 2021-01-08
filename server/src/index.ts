@@ -1,12 +1,8 @@
-import express from "express";
-import { createServer as createHttpServer } from "http";
 import { Server as SocketServer, Socket } from "socket.io";
 import Game from "./entities/Game";
 import Player from "./entities/Player";
 
-const expressServer = express();
-const httpServer = createHttpServer(expressServer);
-const socketServer = new SocketServer(httpServer, {
+const socketServer = new SocketServer(3000, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
@@ -25,8 +21,4 @@ socketServer.on("connection", (socket: Socket) => {
   socket.on("disconnect", () => {
     console.log(`${socket.id} disconnected`);
   });
-});
-
-httpServer.listen(3000, () => {
-  console.log("Server is started on port 3000");
 });

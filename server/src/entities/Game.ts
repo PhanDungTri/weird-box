@@ -2,10 +2,19 @@ import ANIMATION_DURATION from "../../../shared/src/animationDuration";
 import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import generateUniqueId from "../utilities/generateUniqueId";
 import Card from "./Card";
+import Client from "./Client";
 import Deck from "./Deck";
 import createEffect from "./effects/createEffect";
 import GameCommunicator from "./GameCommunicator";
 import Player from "./Player";
+
+interface GameOptions {
+  maxHP: number;
+}
+
+const defaultOptions: GameOptions = {
+  maxHP: 100,
+};
 
 const STARTING_HAND = 5;
 
@@ -17,7 +26,12 @@ class Game {
   private discardDeck: Deck = new Deck({ isEmpty: true });
   private players: Player[] = [];
   private currentPlayerIndex = -1;
-  private maxHP = 100;
+  private maxHP: number;
+
+  constructor(options = defaultOptions, ...clients: Client[]) {
+    this.maxHP = options.maxHP;
+    this.players = clients.map((cl) => new Player(cl, this));
+  }
 
   public getMaxHP(): number {
     return this.maxHP;

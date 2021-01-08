@@ -3,6 +3,7 @@ import { IEffectEvent } from "../../../shared/src/interfaces/Effect";
 import { IPlayer } from "../../../shared/src/interfaces/Player";
 import SOCKET_EVENT from "../../../shared/src/socketEvent";
 import Card from "./Card";
+import Client from "./Client";
 import Effect from "./effects/Effect";
 import OverTimeEffect from "./effects/OverTimeEffect";
 import Game from "./Game";
@@ -10,17 +11,11 @@ import Game from "./Game";
 class Player {
   private cards: Card[] = [];
   private effects: OverTimeEffect[] = [];
-  private game: Game | null = null;
-  private name = "Name";
-  private hitPoint = 0;
+  private hitPoint: number;
 
-  constructor(private socket: Socket) {
-    socket.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
-  }
-
-  public setGame(game: Game): void {
-    this.game = game;
-    this.hitPoint = this.game.getMaxHP();
+  constructor(private client: Client, private game: Game, private name = "player") {
+    this.hitPoint = game.getMaxHP();
+    client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
   }
 
   public getCards(): Card[] {
@@ -32,14 +27,18 @@ class Player {
   }
 
   public getId(): string {
-    return this.socket.id;
+    return this.client.getId();
+  }
+
+  public getClient(): Client {
+    return this.client;
   }
 
   private playCard(id: string): void {
     const card = this.getCardById(id);
 
     if (card) {
-      if (this.game?.getCurrentPlayer() === this) {
+      if (this.game.getCurrentPlayer() === this) {
         this.game.consumeCard(card);
       } else {
         this.response(SOCKET_EVENT.Error, "Not your turn");
