@@ -11,9 +11,10 @@ enum SOCKET_EVENT {
   HitPointChanged = "hit point changed",
   ChargePointChanged = "charge point changed",
   StartTurn = "start turn",
-  TakeEffect = "take effect",
-  TickEffect = "tick effect",
-  Sanitize = "sanitize",
+  TakeSpell = "take spell",
+  Purify = "purify",
+  FindGame = "find game",
+  Connected = "connected",
 }
 
 export default SOCKET_EVENT;

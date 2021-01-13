@@ -1,9 +1,9 @@
-import EFFECT_NAME from "../../../shared/src/effectName";
+import SPELL_NAME from "../../../shared/src/SpellName";
 
 interface ICard {
   id: string;
   powerPoint: number;
-  effect: EFFECT_NAME;
+  spell: SPELL_NAME;
 }
 
 export default ICard;

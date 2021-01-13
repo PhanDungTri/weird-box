@@ -1,41 +1,22 @@
 import { none } from "@hookstate/core";
-import ANIMATION_DURATION from "../../../../../shared/src/animationDuration";
-import EFFECT_NAME from "../../../../../shared/src/effectName";
-import { IEffect, IEffectEvent } from "../../../../../shared/src/interfaces/Effect";
+import ANIMATION_DURATION from "../../../../../shared/src/AnimationDuration";
+import { IGame } from "../../../../../shared/src/interfaces/Game";
 import { IPlayer } from "../../../../../shared/src/interfaces/Player";
-import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
+import { ISpell } from "../../../../../shared/src/interfaces/Spell";
+import SOCKET_EVENT from "../../../../../shared/src/SocketEvent";
+import SPELL_NAME from "../../../../../shared/src/SpellName";
+import socket from "../../../global/socket";
+import { appState, APP_STATE } from "../../../state/appState";
 import { useChosenCardState } from "./chosenCardState";
 import { currentPlayerState, useCurrentPlayerState } from "./currentPlayerState";
-import {
-  EffectAnimationTriggerList,
-  effectAnimationTriggerState,
-  useEffectAnimationTriggerState,
-} from "./effectAnimationTriggerState";
-import { EffectTrackerList, effectTrakerState, useEffectTrackerState } from "./effectTrackerState";
-import { gameState, GameState, useGameState } from "./gameState";
+import { gameState, useGameState } from "./gameState";
 import { PlayerList, playerListState, usePlayerListState } from "./playerListState";
-import socket from "../../../global/socket";
-
-const triggerEffectAnimation = (payload: IEffectEvent) => {
-  effectAnimationTriggerState[payload.target].set(payload.effect.name);
-  setTimeout(() => effectAnimationTriggerState[payload.target].set(EFFECT_NAME.Void), ANIMATION_DURATION.TakeEffect);
-};
-
-socket.on(SOCKET_EVENT.GetPlayerList, (payload: IPlayer[]) => {
-  const playerList: PlayerList = {};
-  const effectTrackerList: EffectTrackerList = {};
-  const effectAnimationTriggerList: EffectAnimationTriggerList = {};
-
-  for (const p of payload) {
-    playerList[p.id] = p;
-    effectTrackerList[p.id] = {};
-    effectAnimationTriggerList[p.id] = EFFECT_NAME.Void;
-  }
-
-  playerListState.set(playerList);
-  effectTrakerState.set(effectTrackerList);
-  effectAnimationTriggerState.set(effectAnimationTriggerList);
-});
+import {
+  SpellAnimationTriggerList,
+  spellAnimationTriggerState,
+  useSpellAnimationTriggerState,
+} from "./spellAnimationTriggerState";
+import { SpellTrackerList, spellTrakerState, useSpellTrackerState } from "./spellTrackerState";
 
 socket.on(SOCKET_EVENT.HitPointChanged, (payload: Omit<IPlayer, "name">[]) => {
   playerListState.batch((list) => {
@@ -45,26 +26,52 @@ socket.on(SOCKET_EVENT.HitPointChanged, (payload: Omit<IPlayer, "name">[]) => {
   });
 });
 
-socket.on(SOCKET_EVENT.GetGameInfo, (payload: GameState) => gameState.maxHP.set(payload.maxHP));
+socket.on(SOCKET_EVENT.GetGameInfo, (payload: IGame) => {
+  const playerList: PlayerList = {};
+  const spellTrackerList: SpellTrackerList = {};
+  const spellAnimationTriggerList: SpellAnimationTriggerList = {};
+
+  for (const p of payload.players) {
+    playerList[p.id] = p;
+    spellTrackerList[p.id] = {};
+    spellAnimationTriggerList[p.id] = SPELL_NAME.Void;
+  }
+
+  playerListState.set(playerList);
+  spellTrakerState.set(spellTrackerList);
+  spellAnimationTriggerState.set(spellAnimationTriggerList);
+  gameState.maxHP.set(payload.maxHP);
+  appState.set(APP_STATE.InGame);
+});
 
 socket.on(SOCKET_EVENT.StartTurn, (id: string) => currentPlayerState.set(id));
 
-socket.on(SOCKET_EVENT.Sanitize, (id: string) => effectTrakerState[id].set({}));
+socket.on(SOCKET_EVENT.Purify, (id: string) => spellTrakerState[id].set({}));
 
-socket.on(SOCKET_EVENT.TakeEffect, (payload: IEffectEvent) => {
-  triggerEffectAnimation(payload);
-  if (payload.effect.duration > 0) {
-    effectTrakerState[payload.target][payload.effect.id].set(payload.effect);
-  }
-});
+socket.on(SOCKET_EVENT.TakeSpell, (payload: ISpell[]) => {
+  spellAnimationTriggerState.batch((list) => {
+    for (const s of payload) {
+      list[s.target].set(s.name);
+    }
+  });
 
-socket.on(SOCKET_EVENT.TickEffect, (payload: IEffectEvent) => {
-  let updated: IEffect | typeof none = payload.effect;
+  setTimeout(
+    () =>
+      spellAnimationTriggerState.batch((list) => {
+        for (const s of payload) {
+          list[s.target].set(SPELL_NAME.Void);
+        }
+      }),
+    ANIMATION_DURATION.TakeSpell
+  );
 
-  if (payload.effect.duration === 0) updated = none;
-
-  triggerEffectAnimation(payload);
-  effectTrakerState[payload.target][payload.effect.id].set(updated);
+  spellTrakerState.batch((list) => {
+    for (const s of payload) {
+      const spell = list[s.target][s.id];
+      if (s.duration === 0 && spell) spell.set(none);
+      else if (s.duration > 0) spell.set(s);
+    }
+  });
 });
 
 export {
@@ -72,6 +79,6 @@ export {
   useGameState,
   useChosenCardState,
   useCurrentPlayerState,
-  useEffectTrackerState,
-  useEffectAnimationTriggerState,
+  useSpellTrackerState,
+  useSpellAnimationTriggerState,
 };

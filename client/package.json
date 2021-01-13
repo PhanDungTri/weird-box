@@ -15,14 +15,11 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-spring": "^8.0.27",
-    "socket.io-client": "^3.0.3",
-    "styled-components": "^5.2.1"
+    "socket.io-client": "^3.0.3"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "@types/react-motion": "0.0.29",
-    "@types/styled-components": "^5.1.4",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "eslint": "^7.14.0",

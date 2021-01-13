@@ -1,11 +1,7 @@
 import { createState, useState } from "@hookstate/core";
+import { IGame } from "../../../../../shared/src/interfaces/Game";
 
-interface GameState {
-  maxHP: number;
-}
-
-const gameState = createState<GameState>({ maxHP: 0 });
-const useGameState = (): GameState => useState(gameState).value;
+const gameState = createState<Omit<IGame, "players">>({ maxHP: 0 });
+const useGameState = (): Omit<IGame, "players"> => useState(gameState).value;
 
 export { gameState, useGameState };
-export type { GameState };

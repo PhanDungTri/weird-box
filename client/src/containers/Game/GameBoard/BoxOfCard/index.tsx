@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SOCKET_EVENT from "../../../../../../shared/src/socketEvent";
+import SOCKET_EVENT from "../../../../../../shared/src/SocketEvent";
 import IdleSprite from "../../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../../assets/sprites/box_of_cards_overcharged.png";

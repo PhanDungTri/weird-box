@@ -1,16 +1,15 @@
-import { Socket } from "socket.io";
-import { IEffectEvent } from "../../../shared/src/interfaces/Effect";
+import ANIMATION_DURATION from "../../../shared/src/AnimationDuration";
 import { IPlayer } from "../../../shared/src/interfaces/Player";
-import SOCKET_EVENT from "../../../shared/src/socketEvent";
+import SOCKET_EVENT from "../../../shared/src/SocketEvent";
 import Card from "./Card";
 import Client from "./Client";
-import Effect from "./effects/Effect";
-import OverTimeEffect from "./effects/OverTimeEffect";
 import Game from "./Game";
+import Debuff from "./spells/Debuff";
+import Spell from "./spells/Spell";
 
 class Player {
   private cards: Card[] = [];
-  private effects: OverTimeEffect[] = [];
+  private debuffs: Debuff[] = [];
   private hitPoint: number;
 
   constructor(private client: Client, private game: Game, private name = "player") {
@@ -34,6 +33,10 @@ class Player {
     return this.client;
   }
 
+  public countDebuffs(): number {
+    return this.debuffs.length;
+  }
+
   private playCard(id: string): void {
     const card = this.getCardById(id);
 
@@ -41,64 +44,58 @@ class Player {
       if (this.game.getCurrentPlayer() === this) {
         this.game.consumeCard(card);
       } else {
-        this.response(SOCKET_EVENT.Error, "Not your turn");
+        this.client.send(SOCKET_EVENT.Error, "Not your turn");
       }
     }
 
     // TODO validate card and check if player is in any game.
   }
 
-  public response(event: string, data?: unknown, wait = 0): void {
-    if (wait > 0) setTimeout(() => this.socket.emit(event, data), wait);
-    else this.socket.emit(event, data);
-  }
-
   public takeCards(...cards: Card[]): void {
     this.cards.push(...cards);
-    this.response(SOCKET_EVENT.TakeCard, cards);
+    this.client.send(SOCKET_EVENT.TakeCard, cards);
   }
 
   public changeHitPoint(difference: number): void {
     this.hitPoint += difference;
+
     if (this.hitPoint < 0) this.hitPoint = 0;
     else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    this.game?.communicator.dispatchChangeHitPoint(this.toJsonData());
+    this.game.eventEmitter.dispatchChangeHitPoint(this.toJsonData());
   }
 
-  public takeEffect(effect: Effect): void {
-    if (effect instanceof OverTimeEffect) {
-      this.effects.push(effect);
+  public takeSpell(spell: Spell): void {
+    if (spell instanceof Debuff) {
+      this.debuffs.push(spell);
+    } else {
+      spell.trigger();
     }
 
-    const data: IEffectEvent = {
-      target: this.getId(),
-      effect: effect.toJsonData(),
-    };
-
-    this.game?.notifyAll(SOCKET_EVENT.TakeEffect, data);
+    this.game.eventEmitter.dispatchTakeSpell(spell.toJsonData());
   }
 
-  public removeEffect(effect: OverTimeEffect): void {
-    this.effects = this.effects.filter((eff) => eff !== effect);
+  public removeDebuff(debuff: Debuff): void {
+    this.debuffs = this.debuffs.filter((spell) => spell !== debuff);
   }
 
-  public tickEffects(): void {
-    this.effects.forEach((eff) => {
-      eff.tick();
+  // Return total waiting time
+  public triggerDebuffs(): number {
+    return this.debuffs.reduce((acc, spell, i) => {
+      const wait = i * (ANIMATION_DURATION.TakeSpell + 200);
 
-      const data: IEffectEvent = {
-        target: this.getId(),
-        effect: eff.toJsonData(),
-      };
+      setTimeout(() => {
+        spell.trigger();
+        this.game.eventEmitter.dispatchTakeSpell(spell.toJsonData());
+      }, wait);
 
-      this.game?.notifyAll(SOCKET_EVENT.TickEffect, data);
-    });
+      return acc + wait;
+    }, 0);
   }
 
-  public sanitize(): void {
-    this.effects = [];
-    this.game?.notifyAll(SOCKET_EVENT.Sanitize, this.getId());
+  public purify(): void {
+    this.debuffs = [];
+    this.game.sendToAll(SOCKET_EVENT.Purify, this.getId());
   }
 
   public toJsonData(): IPlayer {

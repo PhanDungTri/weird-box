@@ -1,22 +1,22 @@
 import React from "react";
-import EFFECT_NAME from "../../../../shared/src/effectName";
+import SPELL_NAME from "../../../../shared/src/SpellName";
 import ChargeSprite from "../../assets/sprites/charge.png";
 import ConsumeSprite from "../../assets/sprites/consume.png";
-import HealEffectSprite from "../../assets/sprites/heal.png";
-import PoisonEffectSprite from "../../assets/sprites/poison.png";
-import PunchEffectSprite from "../../assets/sprites/punch.png";
+import HealSpellSprite from "../../assets/sprites/heal.png";
+import PoisonSpellSprite from "../../assets/sprites/poison.png";
+import PunchSpellSprite from "../../assets/sprites/punch.png";
 import ICard from "../../interfaces/ICard";
 import Sprite from "../Sprite";
 import "./Card.scss";
 
-const setSprite = (effectName: EFFECT_NAME, isCharge: boolean): string => {
-  switch (effectName) {
-    case EFFECT_NAME.Punch:
-      return PunchEffectSprite;
-    case EFFECT_NAME.Poison:
-      return PoisonEffectSprite;
-    case EFFECT_NAME.Heal:
-      return HealEffectSprite;
+const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
+  switch (spellName) {
+    case SPELL_NAME.Punch:
+      return PunchSpellSprite;
+    case SPELL_NAME.Poison:
+      return PoisonSpellSprite;
+    case SPELL_NAME.Heal:
+      return HealSpellSprite;
     default: {
       return isCharge ? ChargeSprite : ConsumeSprite;
     }
@@ -43,7 +43,7 @@ const Card = ({ onChoose = dummyFn, isChosen = false, card }: CardProps): JSX.El
     <div className={`card ${isChosen ? "-chosen" : ""}`} onClick={chooseMe}>
       <div className="card__content -centerize">
         <div className="card__spec -power-point">{Math.abs(card.powerPoint)}</div>
-        <Sprite src={setSprite(card.effect, card.powerPoint >= 0)} size={[24, 24]} centerize />
+        <Sprite src={setSprite(card.spell, card.powerPoint >= 0)} size={[24, 24]} centerize />
         <div className="card__spec -action">{card.powerPoint >= 0 ? "+" : "-"}</div>
       </div>
     </div>

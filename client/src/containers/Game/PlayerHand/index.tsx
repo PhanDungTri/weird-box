@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { animated, useTransition } from "react-spring";
-import SOCKET_EVENT from "../../../../../shared/src/socketEvent";
+import SOCKET_EVENT from "../../../../../shared/src/SocketEvent";
 import Card from "../../../components/Card";
 import NOTI_VARIANT from "../../../constants/NOTI_VARIANT";
 import socket from "../../../global/socket";
