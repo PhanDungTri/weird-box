@@ -21,7 +21,7 @@ class Server {
     this.socketServer.on("connection", (socket: Socket) => {
       const client = new Client(socket, this);
 
-      console.log("Client connected: " + client.getId());
+      console.log("Client connected: " + client.id);
       this.onlineClients.push(client);
       client.run();
     });

@@ -4,15 +4,17 @@ import SOCKET_EVENT from "../../../shared/src/SocketEvent";
 import Card from "./Card";
 import Client from "./Client";
 import Game from "./Game";
+import Spectator from "./Spectator";
 import Debuff from "./spells/Debuff";
 import Spell from "./spells/Spell";
 
-class Player {
+class Player extends Spectator {
   private cards: Card[] = [];
   private debuffs: Debuff[] = [];
   private hitPoint: number;
 
-  constructor(private client: Client, private game: Game, private name = "player") {
+  constructor(client: Client, game: Game) {
+    super(client, game);
     this.hitPoint = game.getMaxHP();
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
   }
@@ -23,14 +25,6 @@ class Player {
 
   public getCardById(id: string): Card | undefined {
     return this.cards.find((c) => c.id === id);
-  }
-
-  public getId(): string {
-    return this.client.getId();
-  }
-
-  public getClient(): Client {
-    return this.client;
   }
 
   public countDebuffs(): number {
@@ -44,7 +38,7 @@ class Player {
       if (this.game.getCurrentPlayer() === this) {
         this.game.consumeCard(card);
       } else {
-        this.client.send(SOCKET_EVENT.Error, "Not your turn");
+        this.getClient().send(SOCKET_EVENT.Error, "Not your turn");
       }
     }
 
@@ -53,7 +47,7 @@ class Player {
 
   public takeCards(...cards: Card[]): void {
     this.cards.push(...cards);
-    this.client.send(SOCKET_EVENT.TakeCard, cards);
+    this.getClient().send(SOCKET_EVENT.TakeCard, cards);
   }
 
   public changeHitPoint(difference: number): void {
@@ -95,13 +89,12 @@ class Player {
 
   public purify(): void {
     this.debuffs = [];
-    this.game.sendToAll(SOCKET_EVENT.Purify, this.getId());
+    this.game.sendToAll(SOCKET_EVENT.Purify, this.client.id);
   }
 
   public toJsonData(): IPlayer {
     return {
-      id: this.getId(),
-      name: this.name,
+      ...this.client.toJsonData(),
       hp: this.hitPoint,
     };
   }

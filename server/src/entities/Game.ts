@@ -8,6 +8,7 @@ import GameEventEmitter from "./GameEventEmitter";
 import Player from "./Player";
 import { IGame } from "../../../shared/src/interfaces/Game";
 import SpellFactory from "./spells/SpellFactory";
+import Spectator from "./Spectator";
 
 interface GameOptions {
   maxHP: number;
@@ -25,6 +26,7 @@ class Game {
   private players: Player[];
   private currentPlayerIndex: number;
   private maxHP: number;
+  private spectators: Spectator[] = [];
   private chargePoint = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck({ isEmpty: true });
@@ -56,6 +58,20 @@ class Game {
 
   public getPlayers(): Player[] {
     return this.players;
+  }
+
+  public addSpectator(client: Client): void {
+    // TODO check duplicate spectator
+    this.spectators.push(new Spectator(client, this));
+  }
+
+  public eliminatePlayer(id: string): void {
+    const player = this.players.find((p) => p.getClient().id === id);
+
+    if (player) {
+      this.players = this.players.filter((p) => p !== player);
+      this.spectators.push(new Spectator(player.getClient(), this));
+    }
   }
 
   private dealCard(): Card {
@@ -103,7 +119,7 @@ class Game {
 
     // Wait for deal card animation
     timeline += ANIMATION_DURATION.TakeCard;
-    setTimeout(() => this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getId()), timeline);
+    setTimeout(() => this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id), timeline);
   }
 
   public consumeCard(card: Card): void {
