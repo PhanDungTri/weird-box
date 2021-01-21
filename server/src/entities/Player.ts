@@ -53,8 +53,10 @@ class Player extends Spectator {
   public changeHitPoint(difference: number): void {
     this.hitPoint += difference;
 
-    if (this.hitPoint < 0) this.hitPoint = 0;
-    else if (this.hitPoint > 100) this.hitPoint = 100;
+    if (this.hitPoint <= 0) {
+      this.hitPoint = 0;
+      this.game.eliminatePlayer(this.getClient().id);
+    } else if (this.hitPoint > 100) this.hitPoint = 100;
 
     this.game.eventEmitter.dispatchChangeHitPoint(this.toJsonData());
   }

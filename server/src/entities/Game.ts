@@ -60,17 +60,13 @@ class Game {
     return this.players;
   }
 
-  public addSpectator(client: Client): void {
-    // TODO check duplicate spectator
-    this.spectators.push(new Spectator(client, this));
-  }
-
   public eliminatePlayer(id: string): void {
     const player = this.players.find((p) => p.getClient().id === id);
 
     if (player) {
       this.players = this.players.filter((p) => p !== player);
       this.spectators.push(new Spectator(player.getClient(), this));
+      this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
     }
   }
 
@@ -161,7 +157,7 @@ class Game {
   }
 
   public sendToAll(event: SOCKET_EVENT, data?: unknown, wait = 0): void {
-    this.players.forEach((p) => p.getClient().send(event, data, wait));
+    [...this.players, ...this.spectators].forEach((p) => p.getClient().send(event, data, wait));
   }
 }
 
