@@ -58,7 +58,7 @@ class Player extends Spectator {
       this.game.eliminatePlayer(this.getClient().id);
     } else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    this.game.eventEmitter.dispatchChangeHitPoint(this.toJsonData());
+    this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());
   }
 
   public takeSpell(spell: Spell): void {
@@ -68,7 +68,7 @@ class Player extends Spectator {
       spell.trigger();
     }
 
-    this.game.eventEmitter.dispatchTakeSpell(spell.toJsonData());
+    this.game.broadcaster.dispatchTakeSpell(spell.toJsonData());
   }
 
   public removeDebuff(debuff: Debuff): void {
@@ -82,7 +82,7 @@ class Player extends Spectator {
 
       setTimeout(() => {
         spell.trigger();
-        this.game.eventEmitter.dispatchTakeSpell(spell.toJsonData());
+        this.game.broadcaster.dispatchTakeSpell(spell.toJsonData());
       }, wait);
 
       return acc + wait;

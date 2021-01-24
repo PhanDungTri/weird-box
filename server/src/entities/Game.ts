@@ -4,7 +4,7 @@ import generateUniqueId from "../utilities/generateUniqueId";
 import Card from "./Card";
 import Client from "./Client";
 import Deck from "./Deck";
-import GameEventEmitter from "./GameEventEmitter";
+import Broadcaster from "./Broadcaster";
 import Player from "./Player";
 import { IGame } from "../../../shared/src/interfaces/Game";
 import SpellFactory from "./spells/SpellFactory";
@@ -22,7 +22,7 @@ const STARTING_HAND = 5;
 
 class Game {
   public readonly id = generateUniqueId();
-  public readonly eventEmitter = new GameEventEmitter(this);
+  public readonly broadcaster = new Broadcaster(this);
   private players: Player[];
   private currentPlayerIndex: number;
   private maxHP: number;

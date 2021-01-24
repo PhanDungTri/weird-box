@@ -3,7 +3,7 @@ import { IPlayer } from "../../../shared/src/interfaces/Player";
 import SOCKET_EVENT from "../../../shared/src/SocketEvent";
 import Game from "./Game";
 
-class GameEventEmitter {
+class Broadcaster {
   public readonly dispatchChangeHitPoint: (payload: Omit<IPlayer, "name">) => void;
   public readonly dispatchTakeSpell: (payload: ISpell) => void;
 
@@ -47,4 +47,4 @@ class GameEventEmitter {
   }
 }
 
-export default GameEventEmitter;
+export default Broadcaster;
