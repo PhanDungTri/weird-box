@@ -111,7 +111,7 @@ class Game {
     const currentPlayer = this.getCurrentPlayer();
 
     // wait for all players complete their updates
-    await Promise.all(this.players.map((p) => p.update));
+    await Promise.all(this.players.map((p) => p.update()));
 
     currentPlayer.takeCards(this.dealCard());
 
