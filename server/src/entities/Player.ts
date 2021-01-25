@@ -1,16 +1,27 @@
 import ANIMATION_DURATION from "../../../shared/src/AnimationDuration";
 import { IPlayer } from "../../../shared/src/interfaces/Player";
 import SOCKET_EVENT from "../../../shared/src/SocketEvent";
+import waitFor from "../utilities/waitFor";
 import Card from "./Card";
 import Client from "./Client";
 import Game from "./Game";
 import Spectator from "./Spectator";
+import SpellManager from "./SpellManager";
 import Debuff from "./spells/Debuff";
 import Spell from "./spells/Spell";
 
+type PlayerAction = {
+  type: PLAYER_ACTION;
+  payload: unknown;
+};
+
+enum PLAYER_ACTION {
+  ChangeHitPoint,
+}
+
 class Player extends Spectator {
   private cards: Card[] = [];
-  private debuffs: Debuff[] = [];
+  private spellManager = new SpellManager();
   private hitPoint: number;
 
   constructor(client: Client, game: Game) {
@@ -25,10 +36,6 @@ class Player extends Spectator {
 
   public getCardById(id: string): Card | undefined {
     return this.cards.find((c) => c.id === id);
-  }
-
-  public countDebuffs(): number {
-    return this.debuffs.length;
   }
 
   private playCard(id: string): void {
@@ -62,36 +69,24 @@ class Player extends Spectator {
   }
 
   public takeSpell(spell: Spell): void {
-    if (spell instanceof Debuff) {
-      this.debuffs.push(spell);
-    } else {
-      spell.trigger();
-    }
-
+    this.spellManager.takeSpell(spell);
     this.game.broadcaster.dispatchTakeSpell(spell.toJsonData());
   }
 
-  public removeDebuff(debuff: Debuff): void {
-    this.debuffs = this.debuffs.filter((spell) => spell !== debuff);
-  }
-
-  // Return total waiting time
-  public triggerDebuffs(): number {
-    return this.debuffs.reduce((acc, spell, i) => {
-      const wait = i * (ANIMATION_DURATION.TakeSpell + 200);
-
-      setTimeout(() => {
-        spell.trigger();
-        this.game.broadcaster.dispatchTakeSpell(spell.toJsonData());
-      }, wait);
-
-      return acc + wait;
-    }, 0);
-  }
-
   public purify(): void {
-    this.debuffs = [];
+    this.spellManager.purify();
     this.game.sendToAll(SOCKET_EVENT.Purify, this.client.id);
+  }
+
+  public async update(): Promise<void> {
+    const debuffTrigger = this.spellManager.triggerDebuffs();
+    let result = debuffTrigger.next();
+
+    while (!result.done) {
+      this.game.broadcaster.dispatchTakeSpell(result.value.toJsonData());
+      await waitFor(600);
+      result = debuffTrigger.next();
+    }
   }
 
   public toJsonData(): IPlayer {

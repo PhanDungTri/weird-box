@@ -11,8 +11,6 @@ class PoisonSpell extends Debuff {
   public trigger(): void {
     this.target.changeHitPoint(-this.power);
     this.duration--;
-
-    if (this.duration <= 0) this.target.removeDebuff(this);
   }
 }
 

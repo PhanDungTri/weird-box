@@ -9,6 +9,7 @@ import Player from "./Player";
 import { IGame } from "../../../shared/src/interfaces/Game";
 import SpellFactory from "./spells/SpellFactory";
 import Spectator from "./Spectator";
+import waitFor from "../utilities/waitFor";
 
 interface GameOptions {
   maxHP: number;
@@ -105,28 +106,29 @@ class Game {
     this.newTurn();
   }
 
-  public newTurn(): void {
+  public async newTurn(): Promise<void> {
     this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     const currentPlayer = this.getCurrentPlayer();
-    // Wait for all spell animations
-    let timeline = Math.max(...this.players.map((p) => p.triggerDebuffs()));
 
-    setTimeout(() => currentPlayer.takeCards(this.dealCard()), timeline);
+    // wait for all players complete their updates
+    await Promise.all(this.players.map((p) => p.update));
 
-    // Wait for deal card animation
-    timeline += ANIMATION_DURATION.TakeCard;
-    setTimeout(() => this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id), timeline);
+    currentPlayer.takeCards(this.dealCard());
+
+    // wait for deal card animation
+    await waitFor(600);
+    this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
 
-  public consumeCard(card: Card): void {
+  public async consumeCard(card: Card): Promise<void> {
     let penalty = 0;
-    let timeline = 0;
     const oldChargePoint = this.chargePoint;
     this.chargePoint += card.getPowerPoint();
 
     this.sendToAll(SOCKET_EVENT.CardPlayed, card);
-    // Wait for consume card animation
-    timeline += ANIMATION_DURATION.ConsumeCard;
+
+    // wait for played card animation
+    await waitFor(600);
 
     if (this.chargePoint < 0) {
       penalty = Math.abs(this.chargePoint);
@@ -136,24 +138,19 @@ class Game {
 
     if (penalty > 0) {
       this.chargePoint = 0;
-
-      this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged, undefined, timeline);
+      this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged);
       this.getCurrentPlayer().changeHitPoint(-penalty);
     } else {
-      setTimeout(
-        () => SpellFactory.create(card.getSpell(), oldChargePoint, this.players, this.getCurrentPlayer()),
-        timeline
-      );
-      // Wait for spell animation
-      timeline += ANIMATION_DURATION.TakeSpell;
+      SpellFactory.create(card.getSpell(), oldChargePoint, this.players, this.getCurrentPlayer());
+      // wait for spell animation
+      await waitFor(600);
     }
 
-    this.sendToAll(SOCKET_EVENT.ChargePointChanged, this.chargePoint, timeline);
-    // Wait for changing charge point animation
-    timeline += ANIMATION_DURATION.ChargePointChange;
-
+    this.sendToAll(SOCKET_EVENT.ChargePointChanged, this.chargePoint);
+    // wait for changing charge point animation
+    await waitFor(600);
     this.discardDeck.push(card);
-    setTimeout(this.newTurn.bind(this), timeline);
+    this.newTurn();
   }
 
   public sendToAll(event: SOCKET_EVENT, data?: unknown, wait = 0): void {

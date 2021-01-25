@@ -4,6 +4,10 @@ import Spell from "./spells/Spell";
 class SpellManager {
   private debuffs: Debuff[] = [];
 
+  public countDebuffs(): number {
+    return this.debuffs.length;
+  }
+
   public takeSpell(spell: Spell): void {
     if (spell instanceof Debuff) {
       this.debuffs.push(spell);
@@ -19,6 +23,7 @@ class SpellManager {
   public *triggerDebuffs(): Generator<Debuff, void, unknown> {
     for (const debuff of this.debuffs) {
       debuff.trigger();
+      if (debuff.getDuration() <= 0) this.removeDebuff(debuff);
       yield debuff;
     }
   }
@@ -27,3 +32,5 @@ class SpellManager {
     this.debuffs = [];
   }
 }
+
+export default SpellManager;
