@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import SOCKET_EVENT from "../../../../../shared/src/SocketEvent";
 import Card from "../../../components/Card";
@@ -9,13 +9,17 @@ import useNotificationState from "../../../state/notificationState";
 import { useChosenCardState, useCurrentPlayerState } from "../state";
 import "./PlayerHand.scss";
 
-const PlayerHand = (): JSX.Element => {
-  const { chosenCard, chooseCard } = useChosenCardState();
-  const currentPlayer = useCurrentPlayerState();
-  const setNotification = useNotificationState().set;
-  const [hand, setHand] = React.useState<ICard[]>([]);
+interface PlayerHandProps {
+  chosenCard: string;
+  chooseCard: (id: string) => void;
+  currentPlayer: string;
+}
 
-  const transitions = useTransition(hand, (card) => card.id, {
+const PlayerHand = ({ chooseCard, chosenCard, currentPlayer }: PlayerHandProps): JSX.Element => {
+  const setNotification = useNotificationState().set;
+  const [cards, setCards] = useState<ICard[]>([]);
+
+  const transitions = useTransition(cards, (card) => card.id, {
     from: {
       position: "relative",
       transform: "translateY(40px)",
@@ -36,9 +40,7 @@ const PlayerHand = (): JSX.Element => {
     if (chosenCard !== id) chooseCard(id);
     else if (currentPlayer === socket.id) {
       socket.emit(SOCKET_EVENT.PlayCard, id);
-      socket.once(SOCKET_EVENT.CardPlayed, () => {
-        setHand(hand.filter((c) => c.id !== id));
-      });
+      socket.once(SOCKET_EVENT.CardPlayed, () => setCards(cards.filter((c) => c.id !== id)));
     } else {
       setNotification({
         message: "Not your turn!",
@@ -49,7 +51,7 @@ const PlayerHand = (): JSX.Element => {
   };
 
   useEffect(() => {
-    socket.on(SOCKET_EVENT.TakeCard, (cards: ICard[]) => setHand((list) => [...list, ...cards]));
+    socket.on(SOCKET_EVENT.TakeCard, (cards: ICard[]) => setCards((list) => [...list, ...cards]));
 
     return (): void => {
       console.log("off");
