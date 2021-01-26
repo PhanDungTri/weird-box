@@ -48,7 +48,6 @@ const BoxOfCard = (): JSX.Element => {
     socket.on(SOCKET_EVENT.ChargePointBarOvercharged, () => setState("overcharged"));
 
     return (): void => {
-      console.log("off");
       socket.off(SOCKET_EVENT.TakeCard);
       socket.off(SOCKET_EVENT.ChargePointBarOvercharged);
     };

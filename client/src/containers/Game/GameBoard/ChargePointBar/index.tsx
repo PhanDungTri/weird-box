@@ -47,7 +47,6 @@ const ChargePointBar = (): JSX.Element => {
     socket.on(SOCKET_EVENT.TakeCard, dealCard);
 
     return (): void => {
-      console.log("off");
       socket.off(SOCKET_EVENT.ChargePointChanged);
       socket.off(SOCKET_EVENT.TakeCard);
     };
