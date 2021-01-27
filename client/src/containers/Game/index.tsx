@@ -6,7 +6,7 @@ import { ISpell } from "../../../../shared/src/interfaces/Spell";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
 import SPELL_NAME from "../../../../shared/src/SpellName";
 import Notification from "../../components/Notification";
-import socket from "../../global/socket";
+import socket from "../../services/socket";
 import "./Game.scss";
 import GameBoard from "./GameBoard";
 import OpponentList from "./OpponentList";
@@ -28,6 +28,14 @@ interface PlayerList {
   [id: string]: PlayerState;
 }
 
+const dummyPlayerState: PlayerState = {
+  id: "",
+  name: "",
+  hp: 0,
+  spells: {},
+  currentSpell: SPELL_NAME.Void,
+};
+
 const Game = (): JSX.Element => {
   const [chosenCard, setChosenCard] = useState("");
   const playerList = useHookState<PlayerList>({});
@@ -35,6 +43,7 @@ const Game = (): JSX.Element => {
   const [state, setState] = useState<GameState>({ maxHP: 0 });
 
   useEffect(() => {
+    socket.emit(SOCKET_EVENT.Ready);
     socket.on(SOCKET_EVENT.StartTurn, (id: string) => setCurrentPlayer(id));
 
     socket.on(SOCKET_EVENT.GetGameInfo, (payload: IGame) => {
@@ -67,6 +76,8 @@ const Game = (): JSX.Element => {
 
           if (s.duration === 0 && spell.value) spell.set(none);
           else if (s.duration > 0) spell.set(s);
+
+          list[s.target].currentSpell.set(s.name);
         })
       );
 
@@ -77,7 +88,7 @@ const Game = (): JSX.Element => {
               if (p.currentSpell !== SPELL_NAME.Void) list[p.id].currentSpell.set(SPELL_NAME.Void);
             })
           ),
-        600
+        500
       );
     });
 
@@ -94,7 +105,7 @@ const Game = (): JSX.Element => {
     <div className="game" onClick={() => setChosenCard("")}>
       <OpponentList maxHP={state.maxHP} opponents={Object.values(playerList.value).filter((p) => p.id !== socket.id)} />
       <GameBoard />
-      <PlayerStatus maxHP={state.maxHP} info={playerList[socket.id].value} />
+      <PlayerStatus maxHP={state.maxHP} info={playerList[socket.id].value || dummyPlayerState} />
       <PlayerHand
         currentPlayer={currentPlayer}
         chooseCard={(id: string) => setChosenCard(id)}

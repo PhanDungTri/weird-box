@@ -31,18 +31,14 @@ class Game {
   private chargePoint = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck({ isEmpty: true });
+  private numOfReadyPlayers = 0;
 
   constructor(options = defaultOptions, ...clients: Client[]) {
     this.maxHP = options.maxHP;
     this.players = clients.map((cl) => new Player(cl, this));
     this.currentPlayerIndex = this.players.length - 1;
-    const info: IGame = {
-      maxHP: this.maxHP,
-      players: this.players.map((p) => p.toJsonData()),
-    };
 
-    this.players.forEach((p) => p.getClient().send(SOCKET_EVENT.GetGameInfo, info));
-    this.start();
+    this.sendToAll(SOCKET_EVENT.GameFound);
   }
 
   public getMaxHP(): number {
@@ -59,16 +55,6 @@ class Game {
 
   public getPlayers(): Player[] {
     return this.players;
-  }
-
-  public eliminatePlayer(id: string): void {
-    const player = this.players.find((p) => p.getClient().id === id);
-
-    if (player) {
-      this.players = this.players.filter((p) => p !== player);
-      this.spectators.push(new Spectator(player.getClient(), this));
-      this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
-    }
   }
 
   private dealCard(): Card {
@@ -91,6 +77,12 @@ class Game {
      * With above approach, the server will only send up to 4 events to all clients in the game.
      */
     const startingHands: Card[][] = [];
+    const info: IGame = {
+      maxHP: this.maxHP,
+      players: this.players.map((p) => p.toJsonData()),
+    };
+
+    this.sendToAll(SOCKET_EVENT.GetGameInfo, info);
 
     for (let i = 0; i < STARTING_HAND; i++) {
       for (let j = 0; j < this.players.length; j++) {
@@ -104,6 +96,24 @@ class Game {
     }
 
     this.newTurn();
+  }
+
+  public checkReady(): void {
+    this.numOfReadyPlayers++;
+
+    if (this.numOfReadyPlayers === this.players.length) {
+      this.start();
+    }
+  }
+
+  public eliminatePlayer(id: string): void {
+    const player = this.players.find((p) => p.getClient().id === id);
+
+    if (player) {
+      this.players = this.players.filter((p) => p !== player);
+      this.spectators.push(new Spectator(player.getClient(), this));
+      this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
+    }
   }
 
   public async newTurn(): Promise<void> {

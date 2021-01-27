@@ -3,10 +3,9 @@ import { animated, useTransition } from "react-spring";
 import SOCKET_EVENT from "../../../../../shared/src/SocketEvent";
 import Card from "../../../components/Card";
 import NOTI_VARIANT from "../../../constants/NOTI_VARIANT";
-import socket from "../../../global/socket";
 import ICard from "../../../interfaces/ICard";
+import socket from "../../../services/socket";
 import useNotificationState from "../../../state/notificationState";
-import { useChosenCardState, useCurrentPlayerState } from "../state";
 import "./PlayerHand.scss";
 
 interface PlayerHandProps {

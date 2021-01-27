@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import NOTI_VARIANT from "../../constants/NOTI_VARIANT";
-import socket from "../../global/socket";
+import socket from "../../services/socket";
 import useNotificationState from "../../state/notificationState";
 import "./Notification.scss";
 

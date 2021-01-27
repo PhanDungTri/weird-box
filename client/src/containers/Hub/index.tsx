@@ -1,5 +1,5 @@
 import React from "react";
-import socket from "../../global/socket";
+import socket from "../../services/socket";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
 
 const Hub = (): JSX.Element => {

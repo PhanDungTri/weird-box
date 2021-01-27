@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SOCKET_EVENT from "../../../../../../shared/src/SocketEvent";
-import socket from "../../../../global/socket";
+import socket from "../../../../services/socket";
 import useStepAnimation from "../../../../hooks/useStepAnimation";
 import "./ChargePointBar.scss";
 

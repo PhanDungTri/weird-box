@@ -4,7 +4,7 @@ import IdleSprite from "../../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../../assets/sprites/box_of_cards_overcharged.png";
 import Sprite from "../../../../components/Sprite";
-import socket from "../../../../global/socket";
+import socket from "../../../../services/socket";
 
 type State = "idle" | "deal" | "overcharged";
 

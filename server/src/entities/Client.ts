@@ -21,6 +21,10 @@ class Client {
     this.socket.on(event, listener);
   }
 
+  public off(event: SOCKET_EVENT): void {
+    this.socket.removeAllListeners(event);
+  }
+
   public send(event: SOCKET_EVENT, data: unknown, wait = 0): void {
     if (wait > 0) setTimeout(() => this.socket.emit(event, data), wait);
     this.socket.emit(event, data);

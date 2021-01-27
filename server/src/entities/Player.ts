@@ -1,4 +1,3 @@
-import ANIMATION_DURATION from "../../../shared/src/AnimationDuration";
 import { IPlayer } from "../../../shared/src/interfaces/Player";
 import SOCKET_EVENT from "../../../shared/src/SocketEvent";
 import waitFor from "../utilities/waitFor";
@@ -7,17 +6,7 @@ import Client from "./Client";
 import Game from "./Game";
 import Spectator from "./Spectator";
 import SpellManager from "./SpellManager";
-import Debuff from "./spells/Debuff";
 import Spell from "./spells/Spell";
-
-type PlayerAction = {
-  type: PLAYER_ACTION;
-  payload: unknown;
-};
-
-enum PLAYER_ACTION {
-  ChangeHitPoint,
-}
 
 class Player extends Spectator {
   private cards: Card[] = [];
@@ -28,6 +17,7 @@ class Player extends Spectator {
     super(client, game);
     this.hitPoint = game.getMaxHP();
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
+    client.on(SOCKET_EVENT.Ready, this.ready.bind(this));
   }
 
   public getCards(): Card[] {
@@ -50,6 +40,11 @@ class Player extends Spectator {
     }
 
     // TODO validate card and check if player is in any game.
+  }
+
+  private ready(): void {
+    this.game.checkReady();
+    this.client.off(SOCKET_EVENT.Ready);
   }
 
   public takeCards(...cards: Card[]): void {
@@ -84,7 +79,7 @@ class Player extends Spectator {
 
     while (!result.done) {
       this.game.broadcaster.dispatchTakeSpell(result.value.toJsonData());
-      await waitFor(600);
+      await waitFor(700);
       result = debuffTrigger.next();
     }
   }
