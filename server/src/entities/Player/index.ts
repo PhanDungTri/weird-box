@@ -1,12 +1,12 @@
-import { IPlayer } from "../../../shared/src/interfaces/Player";
-import SOCKET_EVENT from "../../../shared/src/SocketEvent";
-import waitFor from "../utilities/waitFor";
-import Card from "./Card";
-import Client from "./Client";
-import Game from "./Game";
-import Spectator from "./Spectator";
+import { IPlayer } from "../../../../shared/src/interfaces/Player";
+import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
+import waitFor from "../../utilities/waitFor";
+import Card from "../Card";
+import Client from "../Client";
+import Game from "../Game";
+import Spectator from "../Spectator";
 import SpellManager from "./SpellManager";
-import Spell from "./spells/Spell";
+import Spell from "../Spell";
 
 class Player extends Spectator {
   private cards: Card[] = [];

@@ -1,5 +1,5 @@
-import Debuff from "./spells/Debuff";
-import Spell from "./spells/Spell";
+import Debuff from "../Spell/Debuff";
+import Spell from "../Spell";
 
 class SpellManager {
   private debuffs: Debuff[] = [];

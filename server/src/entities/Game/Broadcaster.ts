@@ -1,7 +1,7 @@
-import { ISpell } from "../../../shared/src/interfaces/Spell";
-import { IPlayer } from "../../../shared/src/interfaces/Player";
-import SOCKET_EVENT from "../../../shared/src/SocketEvent";
-import Game from "./Game";
+import { ISpell } from "../../../../shared/src/interfaces/Spell";
+import { IPlayer } from "../../../../shared/src/interfaces/Player";
+import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
+import Game from ".";
 
 class Broadcaster {
   public readonly dispatchChangeHitPoint: (payload: Omit<IPlayer, "name">) => void;

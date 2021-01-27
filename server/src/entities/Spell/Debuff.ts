@@ -1,7 +1,7 @@
 import SPELL_NAME from "../../../../shared/src/SpellName";
 import { ISpell } from "../../../../shared/src/interfaces/Spell";
 import Player from "../Player";
-import Spell from "./Spell";
+import Spell from ".";
 
 abstract class Debuff extends Spell {
   constructor(name: SPELL_NAME, target: Player, caster: Player, duration: number) {

@@ -1,15 +1,14 @@
-import ANIMATION_DURATION from "../../../shared/src/AnimationDuration";
-import SOCKET_EVENT from "../../../shared/src/SocketEvent";
-import generateUniqueId from "../utilities/generateUniqueId";
-import Card from "./Card";
-import Client from "./Client";
+import { IGame } from "../../../../shared/src/interfaces/Game";
+import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
+import generateUniqueId from "../../utilities/generateUniqueId";
+import waitFor from "../../utilities/waitFor";
+import Card from "../Card";
+import Client from "../Client";
 import Deck from "./Deck";
+import Player from "../Player";
+import Spectator from "../Spectator";
+import SpellFactory from "../Spell/SpellFactory";
 import Broadcaster from "./Broadcaster";
-import Player from "./Player";
-import { IGame } from "../../../shared/src/interfaces/Game";
-import SpellFactory from "./spells/SpellFactory";
-import Spectator from "./Spectator";
-import waitFor from "../utilities/waitFor";
 
 interface GameOptions {
   maxHP: number;
@@ -104,6 +103,8 @@ class Game {
     if (this.numOfReadyPlayers === this.players.length) {
       this.start();
     }
+
+    // TODO timeout when there is one or more players haven't readied
   }
 
   public eliminatePlayer(id: string): void {

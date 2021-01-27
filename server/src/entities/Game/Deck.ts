@@ -1,5 +1,5 @@
-import SPELL_NAME from "../../../shared/src/SpellName";
-import Card from "./Card";
+import SPELL_NAME from "../../../../shared/src/SpellName";
+import Card from "../Card";
 
 interface DeckOptions {
   isEmpty: boolean;
