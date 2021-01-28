@@ -57,7 +57,7 @@ class Player extends Spectator {
 
     if (this.hitPoint <= 0) {
       this.hitPoint = 0;
-      this.game.eliminatePlayer(this.getClient().id);
+      this.game.eliminatePlayer(this);
     } else if (this.hitPoint > 100) this.hitPoint = 100;
 
     this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());

@@ -22,6 +22,7 @@ interface PlayerState extends IPlayer {
     [id: string]: ISpell;
   };
   currentSpell: SPELL_NAME;
+  isEliminated: boolean;
 }
 
 interface PlayerList {
@@ -34,6 +35,7 @@ const dummyPlayerState: PlayerState = {
   hp: 0,
   spells: {},
   currentSpell: SPELL_NAME.Void,
+  isEliminated: false,
 };
 
 const Game = (): JSX.Element => {
@@ -54,11 +56,16 @@ const Game = (): JSX.Element => {
             ...cur,
             spells: {},
             currentSpell: SPELL_NAME.Void,
+            isEliminated: false,
           };
 
           return acc;
         }, {})
       );
+    });
+
+    socket.on(SOCKET_EVENT.PlayerEliminated, (id: string) => {
+      playerList[id].isEliminated.set(true);
     });
 
     socket.on(SOCKET_EVENT.HitPointChanged, (payload: Omit<IPlayer, "name">[]) => {

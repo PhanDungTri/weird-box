@@ -107,17 +107,17 @@ class Game {
     // TODO timeout when there is one or more players haven't readied
   }
 
-  public eliminatePlayer(id: string): void {
-    const player = this.players.find((p) => p.getClient().id === id);
-
-    if (player) {
-      this.players = this.players.filter((p) => p !== player);
-      this.spectators.push(new Spectator(player.getClient(), this));
-      this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
-    }
+  public eliminatePlayer(player: Player): void {
+    this.players = this.players.filter((p) => p !== player);
+    this.spectators.push(new Spectator(player.getClient(), this));
+    this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
   }
 
   public async newTurn(): Promise<void> {
+    if (this.players.length === 1) {
+      // TODO end game
+    }
+
     this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     const currentPlayer = this.getCurrentPlayer();
 
