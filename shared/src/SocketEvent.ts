@@ -18,6 +18,7 @@ enum SOCKET_EVENT {
   PlayerEliminated = "player eliminated",
   Ready = "ready",
   GameFound = "game found",
+  GameOver = "game over",
 }
 
 export default SOCKET_EVENT;

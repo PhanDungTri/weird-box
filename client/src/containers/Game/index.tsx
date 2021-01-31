@@ -9,6 +9,7 @@ import Notification from "../../components/Notification";
 import socket from "../../services/socket";
 import "./Game.scss";
 import GameBoard from "./GameBoard";
+import GameOverDialog from "./GameOverDialog";
 import OpponentList from "./OpponentList";
 import PlayerHand from "./PlayerHand";
 import PlayerStatus from "./PlayerStatus";
@@ -38,11 +39,14 @@ const dummyPlayerState: PlayerState = {
   isEliminated: false,
 };
 
+type Winner = Pick<PlayerState, "id" | "name">;
+
 const Game = (): JSX.Element => {
   const [chosenCard, setChosenCard] = useState("");
   const playerList = useHookState<PlayerList>({});
   const [currentPlayer, setCurrentPlayer] = useState("");
   const [state, setState] = useState<GameState>({ maxHP: 0 });
+  const [winner, setWinner] = useState<Winner | null>(null);
 
   useEffect(() => {
     socket.emit(SOCKET_EVENT.Ready);
@@ -74,6 +78,10 @@ const Game = (): JSX.Element => {
 
     socket.on(SOCKET_EVENT.Purify, (id: string) => {
       playerList[id].spells.set({});
+    });
+
+    socket.on(SOCKET_EVENT.GameOver, (id: string) => {
+      setWinner(playerList[id].value);
     });
 
     socket.on(SOCKET_EVENT.TakeSpell, (payload: ISpell[]) => {
@@ -118,10 +126,11 @@ const Game = (): JSX.Element => {
         chooseCard={(id: string) => setChosenCard(id)}
         chosenCard={chosenCard}
       />
+      <GameOverDialog open={!!winner} onClose={() => setWinner(null)} winner={winner as Winner} />
       <Notification />
     </div>
   );
 };
 
 export default Game;
-export type { PlayerList, PlayerState };
+export type { PlayerList, PlayerState, Winner };

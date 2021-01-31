@@ -4,17 +4,15 @@ import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";
 import Game from "../Game";
-import Spectator from "../Spectator";
 import SpellManager from "./SpellManager";
 import Spell from "../Spell";
 
-class Player extends Spectator {
+class Player {
   private cards: Card[] = [];
   private spellManager = new SpellManager();
   private hitPoint: number;
 
-  constructor(client: Client, game: Game) {
-    super(client, game);
+  constructor(private client: Client, private game: Game) {
     this.hitPoint = game.getMaxHP();
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
     client.on(SOCKET_EVENT.Ready, this.ready.bind(this));
@@ -26,6 +24,10 @@ class Player extends Spectator {
 
   public getCardById(id: string): Card | undefined {
     return this.cards.find((c) => c.id === id);
+  }
+
+  public getClient(): Client {
+    return this.client;
   }
 
   private playCard(id: string): void {

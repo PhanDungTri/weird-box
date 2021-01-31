@@ -6,7 +6,6 @@ import Card from "../Card";
 import Client from "../Client";
 import Deck from "./Deck";
 import Player from "../Player";
-import Spectator from "../Spectator";
 import SpellFactory from "../Spell/SpellFactory";
 import Broadcaster from "./Broadcaster";
 
@@ -23,19 +22,20 @@ const STARTING_HAND = 5;
 class Game {
   public readonly id = generateUniqueId();
   public readonly broadcaster = new Broadcaster(this);
+  private alivePlayers: Player[];
   private players: Player[];
   private currentPlayerIndex: number;
   private maxHP: number;
-  private spectators: Spectator[] = [];
   private chargePoint = 0;
+  private numOfReadyPlayers = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck({ isEmpty: true });
-  private numOfReadyPlayers = 0;
 
   constructor(options = defaultOptions, ...clients: Client[]) {
     this.maxHP = options.maxHP;
-    this.players = clients.map((cl) => new Player(cl, this));
-    this.currentPlayerIndex = this.players.length - 1;
+    this.alivePlayers = clients.map((cl) => new Player(cl, this));
+    this.players = [...this.alivePlayers];
+    this.currentPlayerIndex = this.alivePlayers.length - 1;
 
     this.sendToAll(SOCKET_EVENT.GameFound);
   }
@@ -45,15 +45,11 @@ class Game {
   }
 
   public getCurrentPlayer(): Player {
-    return this.players[this.currentPlayerIndex];
+    return this.alivePlayers[this.currentPlayerIndex];
   }
 
   public getChargePoint(): number {
     return this.chargePoint;
-  }
-
-  public getPlayers(): Player[] {
-    return this.players;
   }
 
   private dealCard(): Card {
@@ -84,14 +80,14 @@ class Game {
     this.sendToAll(SOCKET_EVENT.GetGameInfo, info);
 
     for (let i = 0; i < STARTING_HAND; i++) {
-      for (let j = 0; j < this.players.length; j++) {
+      for (let j = 0; j < this.alivePlayers.length; j++) {
         if (!startingHands[j]) startingHands[j] = [];
         startingHands[j].push(this.dealCard());
       }
     }
 
-    for (let j = 0; j < this.players.length; j++) {
-      this.players[j].takeCards(...startingHands[j]);
+    for (let j = 0; j < this.alivePlayers.length; j++) {
+      this.alivePlayers[j].takeCards(...startingHands[j]);
     }
 
     this.newTurn();
@@ -108,21 +104,26 @@ class Game {
   }
 
   public eliminatePlayer(player: Player): void {
-    this.players = this.players.filter((p) => p !== player);
-    this.spectators.push(new Spectator(player.getClient(), this));
+    this.alivePlayers = this.alivePlayers.filter((p) => p !== player);
     this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
   }
 
   public async newTurn(): Promise<void> {
-    if (this.players.length === 1) {
-      // TODO end game
+    // wait for all players complete their updates
+    await Promise.all(this.alivePlayers.map((p) => p.update()));
+
+    if (this.alivePlayers.length === 1) {
+      this.sendToAll(SOCKET_EVENT.GameOver, this.alivePlayers[0].getClient().id);
+      // TODO etc
+      return;
     }
 
-    this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-    const currentPlayer = this.getCurrentPlayer();
+    let currentPlayer: Player;
 
-    // wait for all players complete their updates
-    await Promise.all(this.players.map((p) => p.update()));
+    do {
+      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+      currentPlayer = this.getCurrentPlayer();
+    } while (!this.alivePlayers.includes(currentPlayer));
 
     currentPlayer.takeCards(this.dealCard());
 
@@ -152,7 +153,7 @@ class Game {
       this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged);
       this.getCurrentPlayer().changeHitPoint(-penalty);
     } else {
-      SpellFactory.create(card.getSpell(), oldChargePoint, this.players, this.getCurrentPlayer());
+      SpellFactory.create(card.getSpell(), oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
       // wait for spell animation
       await waitFor(600);
     }
@@ -165,7 +166,7 @@ class Game {
   }
 
   public sendToAll(event: SOCKET_EVENT, data?: unknown, wait = 0): void {
-    [...this.players, ...this.spectators].forEach((p) => p.getClient().send(event, data, wait));
+    this.players.forEach((p) => p.getClient().send(event, data, wait));
   }
 }
 

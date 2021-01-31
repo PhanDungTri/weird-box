@@ -1,0 +1,10 @@
+@import "../../styles/utilities/createPixelBorder.scss";
+
+.button {
+  margin: 4px;
+  box-shadow: createPixelBorder(2px, black);
+  outline: none;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
