@@ -16,6 +16,7 @@ class Player {
     this.hitPoint = game.getMaxHP();
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
     client.on(SOCKET_EVENT.Ready, this.ready.bind(this));
+    client.on(SOCKET_EVENT.LeaveGame, this.leaveGame.bind(this));
   }
 
   public getCards(): Card[] {
@@ -84,6 +85,10 @@ class Player {
       await waitFor(700);
       result = debuffTrigger.next();
     }
+  }
+
+  public leaveGame(): void {
+    this.game.removePlayer(this);
   }
 
   public toJsonData(): IPlayer {

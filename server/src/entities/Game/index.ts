@@ -45,7 +45,7 @@ class Game {
   }
 
   public getCurrentPlayer(): Player {
-    return this.alivePlayers[this.currentPlayerIndex];
+    return this.players[this.currentPlayerIndex];
   }
 
   public getChargePoint(): number {
@@ -106,6 +106,12 @@ class Game {
   public eliminatePlayer(player: Player): void {
     this.alivePlayers = this.alivePlayers.filter((p) => p !== player);
     this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
+  }
+
+  public removePlayer(player: Player): void {
+    if (this.alivePlayers.includes(player)) this.eliminatePlayer(player);
+    this.players = this.players.filter((p) => p !== player);
+    this.sendToAll(SOCKET_EVENT.PlayerLeftGame, player.getClient().id);
   }
 
   public async newTurn(): Promise<void> {

@@ -7,6 +7,7 @@ import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
 import SPELL_NAME from "../../../../shared/src/SpellName";
 import Notification from "../../components/Notification";
 import socket from "../../services/socket";
+import useAppState, { APP_STATE } from "../../state/appState";
 import "./Game.scss";
 import GameBoard from "./GameBoard";
 import GameOverDialog from "./GameOverDialog";
@@ -42,11 +43,17 @@ const dummyPlayerState: PlayerState = {
 type Winner = Pick<PlayerState, "id" | "name">;
 
 const Game = (): JSX.Element => {
+  const appState = useAppState();
   const [chosenCard, setChosenCard] = useState("");
   const playerList = useHookState<PlayerList>({});
   const [currentPlayer, setCurrentPlayer] = useState("");
   const [state, setState] = useState<GameState>({ maxHP: 0 });
   const [winner, setWinner] = useState<Winner | null>(null);
+
+  const onGameOver = (): void => {
+    socket.emit(SOCKET_EVENT.LeaveGame);
+    appState.set(APP_STATE.Hub);
+  };
 
   useEffect(() => {
     socket.emit(SOCKET_EVENT.Ready);
@@ -113,6 +120,7 @@ const Game = (): JSX.Element => {
       socket.off(SOCKET_EVENT.HitPointChanged);
       socket.off(SOCKET_EVENT.Purify);
       socket.off(SOCKET_EVENT.TakeSpell);
+      socket.off(SOCKET_EVENT.PlayerEliminated);
     };
   }, []);
 
@@ -126,7 +134,7 @@ const Game = (): JSX.Element => {
         chooseCard={(id: string) => setChosenCard(id)}
         chosenCard={chosenCard}
       />
-      <GameOverDialog open={!!winner} onClose={() => setWinner(null)} winner={winner as Winner} />
+      <GameOverDialog open={!!winner} onClose={onGameOver} winner={winner as Winner} />
       <Notification />
     </div>
   );
