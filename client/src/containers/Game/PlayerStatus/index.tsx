@@ -1,17 +1,16 @@
 import React from "react";
-import { PlayerState } from "..";
 import HitPointBar from "../../../components/HitPointBar";
 import "./PlayerStatus.scss";
 
 interface PlayerStatusProps {
-  info: PlayerState;
+  hp?: number;
   maxHP: number;
 }
 
-const PlayerStatus = ({ maxHP, info }: PlayerStatusProps): JSX.Element => {
+const PlayerStatus = ({ maxHP, hp = 0 }: PlayerStatusProps): JSX.Element => {
   return (
-    <div className="player-status">
-      <HitPointBar maxHP={maxHP} hp={info.hp} />
+    <div className="player__status">
+      <HitPointBar maxHP={maxHP} hp={hp} />
       <div></div>
     </div>
   );

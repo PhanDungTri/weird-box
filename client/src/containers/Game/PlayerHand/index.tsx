@@ -12,9 +12,10 @@ interface PlayerHandProps {
   chosenCard: string;
   chooseCard: (id: string) => void;
   currentPlayer: string;
+  eliminated?: boolean;
 }
 
-const PlayerHand = ({ chooseCard, chosenCard, currentPlayer }: PlayerHandProps): JSX.Element => {
+const PlayerHand = ({ chooseCard, chosenCard, currentPlayer, eliminated = false }: PlayerHandProps): JSX.Element => {
   const setNotification = useNotificationState().set;
   const [cards, setCards] = useState<ICard[]>([]);
 
@@ -33,6 +34,10 @@ const PlayerHand = ({ chooseCard, chosenCard, currentPlayer }: PlayerHandProps):
       opacity: 0,
     },
   });
+
+  useEffect(() => {
+    if (eliminated) setCards([]);
+  }, [eliminated]);
 
   const playCard = (id: string): void => {
     // TODO check if in-turn
@@ -60,7 +65,7 @@ const PlayerHand = ({ chooseCard, chosenCard, currentPlayer }: PlayerHandProps):
 
   return (
     <>
-      <div className="player-hand">
+      <div className="player__hand">
         {transitions.map(({ item, key, props }) => (
           <animated.div key={key} style={props}>
             <Card card={item} onChoose={() => playCard(item.id)} isChosen={chosenCard === item.id} />

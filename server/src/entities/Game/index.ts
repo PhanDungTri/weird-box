@@ -118,6 +118,11 @@ class Game {
     // wait for all players complete their updates
     await Promise.all(this.alivePlayers.map((p) => p.update()));
 
+    if (this.alivePlayers.length === 0) {
+      // TODO draw
+      return;
+    }
+
     if (this.alivePlayers.length === 1) {
       this.sendToAll(SOCKET_EVENT.GameOver, this.alivePlayers[0].getClient().id);
       // TODO etc

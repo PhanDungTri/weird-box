@@ -61,6 +61,8 @@ class Player {
     if (this.hitPoint <= 0) {
       this.hitPoint = 0;
       this.game.eliminatePlayer(this);
+      this.cards = [];
+      this.purify();
     } else if (this.hitPoint > 100) this.hitPoint = 100;
 
     this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());

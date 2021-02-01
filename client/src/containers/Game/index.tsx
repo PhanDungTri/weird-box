@@ -31,14 +31,14 @@ interface PlayerList {
   [id: string]: PlayerState;
 }
 
-const dummyPlayerState: PlayerState = {
-  id: "",
-  name: "",
-  hp: 0,
-  spells: {},
-  currentSpell: SPELL_NAME.Void,
-  isEliminated: false,
-};
+// const dummyPlayerState: PlayerState = {
+//   id: "",
+//   name: "",
+//   hp: 0,
+//   spells: {},
+//   currentSpell: SPELL_NAME.Void,
+//   isEliminated: false,
+// };
 
 type Winner = Pick<PlayerState, "id" | "name">;
 
@@ -128,12 +128,15 @@ const Game = (): JSX.Element => {
     <div className="game" onClick={() => setChosenCard("")}>
       <OpponentList maxHP={state.maxHP} opponents={Object.values(playerList.value).filter((p) => p.id !== socket.id)} />
       <GameBoard />
-      <PlayerStatus maxHP={state.maxHP} info={playerList[socket.id].value || dummyPlayerState} />
-      <PlayerHand
-        currentPlayer={currentPlayer}
-        chooseCard={(id: string) => setChosenCard(id)}
-        chosenCard={chosenCard}
-      />
+      <div className="player">
+        <PlayerStatus maxHP={state.maxHP} hp={playerList[socket.id].value?.hp || 0} />
+        <PlayerHand
+          currentPlayer={currentPlayer}
+          chooseCard={(id: string) => setChosenCard(id)}
+          chosenCard={chosenCard}
+          eliminated={!!playerList[socket.id].value?.isEliminated}
+        />
+      </div>
       <GameOverDialog open={!!winner} onClose={onGameOver} winner={winner as Winner} />
       <Notification />
     </div>
