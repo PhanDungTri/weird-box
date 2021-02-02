@@ -34,7 +34,7 @@ const setSpellAnimation = (spell: SPELL_NAME): JSX.Element => {
     }
     case SPELL_NAME.Poison: {
       animationProps = {
-        step: 11,
+        step: 8,
         src: PoisonSpellAnimation,
       };
 

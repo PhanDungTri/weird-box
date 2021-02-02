@@ -110,7 +110,7 @@ const Game = (): JSX.Element => {
               if (p.currentSpell !== SPELL_NAME.Void) list[p.id].currentSpell.set(SPELL_NAME.Void);
             })
           ),
-        500
+        450
       );
     });
 
