@@ -2,25 +2,17 @@ import React from "react";
 import SPELL_NAME from "../../../../shared/src/SpellName";
 import ChargeSprite from "../../assets/sprites/charge.png";
 import ConsumeSprite from "../../assets/sprites/consume.png";
-import HealSpellSprite from "../../assets/sprites/heal.png";
-import PoisonSpellSprite from "../../assets/sprites/poison.png";
-import PunchSpellSprite from "../../assets/sprites/punch.png";
 import ICard from "../../interfaces/ICard";
+import spellSpriteHolder from "../../utils/spellSpriteHolder";
 import Sprite from "../Sprite";
 import "./Card.scss";
 
 const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
-  switch (spellName) {
-    case SPELL_NAME.Punch:
-      return PunchSpellSprite;
-    case SPELL_NAME.Poison:
-      return PoisonSpellSprite;
-    case SPELL_NAME.Heal:
-      return HealSpellSprite;
-    default: {
-      return isCharge ? ChargeSprite : ConsumeSprite;
-    }
+  if (spellSpriteHolder[spellName]) {
+    return spellSpriteHolder[spellName];
   }
+
+  return isCharge ? ChargeSprite : ConsumeSprite;
 };
 
 interface CardProps {

@@ -1,21 +1,23 @@
 @import "../../../styles/utilities/createPixelBorder.scss";
 
+$size: 14px;
+
 .spell-tracker {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 3px);
-  justify-content: center;
-  gap: 1px;
-  width: 12px;
-  height: 12px;
-  border: 2px solid #2b2e4a;
-  background-color: green;
+
+  &__img {
+    position: absolute;
+  }
 
   &__counter {
-    position: relative;
-    width: 3px;
-    height: 3px;
-    background-color: #2b2e4a;
-    top: 125%;
+    position: absolute;
+    font-size: $size;
+    background-color: #2f2f2f;
+    width: $size;
+    height: $size;
+    top: $size;
+    left: $size;
+    text-align: center;
+    color: white;
   }
 }
