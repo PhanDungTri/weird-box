@@ -5,6 +5,7 @@ import socket from "../services/socket";
 enum APP_STATE {
   Hub,
   InGame,
+  Test,
 }
 
 const appState = createState<APP_STATE>(APP_STATE.Hub);
