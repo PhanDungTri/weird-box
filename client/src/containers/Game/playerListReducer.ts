@@ -6,7 +6,7 @@ enum PLAYER_LIST_ACTION_NAME {
   Populate,
   Eliminate,
   AddSpells,
-  ResetSpellAnimation,
+  CleanUpSpells,
   UpdateHitPoints,
   Purify,
 }
@@ -61,28 +61,31 @@ const addSpells = (list: PlayerList, spells: ISpell[]): PlayerList =>
 
     const targetSpells = { ...acc[cur.target].spells };
 
-    if (cur.duration === 0 && targetSpells[cur.id]) {
-      delete targetSpells[cur.id];
-    } else if (cur.duration > 0) targetSpells[cur.id] = cur;
+    if (cur.duration > 0 || (targetSpells[cur.id] && cur.duration === 0)) targetSpells[cur.id] = cur;
 
     return {
       ...acc,
       [cur.target]: {
         ...acc[cur.target],
-        spells: { ...targetSpells },
+        spells: targetSpells,
         currentSpell: cur.name,
       },
     };
   }, list);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const resetSpellAnimation = (list: PlayerList, _: unknown): PlayerList =>
+const cleanUpSpells = (list: PlayerList, _: unknown): PlayerList =>
   Object.keys(list).reduce<PlayerList>((acc, cur) => {
-    if (acc[cur].currentSpell === SPELL_NAME.Void) return acc;
+    const spells = Object.values(acc[cur].spells).reduce<Record<string, ISpell>>((acc, cur) => {
+      if (cur.duration !== 0) acc[cur.id] = cur;
+      return acc;
+    }, {});
+
     return {
       ...acc,
       [cur]: {
         ...acc[cur],
+        spells,
         currentSpell: SPELL_NAME.Void,
       },
     };
@@ -117,7 +120,7 @@ const handlerHolder = {
   [PLAYER_LIST_ACTION_NAME.Populate]: populateList,
   [PLAYER_LIST_ACTION_NAME.Eliminate]: eliminatePlayer,
   [PLAYER_LIST_ACTION_NAME.AddSpells]: addSpells,
-  [PLAYER_LIST_ACTION_NAME.ResetSpellAnimation]: resetSpellAnimation,
+  [PLAYER_LIST_ACTION_NAME.CleanUpSpells]: cleanUpSpells,
   [PLAYER_LIST_ACTION_NAME.UpdateHitPoints]: updateHitPoints,
   [PLAYER_LIST_ACTION_NAME.Purify]: purifyPlayer,
 };

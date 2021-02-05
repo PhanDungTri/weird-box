@@ -1,5 +1,5 @@
 import React from "react";
-import { PlayerState } from "..";
+import { PlayerState } from "../playerListReducer";
 import Opponent from "./Opponent";
 import "./OpponentList.scss";
 

@@ -75,17 +75,13 @@ const Game = (): JSX.Element => {
       });
     });
 
-    socket.on(SOCKET_EVENT.GameOver, (id: string) => {
-      setWinner(playerList[id]);
-    });
-
     socket.on(SOCKET_EVENT.TakeSpell, (payload: ISpell[]) => {
       dispatch({
         name: PLAYER_LIST_ACTION_NAME.AddSpells,
         payload,
       });
 
-      setTimeout(() => dispatch({ name: PLAYER_LIST_ACTION_NAME.ResetSpellAnimation }), 450);
+      setTimeout(() => dispatch({ name: PLAYER_LIST_ACTION_NAME.CleanUpSpells }), 450);
     });
 
     return (): void => {
@@ -95,8 +91,19 @@ const Game = (): JSX.Element => {
       socket.off(SOCKET_EVENT.Purify);
       socket.off(SOCKET_EVENT.TakeSpell);
       socket.off(SOCKET_EVENT.PlayerEliminated);
+      socket.off(SOCKET_EVENT.GameOver);
     };
   }, []);
+
+  useEffect(() => {
+    socket.on(SOCKET_EVENT.GameOver, (id: string) => {
+      setWinner(playerList[id]);
+    });
+
+    return (): void => {
+      socket.off(SOCKET_EVENT.GameOver);
+    };
+  }, [playerList]);
 
   return (
     <div className="game" onClick={() => setChosenCard("")}>
