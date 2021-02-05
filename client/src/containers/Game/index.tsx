@@ -1,10 +1,8 @@
-import { none, useState as useHookState } from "@hookstate/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { IGame } from "../../../../shared/src/interfaces/Game";
 import { IPlayer } from "../../../../shared/src/interfaces/Player";
 import { ISpell } from "../../../../shared/src/interfaces/Spell";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
-import SPELL_NAME from "../../../../shared/src/SpellName";
 import Notification from "../../components/Notification";
 import socket from "../../services/socket";
 import useAppState, { APP_STATE } from "../../state/appState";
@@ -13,22 +11,11 @@ import GameBoard from "./GameBoard";
 import GameOverDialog from "./GameOverDialog";
 import OpponentList from "./OpponentList";
 import PlayerHand from "./PlayerHand";
+import playerListReducer, { PlayerList, PlayerState, PLAYER_LIST_ACTION_NAME } from "./playerListReducer";
 import PlayerStatus from "./PlayerStatus";
 
 interface GameState {
   maxHP: number;
-}
-
-interface PlayerState extends IPlayer {
-  spells: {
-    [id: string]: ISpell;
-  };
-  currentSpell: SPELL_NAME;
-  isEliminated: boolean;
-}
-
-interface PlayerList {
-  [id: string]: PlayerState;
 }
 
 // const dummyPlayerState: PlayerState = {
@@ -45,7 +32,7 @@ type Winner = Pick<PlayerState, "id" | "name">;
 const Game = (): JSX.Element => {
   const appState = useAppState();
   const [chosenCard, setChosenCard] = useState("");
-  const playerList = useHookState<PlayerList>({});
+  const [playerList, dispatch] = useReducer(playerListReducer, {} as PlayerList);
   const [currentPlayer, setCurrentPlayer] = useState("");
   const [state, setState] = useState<GameState>({ maxHP: 0 });
   const [winner, setWinner] = useState<Winner | null>(null);
@@ -59,59 +46,46 @@ const Game = (): JSX.Element => {
     socket.emit(SOCKET_EVENT.Ready);
     socket.on(SOCKET_EVENT.StartTurn, (id: string) => setCurrentPlayer(id));
 
-    socket.on(SOCKET_EVENT.GetGameInfo, (payload: IGame) => {
-      setState({ maxHP: payload.maxHP });
-      playerList.set(
-        payload.players.reduce<PlayerList>((acc, cur) => {
-          acc[cur.id] = {
-            ...cur,
-            spells: {},
-            currentSpell: SPELL_NAME.Void,
-            isEliminated: false,
-          };
-
-          return acc;
-        }, {})
-      );
+    socket.on(SOCKET_EVENT.GetGameInfo, ({ players, maxHP }: IGame) => {
+      setState({ maxHP: maxHP });
+      dispatch({
+        name: PLAYER_LIST_ACTION_NAME.Populate,
+        payload: players,
+      });
     });
 
     socket.on(SOCKET_EVENT.PlayerEliminated, (id: string) => {
-      playerList[id].isEliminated.set(true);
+      dispatch({
+        name: PLAYER_LIST_ACTION_NAME.Eliminate,
+        payload: id,
+      });
     });
 
     socket.on(SOCKET_EVENT.HitPointChanged, (payload: Omit<IPlayer, "name">[]) => {
-      playerList.batch((list) => payload.forEach((p) => list[p.id].hp.set(p.hp)));
+      dispatch({
+        name: PLAYER_LIST_ACTION_NAME.UpdateHitPoints,
+        payload,
+      });
     });
 
     socket.on(SOCKET_EVENT.Purify, (id: string) => {
-      playerList[id].spells.set({});
+      dispatch({
+        name: PLAYER_LIST_ACTION_NAME.Purify,
+        payload: id,
+      });
     });
 
     socket.on(SOCKET_EVENT.GameOver, (id: string) => {
-      setWinner(playerList[id].value);
+      setWinner(playerList[id]);
     });
 
     socket.on(SOCKET_EVENT.TakeSpell, (payload: ISpell[]) => {
-      playerList.batch((list) =>
-        payload.forEach((s) => {
-          const spell = list[s.target].spells[s.id];
+      dispatch({
+        name: PLAYER_LIST_ACTION_NAME.AddSpells,
+        payload,
+      });
 
-          if (s.duration === 0 && spell.value) spell.set(none);
-          else if (s.duration > 0) spell.set(s);
-
-          list[s.target].currentSpell.set(s.name);
-        })
-      );
-
-      setTimeout(
-        () =>
-          playerList.batch((list) =>
-            Object.values(list.value).forEach((p) => {
-              if (p.currentSpell !== SPELL_NAME.Void) list[p.id].currentSpell.set(SPELL_NAME.Void);
-            })
-          ),
-        450
-      );
+      setTimeout(() => dispatch({ name: PLAYER_LIST_ACTION_NAME.ResetSpellAnimation }), 450);
     });
 
     return (): void => {
@@ -126,15 +100,15 @@ const Game = (): JSX.Element => {
 
   return (
     <div className="game" onClick={() => setChosenCard("")}>
-      <OpponentList maxHP={state.maxHP} opponents={Object.values(playerList.value).filter((p) => p.id !== socket.id)} />
+      <OpponentList maxHP={state.maxHP} opponents={Object.values(playerList).filter((p) => p.id !== socket.id)} />
       <GameBoard />
       <div className="player">
-        <PlayerStatus maxHP={state.maxHP} hp={playerList[socket.id].value?.hp || 0} />
+        <PlayerStatus maxHP={state.maxHP} hp={playerList[socket.id]?.hp || 0} />
         <PlayerHand
           currentPlayer={currentPlayer}
           chooseCard={(id: string) => setChosenCard(id)}
           chosenCard={chosenCard}
-          eliminated={!!playerList[socket.id].value?.isEliminated}
+          eliminated={!!playerList[socket.id]?.isEliminated}
         />
       </div>
       <GameOverDialog open={!!winner} onClose={onGameOver} winner={winner as Winner} />
@@ -144,4 +118,4 @@ const Game = (): JSX.Element => {
 };
 
 export default Game;
-export type { PlayerList, PlayerState, Winner };
+export type { Winner };

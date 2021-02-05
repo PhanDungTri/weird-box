@@ -1,8 +1,8 @@
 import React from "react";
-import { PlayerState } from "../..";
 import HitPointBar from "../../../../components/HitPointBar";
 import SpellAnimation from "../../../../components/SpellAnimation";
 import SpellList from "../../../../components/SpellList";
+import { PlayerState } from "../../playerListReducer";
 import "./Opponent.scss";
 
 interface OpponentProps {
