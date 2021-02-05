@@ -163,7 +163,7 @@ class Game {
       this.chargePoint = 0;
       this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged);
       this.getCurrentPlayer().changeHitPoint(-penalty);
-    } else {
+    } else if (oldChargePoint > 0) {
       SpellFactory.create(card.getSpell(), oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
       // wait for spell animation
       await waitFor(600);
