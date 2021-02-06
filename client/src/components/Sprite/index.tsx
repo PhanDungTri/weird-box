@@ -10,9 +10,19 @@ interface Props {
   tick?: number;
   repeat?: number;
   centerize?: boolean;
+  style?: React.CSSProperties;
 }
 
-const Sprite = ({ src, step = 1, tick = 1, size, scale = 1, repeat = -1, centerize = false }: Props): JSX.Element => {
+const Sprite = ({
+  src,
+  step = 1,
+  tick = 1,
+  size,
+  scale = 1,
+  repeat = -1,
+  centerize = false,
+  style,
+}: Props): JSX.Element => {
   const { currentStep } = useStepAnimation({ step, tick, repeat, start: true });
   const [width, height] = useRef(size.map((s) => s * scale)).current;
 
@@ -20,6 +30,7 @@ const Sprite = ({ src, step = 1, tick = 1, size, scale = 1, repeat = -1, centeri
     <div
       className={`sprite ${centerize ? "-centerize" : ""}`}
       style={{
+        ...style,
         width: width + "px",
         height: height + "px",
         backgroundImage: `url(${src})`,

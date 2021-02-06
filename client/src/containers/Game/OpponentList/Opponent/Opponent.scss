@@ -18,13 +18,4 @@
     font-size: 16px;
     font-weight: bold;
   }
-
-  &.-eliminated {
-    box-shadow: createPixelBorder(4px, gray);
-
-    .opponent__name {
-      background-color: gray;
-      border-bottom: 4px solid gray;
-    }
-  }
 }

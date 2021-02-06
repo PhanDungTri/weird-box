@@ -1,6 +1,27 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .-centerize {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.-disabled::before {
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background-color: rgba($color: #000, $alpha: 0.6);
+  z-index: 1;
+  animation-name: fade-in;
+  animation-duration: 450ms;
 }

@@ -12,7 +12,7 @@ interface OpponentProps {
 
 const Opponent = ({ maxHP, info }: OpponentProps): JSX.Element => {
   return (
-    <div className={`opponent ${info.isEliminated ? "-eliminated" : ""}`}>
+    <div className={`opponent ${info.isEliminated ? "-disabled" : ""}`}>
       <div className="opponent__name">{info.name}</div>
       <SpellList spells={Object.values(info.spells)} />
       <HitPointBar hp={info.hp} maxHP={maxHP} />

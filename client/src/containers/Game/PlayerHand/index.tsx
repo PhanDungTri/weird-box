@@ -35,10 +35,6 @@ const PlayerHand = ({ chooseCard, chosenCard, currentPlayer, eliminated = false 
     },
   });
 
-  useEffect(() => {
-    if (eliminated) setCards([]);
-  }, [eliminated]);
-
   const playCard = (id: string): void => {
     // TODO check if in-turn
     if (chosenCard !== id) chooseCard(id);
@@ -68,7 +64,12 @@ const PlayerHand = ({ chooseCard, chosenCard, currentPlayer, eliminated = false 
       <div className="player__hand">
         {transitions.map(({ item, key, props }) => (
           <animated.div key={key} style={props}>
-            <Card card={item} onChoose={() => playCard(item.id)} isChosen={chosenCard === item.id} />
+            <Card
+              disabled={eliminated}
+              card={item}
+              onChoose={() => playCard(item.id)}
+              chosen={chosenCard === item.id}
+            />
           </animated.div>
         ))}
       </div>

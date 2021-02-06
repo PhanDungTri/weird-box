@@ -18,21 +18,24 @@ const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
 interface CardProps {
   card: ICard;
   onChoose?: () => void;
-  isChosen?: boolean;
+  chosen?: boolean;
+  disabled?: boolean;
 }
 
 const dummyFn = (): void => {
   return;
 };
 
-const Card = ({ onChoose = dummyFn, isChosen = false, card }: CardProps): JSX.Element => {
+const Card = ({ onChoose = dummyFn, chosen = false, card, disabled = false }: CardProps): JSX.Element => {
   const chooseMe = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    event.stopPropagation();
-    onChoose();
+    if (!disabled) {
+      event.stopPropagation();
+      onChoose();
+    }
   };
 
   return (
-    <div className={`card ${isChosen ? "-chosen" : ""}`} onClick={chooseMe}>
+    <div className={`card ${chosen ? "-chosen" : ""} ${disabled ? "-disabled" : ""}`} onClick={chooseMe}>
       <div className="card__content -centerize">
         <div className="card__spec -power-point">{Math.abs(card.powerPoint)}</div>
         <Sprite src={setSprite(card.spell, card.powerPoint >= 0)} size={[24, 24]} centerize />

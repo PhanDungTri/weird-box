@@ -43,7 +43,7 @@ const setSpellAnimation = (spell: SPELL_NAME): JSX.Element => {
     default:
       return <></>;
   }
-  return <Sprite {...animationProps} tick={3} repeat={0} size={[62, 46]} scale={2} centerize />;
+  return <Sprite style={{ zIndex: 2 }} {...animationProps} tick={3} repeat={0} size={[62, 46]} scale={2} centerize />;
 };
 
 const SpellAnimation = (props: SpellAnimationProps): JSX.Element => {
