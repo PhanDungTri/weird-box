@@ -47,6 +47,7 @@ const eliminatePlayer = (list: PlayerList, id: string): PlayerList => {
       ...list,
       [id]: {
         ...list[id],
+        spells: {},
         isEliminated: true,
       },
     };

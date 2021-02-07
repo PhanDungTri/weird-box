@@ -104,6 +104,7 @@ class Game {
   }
 
   public eliminatePlayer(player: Player): void {
+    player.purify();
     this.alivePlayers = this.alivePlayers.filter((p) => p !== player);
     this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
   }
@@ -117,6 +118,11 @@ class Game {
   public async newTurn(): Promise<void> {
     // wait for all players complete their updates
     await Promise.all(this.alivePlayers.map((p) => p.update()));
+
+    // check if player is eliminated
+    this.alivePlayers.forEach((player) => {
+      if (player.getHitPoint() <= 0) this.eliminatePlayer(player);
+    });
 
     if (this.alivePlayers.length === 0) {
       // TODO draw

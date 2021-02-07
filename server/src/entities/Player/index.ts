@@ -31,6 +31,10 @@ class Player {
     return this.client;
   }
 
+  public getHitPoint(): number {
+    return this.hitPoint;
+  }
+
   private playCard(id: string): void {
     const card = this.getCardById(id);
 
@@ -43,6 +47,7 @@ class Player {
     }
 
     // TODO validate card and check if player is in any game.
+    // TODO check if player is eliminated
   }
 
   private ready(): void {
@@ -60,9 +65,7 @@ class Player {
 
     if (this.hitPoint <= 0) {
       this.hitPoint = 0;
-      this.game.eliminatePlayer(this);
       this.cards = [];
-      this.purify();
     } else if (this.hitPoint > 100) this.hitPoint = 100;
 
     this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());
