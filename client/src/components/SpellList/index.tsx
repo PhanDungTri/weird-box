@@ -6,9 +6,10 @@ import SpellTracker from "./SpellTracker";
 
 interface SpellListProps {
   spells: ISpell[];
+  align?: "center" | "left";
 }
 
-const SpellList = ({ spells = [] }: SpellListProps): JSX.Element => {
+const SpellList = ({ spells = [], align = "center" }: SpellListProps): JSX.Element => {
   const counter = useRef(0);
   const transitions = useTransition(spells, (spell) => spell.id, {
     from: {
@@ -27,7 +28,7 @@ const SpellList = ({ spells = [] }: SpellListProps): JSX.Element => {
   }, [spells]);
 
   return (
-    <div className="spell-list">
+    <div className={`spell-list -align-${align}`}>
       {transitions.map(({ item, key, props }) => (
         <animated.div key={key} style={props}>
           <SpellTracker id={item.id} name={item.name} duration={item.duration} />

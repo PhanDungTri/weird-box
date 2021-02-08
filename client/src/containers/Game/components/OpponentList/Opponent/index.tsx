@@ -1,16 +1,18 @@
 import React from "react";
-import HitPointBar from "../../../../components/HitPointBar";
-import SpellAnimation from "../../../../components/SpellAnimation";
-import SpellList from "../../../../components/SpellList";
-import { PlayerState } from "../../playerListReducer";
+import HitPointBar from "../../../../../components/HitPointBar";
+import SpellAnimation from "../../../../../components/SpellAnimation";
+import SpellList from "../../../../../components/SpellList";
+import { useGameInfoContext } from "../../../business/context";
+import { PlayerState } from "../../../business/reducers/playerListReducer";
 import "./Opponent.scss";
 
 interface OpponentProps {
   info: PlayerState;
-  maxHP: number;
 }
 
-const Opponent = ({ maxHP, info }: OpponentProps): JSX.Element => {
+const Opponent = ({ info }: OpponentProps): JSX.Element => {
+  const { maxHP } = useGameInfoContext();
+
   return (
     <div className={`opponent ${info.isEliminated ? "-disabled" : ""}`}>
       <div className="opponent__name">{info.name}</div>

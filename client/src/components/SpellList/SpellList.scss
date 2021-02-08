@@ -3,5 +3,12 @@
   display: grid;
   gap: 4px;
   grid-template-columns: repeat(auto-fit, 32px);
-  justify-content: center;
+
+  &.-align-center {
+    justify-content: center;
+  }
+
+  &.-align-left {
+    justify-content: left;
+  }
 }

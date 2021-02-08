@@ -6,35 +6,25 @@ import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
 import Notification from "../../components/Notification";
 import socket from "../../services/socket";
 import useAppState, { APP_STATE } from "../../state/appState";
+import { GameProvider, useCardChoiceContext, useGameInfoContext } from "./business/context";
+import playerListReducer, {
+  PlayerList,
+  PlayerState,
+  PLAYER_LIST_ACTION_NAME,
+} from "./business/reducers/playerListReducer";
+import GameBoard from "./components/GameBoard";
+import GameOverDialog from "./components/GameOverDialog";
+import OpponentList from "./components/OpponentList";
+import Player from "./components/Player";
 import "./Game.scss";
-import GameBoard from "./GameBoard";
-import GameOverDialog from "./GameOverDialog";
-import OpponentList from "./OpponentList";
-import PlayerHand from "./PlayerHand";
-import playerListReducer, { PlayerList, PlayerState, PLAYER_LIST_ACTION_NAME } from "./playerListReducer";
-import PlayerStatus from "./PlayerStatus";
-
-interface GameState {
-  maxHP: number;
-}
-
-// const dummyPlayerState: PlayerState = {
-//   id: "",
-//   name: "",
-//   hp: 0,
-//   spells: {},
-//   currentSpell: SPELL_NAME.Void,
-//   isEliminated: false,
-// };
 
 type Winner = Pick<PlayerState, "id" | "name">;
 
 const Game = (): JSX.Element => {
   const appState = useAppState();
-  const [chosenCard, setChosenCard] = useState("");
+  const { clearCardChoice } = useCardChoiceContext();
+  const { setGameInfo } = useGameInfoContext();
   const [playerList, dispatch] = useReducer(playerListReducer, {} as PlayerList);
-  const [currentPlayer, setCurrentPlayer] = useState("");
-  const [state, setState] = useState<GameState>({ maxHP: 0 });
   const [winner, setWinner] = useState<Winner | null>(null);
 
   const onGameOver = (): void => {
@@ -44,10 +34,9 @@ const Game = (): JSX.Element => {
 
   useEffect(() => {
     socket.emit(SOCKET_EVENT.Ready);
-    socket.on(SOCKET_EVENT.StartTurn, (id: string) => setCurrentPlayer(id));
 
     socket.on(SOCKET_EVENT.GetGameInfo, ({ players, maxHP }: IGame) => {
-      setState({ maxHP: maxHP });
+      setGameInfo({ maxHP: maxHP });
       dispatch({
         name: PLAYER_LIST_ACTION_NAME.Populate,
         payload: players,
@@ -85,7 +74,6 @@ const Game = (): JSX.Element => {
     });
 
     return (): void => {
-      socket.off(SOCKET_EVENT.StartTurn);
       socket.off(SOCKET_EVENT.GetGameInfo);
       socket.off(SOCKET_EVENT.HitPointChanged);
       socket.off(SOCKET_EVENT.Purify);
@@ -106,23 +94,23 @@ const Game = (): JSX.Element => {
   }, [playerList]);
 
   return (
-    <div className="game" onClick={() => setChosenCard("")}>
-      <OpponentList maxHP={state.maxHP} opponents={Object.values(playerList).filter((p) => p.id !== socket.id)} />
+    <div className="game" onClick={clearCardChoice}>
+      <OpponentList opponents={Object.values(playerList).filter((p) => p.id !== socket.id)} />
       <GameBoard />
-      <div className="player">
-        <PlayerStatus maxHP={state.maxHP} hp={playerList[socket.id]?.hp || 0} />
-        <PlayerHand
-          currentPlayer={currentPlayer}
-          chooseCard={(id: string) => setChosenCard(id)}
-          chosenCard={chosenCard}
-          eliminated={!!playerList[socket.id]?.isEliminated}
-        />
-      </div>
+      <Player info={playerList[socket.id]} />
       <GameOverDialog open={!!winner} onClose={onGameOver} winner={winner as Winner} />
       <Notification />
     </div>
   );
 };
 
-export default Game;
+const GameWithContext = (): JSX.Element => {
+  return (
+    <GameProvider>
+      <Game />
+    </GameProvider>
+  );
+};
+
+export default GameWithContext;
 export type { Winner };

@@ -1,7 +1,7 @@
 import React from "react";
-import { Winner } from "..";
-import Button from "../../../components/Button";
-import socket from "../../../services/socket";
+import { Winner } from "../..";
+import Button from "../../../../components/Button";
+import socket from "../../../../services/socket";
 import "./GameOverDialog.scss";
 
 interface GameOverDialogProps {

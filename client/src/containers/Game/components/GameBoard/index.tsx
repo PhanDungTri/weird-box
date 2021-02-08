@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import ANIMATION_DURATION from "../../../../../shared/src/AnimationDuration";
-import SOCKET_EVENT from "../../../../../shared/src/SocketEvent";
-import Card from "../../../components/Card";
-import socket from "../../../services/socket";
-import ICard from "../../../interfaces/ICard";
+import ANIMATION_DURATION from "../../../../../../shared/src/AnimationDuration";
+import SOCKET_EVENT from "../../../../../../shared/src/SocketEvent";
+import Card from "../../../../components/Card";
+import socket from "../../../../services/socket";
+import ICard from "../../../../interfaces/ICard";
 import BoxOfCard from "./BoxOfCard";
 import ChargePointBar from "./ChargePointBar";
 import "./GameBoard.scss";

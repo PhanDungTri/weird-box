@@ -4,6 +4,7 @@
   position: relative;
   margin: 8px;
   box-shadow: createPixelBorder(4px, #2b2e4a);
+  height: 16px;
 
   &__text {
     font-size: 12px;
@@ -13,9 +14,9 @@
 
   &__bar {
     background-color: #47ac18;
-    height: 16px;
     box-shadow: inset 0px 8px 0px 0px #99e550;
     transition: 0.3s;
+    height: 100%;
 
     &.-delay {
       position: absolute;

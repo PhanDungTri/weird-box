@@ -1,6 +1,6 @@
-import { IPlayer } from "../../../../shared/src/interfaces/Player";
-import { ISpell } from "../../../../shared/src/interfaces/Spell";
-import SPELL_NAME from "../../../../shared/src/SpellName";
+import { IPlayer } from "../../../../../../shared/src/interfaces/Player";
+import { ISpell } from "../../../../../../shared/src/interfaces/Spell";
+import SPELL_NAME from "../../../../../../shared/src/SpellName";
 
 enum PLAYER_LIST_ACTION_NAME {
   Populate,

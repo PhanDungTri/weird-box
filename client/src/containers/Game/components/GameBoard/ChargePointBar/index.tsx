@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import SOCKET_EVENT from "../../../../../../shared/src/SocketEvent";
-import socket from "../../../../services/socket";
-import useStepAnimation from "../../../../hooks/useStepAnimation";
+import SOCKET_EVENT from "../../../../../../../shared/src/SocketEvent";
+import socket from "../../../../../services/socket";
+import useStepAnimation from "../../../../../hooks/useStepAnimation";
 import "./ChargePointBar.scss";
 
 type ChargePointBarState = "safe" | "warning" | "danger";

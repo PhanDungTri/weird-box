@@ -1,4 +1,4 @@
-@import "../../../../styles/utilities/createPixelBorder.scss";
+@import "../../../../../styles/utilities/createPixelBorder.scss";
 
 .opponent {
   position: relative;
@@ -7,7 +7,7 @@
   margin: 4px;
   margin: 4px;
   box-shadow: createPixelBorder(4px, #2b2e4a);
-  grid-template-rows: 32px auto 32px;
+  grid-template-rows: 32px auto auto;
 
   &__name {
     background-color: #903749;

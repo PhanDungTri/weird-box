@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import SOCKET_EVENT from "../../../../../shared/src/SocketEvent";
-import Card from "../../../components/Card";
-import NOTI_VARIANT from "../../../constants/NOTI_VARIANT";
-import ICard from "../../../interfaces/ICard";
-import socket from "../../../services/socket";
-import useNotificationState from "../../../state/notificationState";
-import "./PlayerHand.scss";
+import SOCKET_EVENT from "../../../../../../../shared/src/SocketEvent";
+import Card from "../../../../../components/Card";
+import NOTI_VARIANT from "../../../../../constants/NOTI_VARIANT";
+import ICard from "../../../../../interfaces/ICard";
+import socket from "../../../../../services/socket";
+import useNotificationState from "../../../../../state/notificationState";
+import { useCurrentPlayerContext, useCardChoiceContext } from "../../../business/context";
+import "./Hand.scss";
 
-interface PlayerHandProps {
-  chosenCard: string;
-  chooseCard: (id: string) => void;
-  currentPlayer: string;
+interface HandProps {
   eliminated?: boolean;
 }
 
-const PlayerHand = ({ chooseCard, chosenCard, currentPlayer, eliminated = false }: PlayerHandProps): JSX.Element => {
+const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
+  const { chooseCard, chosenCard } = useCardChoiceContext();
+  const { currentPlayer } = useCurrentPlayerContext();
   const setNotification = useNotificationState().set;
   const [cards, setCards] = useState<ICard[]>([]);
 
@@ -77,4 +77,4 @@ const PlayerHand = ({ chooseCard, chosenCard, currentPlayer, eliminated = false 
   );
 };
 
-export default PlayerHand;
+export default Hand;
