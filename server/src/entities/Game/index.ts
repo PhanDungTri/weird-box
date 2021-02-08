@@ -87,7 +87,7 @@ class Game {
     }
 
     for (let j = 0; j < this.alivePlayers.length; j++) {
-      this.alivePlayers[j].takeCards(...startingHands[j]);
+      this.alivePlayers[j].receiveCards(...startingHands[j]);
     }
 
     this.newTurn();
@@ -142,10 +142,12 @@ class Game {
       currentPlayer = this.getCurrentPlayer();
     } while (!this.alivePlayers.includes(currentPlayer));
 
-    currentPlayer.takeCards(this.dealCard());
+    currentPlayer.receiveCards(this.dealCard());
 
     // wait for deal card animation
     await waitFor(600);
+
+    currentPlayer.startTurn();
     this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
 

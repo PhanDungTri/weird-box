@@ -11,6 +11,7 @@ class Player {
   private cards: Card[] = [];
   private spellManager = new SpellManager();
   private hitPoint: number;
+  private shouldPlayCard = false;
 
   constructor(private client: Client, private game: Game) {
     this.hitPoint = game.getMaxHP();
@@ -38,12 +39,11 @@ class Player {
   private playCard(id: string): void {
     const card = this.getCardById(id);
 
-    if (card) {
-      if (this.game.getCurrentPlayer() === this) {
-        this.game.consumeCard(card);
-      } else {
-        this.getClient().send(SOCKET_EVENT.Error, "Not your turn");
-      }
+    if (this.shouldPlayCard && this.game.getCurrentPlayer() === this && card) {
+      this.game.consumeCard(card);
+      this.shouldPlayCard = false;
+    } else {
+      this.getClient().send(SOCKET_EVENT.Error, "Not your turn");
     }
 
     // TODO validate card and check if player is in any game.
@@ -55,7 +55,11 @@ class Player {
     this.client.off(SOCKET_EVENT.Ready);
   }
 
-  public takeCards(...cards: Card[]): void {
+  public startTurn(): void {
+    this.shouldPlayCard = true;
+  }
+
+  public receiveCards(...cards: Card[]): void {
     this.cards.push(...cards);
     this.getClient().send(SOCKET_EVENT.TakeCard, cards);
   }

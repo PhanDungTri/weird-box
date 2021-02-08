@@ -5,7 +5,7 @@ class GameFinder {
   private queue: Client[] = [];
 
   public addClient(client: Client): void {
-    this.queue.push(client);
+    if (!this.queue.includes(client)) this.queue.push(client);
 
     if (this.queue.length >= 3) {
       const clients: Client[] = [];
