@@ -2,27 +2,8 @@
 
 $size: 14px;
 
-@keyframes spell-triggered {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
 .spell-tracker {
   position: relative;
-
-  &__img {
-    &.-triggered {
-      animation-name: spell-triggered;
-      animation-duration: 450ms;
-    }
-  }
 
   &__counter {
     position: absolute;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { animated, useTransition } from "react-spring";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import SOCKET_EVENT from "../../../../../../../shared/src/SocketEvent";
 import Card from "../../../../../components/Card";
 import NOTI_VARIANT from "../../../../../constants/NOTI_VARIANT";
 import ICard from "../../../../../interfaces/ICard";
 import socket from "../../../../../services/socket";
 import useNotificationState from "../../../../../state/notificationState";
-import { useCurrentPlayerContext, useCardChoiceContext } from "../../../business/context";
+import { useCardChoiceContext, useCurrentPlayerContext } from "../../../business/context";
 import "./Hand.scss";
 
 interface HandProps {
@@ -18,22 +18,6 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
   const { currentPlayer } = useCurrentPlayerContext();
   const setNotification = useNotificationState().set;
   const [cards, setCards] = useState<ICard[]>([]);
-
-  const transitions = useTransition(cards, (card) => card.id, {
-    from: {
-      position: "relative",
-      transform: "translateY(40px)",
-      opacity: 0.5,
-    },
-    enter: {
-      transform: "translateY(0px)",
-      scale: 1,
-      opacity: 1,
-    },
-    leave: {
-      opacity: 0,
-    },
-  });
 
   const playCard = (id: string): void => {
     // TODO check if in-turn
@@ -60,20 +44,13 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
   }, []);
 
   return (
-    <>
-      <div className="player__hand">
-        {transitions.map(({ item, key, props }) => (
-          <animated.div key={key} style={props}>
-            <Card
-              disabled={eliminated}
-              card={item}
-              onChoose={() => playCard(item.id)}
-              chosen={chosenCard === item.id}
-            />
-          </animated.div>
-        ))}
-      </div>
-    </>
+    <TransitionGroup className="player__hand">
+      {cards.map((c) => (
+        <CSSTransition timeout={600} classNames="card-transition" key={c.id}>
+          <Card disabled={eliminated} card={c} onClick={playCard} chosen={chosenCard === c.id} />
+        </CSSTransition>
+      ))}
+    </TransitionGroup>
   );
 };
 

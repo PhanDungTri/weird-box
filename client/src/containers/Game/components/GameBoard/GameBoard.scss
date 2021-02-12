@@ -4,7 +4,9 @@
 
   &__played-card {
     position: absolute;
+    opacity: 0;
     left: 50%;
     transform: translateX(-50%);
+    bottom: 0%;
   }
 }

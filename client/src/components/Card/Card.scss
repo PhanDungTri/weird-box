@@ -17,11 +17,11 @@ $color-reflection: #ffffff;
     inset 0px $border-width 0px 0px $color-reflection;
   width: 4rem;
   height: 6rem;
-  transition: 0.2s;
   user-select: none;
 
   &.-chosen {
     transform: translateY(-30px);
+    transition: transform 0.2s;
   }
 
   &__content {
