@@ -3,7 +3,9 @@ import { IGame } from "../../../../shared/src/interfaces/Game";
 import { IPlayer } from "../../../../shared/src/interfaces/Player";
 import { ISpell } from "../../../../shared/src/interfaces/Spell";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
+import SPELL_NAME from "../../../../shared/src/SpellName";
 import Notification from "../../components/Notification";
+import SpellAnimation from "../../components/SpellAnimation";
 import socket from "../../services/socket";
 import useAppState, { APP_STATE } from "../../state/appState";
 import { GameProvider, useCardChoiceContext, useGameInfoContext } from "./business/context";
@@ -97,6 +99,7 @@ const Game = (): JSX.Element => {
     <div className="game" onClick={clearCardChoice}>
       <OpponentList opponents={Object.values(playerList).filter((p) => p.id !== socket.id)} />
       <GameBoard />
+      <SpellAnimation spell={playerList[socket.id]?.currentSpell || SPELL_NAME.Void} scale={4} />
       <Player info={playerList[socket.id]} />
       <GameOverDialog open={!!winner} onClose={onGameOver} winner={winner as Winner} />
       <Notification />

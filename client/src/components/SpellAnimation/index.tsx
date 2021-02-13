@@ -7,47 +7,42 @@ import Sprite from "../Sprite";
 
 interface SpellAnimationProps {
   spell: SPELL_NAME;
+  scale?: number;
 }
 
-const setSpellAnimation = (spell: SPELL_NAME): JSX.Element => {
-  let animationProps = {
+const animationProps: Record<SPELL_NAME, { step: number; src: string }> = {
+  [SPELL_NAME.Void]: {
     step: 1,
     src: "",
-  };
-
-  switch (spell) {
-    case SPELL_NAME.Punch: {
-      animationProps = {
-        step: 7,
-        src: PunchSpellAnimation,
-      };
-
-      break;
-    }
-    case SPELL_NAME.Heal: {
-      animationProps = {
-        step: 8,
-        src: HealSpellAnimation,
-      };
-
-      break;
-    }
-    case SPELL_NAME.Poison: {
-      animationProps = {
-        step: 8,
-        src: PoisonSpellAnimation,
-      };
-
-      break;
-    }
-    default:
-      return <></>;
-  }
-  return <Sprite style={{ zIndex: 2 }} {...animationProps} tick={3} repeat={0} size={[62, 46]} scale={2} centerize />;
+  },
+  [SPELL_NAME.Punch]: {
+    step: 7,
+    src: PunchSpellAnimation,
+  },
+  [SPELL_NAME.Heal]: {
+    step: 8,
+    src: HealSpellAnimation,
+  },
+  [SPELL_NAME.Poison]: {
+    step: 8,
+    src: PoisonSpellAnimation,
+  },
 };
 
-const SpellAnimation = (props: SpellAnimationProps): JSX.Element => {
-  return setSpellAnimation(props.spell);
+const SpellAnimation = ({ spell, scale = 2 }: SpellAnimationProps): JSX.Element => {
+  return spell === SPELL_NAME.Void ? (
+    <></>
+  ) : (
+    <Sprite
+      style={{ zIndex: 2 }}
+      {...animationProps[spell]}
+      tick={3}
+      repeat={0}
+      size={[62, 46]}
+      scale={scale}
+      centerize
+    />
+  );
 };
 
 export default SpellAnimation;
