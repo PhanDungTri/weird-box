@@ -1,4 +1,4 @@
-import SPELL_NAME from "../../../shared/src/SpellName";
+import { SPELL_NAME } from "../../../shared/src/interfaces/Spell";
 import generateUniqueId from "../utilities/generateUniqueId";
 
 class Card {

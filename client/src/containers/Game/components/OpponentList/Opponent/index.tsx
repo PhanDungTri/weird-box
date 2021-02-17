@@ -18,7 +18,7 @@ const Opponent = ({ info }: OpponentProps): JSX.Element => {
       <div className="opponent__name">{info.name}</div>
       <SpellList spells={Object.values(info.spells)} />
       <HitPointBar hp={info.hp} maxHP={maxHP} />
-      <SpellAnimation spell={info.currentSpell} />
+      <SpellAnimation name={info.currentSpell} />
     </div>
   );
 };

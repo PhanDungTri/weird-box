@@ -1,6 +1,6 @@
 import { IPlayer } from "../../../../../../shared/src/interfaces/Player";
-import { ISpell } from "../../../../../../shared/src/interfaces/Spell";
-import SPELL_NAME from "../../../../../../shared/src/SpellName";
+import { IPassiveAction, ISpell, PASSIVE_ACTION } from "../../../../../../shared/src/interfaces/Spell";
+import { SPELL_NAME } from "../../../../../../shared/src/interfaces/Spell";
 
 enum PLAYER_LIST_ACTION_NAME {
   Populate,
@@ -9,13 +9,14 @@ enum PLAYER_LIST_ACTION_NAME {
   CleanUpSpells,
   UpdateHitPoints,
   Purify,
+  ActivatePassive,
 }
 
 interface PlayerState extends IPlayer {
   spells: {
     [id: string]: ISpell;
   };
-  currentSpell: SPELL_NAME;
+  currentSpell: SPELL_NAME | PASSIVE_ACTION;
   isEliminated: boolean;
 }
 
@@ -62,7 +63,8 @@ const addSpells = (list: PlayerList, spells: ISpell[]): PlayerList =>
 
     const targetSpells = { ...acc[cur.target].spells };
 
-    if (cur.duration > 0 || (targetSpells[cur.id] && cur.duration === 0)) targetSpells[cur.id] = cur;
+    if (cur.duration > 0 || cur.duration === -1 || (targetSpells[cur.id] && cur.duration === 0))
+      targetSpells[cur.id] = cur;
 
     return {
       ...acc,
@@ -117,6 +119,23 @@ const purifyPlayer = (list: PlayerList, id: string): PlayerList => {
   };
 };
 
+const activatePassiveSpell = (list: PlayerList, payload: IPassiveAction[]): PlayerList =>
+  payload.reduce<PlayerList>((acc, { id, target, action }) => {
+    if (!acc[target]) return acc;
+
+    const nextSpellList = { ...acc[target].spells };
+    delete nextSpellList[id];
+
+    return {
+      ...acc,
+      [target]: {
+        ...acc[target],
+        currentSpell: action,
+        spells: nextSpellList,
+      },
+    };
+  }, list);
+
 const handlerHolder = {
   [PLAYER_LIST_ACTION_NAME.Populate]: populateList,
   [PLAYER_LIST_ACTION_NAME.Eliminate]: eliminatePlayer,
@@ -124,6 +143,7 @@ const handlerHolder = {
   [PLAYER_LIST_ACTION_NAME.CleanUpSpells]: cleanUpSpells,
   [PLAYER_LIST_ACTION_NAME.UpdateHitPoints]: updateHitPoints,
   [PLAYER_LIST_ACTION_NAME.Purify]: purifyPlayer,
+  [PLAYER_LIST_ACTION_NAME.ActivatePassive]: activatePassiveSpell,
 };
 
 const playerListReducer = (list: PlayerList, action: PlayerListAction): PlayerList => {

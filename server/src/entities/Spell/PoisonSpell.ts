@@ -1,8 +1,8 @@
-import SPELL_NAME from "../../../../shared/src/SpellName";
+import Spell from ".";
+import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 import Player from "../Player";
-import Debuff from "./Debuff";
 
-class PoisonSpell extends Debuff {
+class PoisonSpell extends Spell {
   constructor(chargePoint: number, target: Player, caster: Player) {
     super(SPELL_NAME.Poison, target, caster, 3);
     this.power = chargePoint;

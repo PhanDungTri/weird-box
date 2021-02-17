@@ -1,20 +1,18 @@
 import React from "react";
 import { Transition } from "react-transition-group";
 import { TransitionStatus } from "react-transition-group/Transition";
-import SPELL_NAME from "../../../../shared/src/SpellName";
-import ChargeSprite from "../../assets/sprites/charge.png";
-import ConsumeSprite from "../../assets/sprites/consume.png";
+import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 import ICard from "../../interfaces/ICard";
-import spellSpriteHolder from "../../utils/spellSpriteHolder";
+import spriteLibrary from "../../utils/spriteLibrary";
 import Sprite from "../Sprite";
 import "./Card.scss";
 
 const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
-  if (spellSpriteHolder[spellName]) {
-    return spellSpriteHolder[spellName];
+  if (spriteLibrary[spellName]) {
+    return spriteLibrary[spellName];
   }
 
-  return isCharge ? ChargeSprite : ConsumeSprite;
+  return isCharge ? spriteLibrary.Charge : spriteLibrary.Consume;
 };
 
 interface CardProps {

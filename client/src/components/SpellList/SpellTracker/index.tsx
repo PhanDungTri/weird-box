@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Transition, { TransitionStatus } from "react-transition-group/Transition";
-import spellSpriteHolder from "../../../utils/spellSpriteHolder";
+import spriteLibrary from "../../../utils/spriteLibrary";
 import "./SpellTracker.scss";
 
 interface SpellTrackerProps {
@@ -48,7 +48,7 @@ const SpellTracker = ({ duration, name }: SpellTrackerProps): JSX.Element => {
         {(state) => (
           <img
             className={`spell-tracker__img`}
-            src={spellSpriteHolder[name]}
+            src={spriteLibrary[name]}
             style={{
               ...defaultStyle,
               ...transitionStyles[state],
@@ -56,7 +56,7 @@ const SpellTracker = ({ duration, name }: SpellTrackerProps): JSX.Element => {
           />
         )}
       </Transition>
-      <div className="spell-tracker__counter">{duration}</div>
+      {duration >= 0 && <div className="spell-tracker__counter">{duration}</div>}
     </div>
   );
 };

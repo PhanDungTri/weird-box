@@ -1,9 +1,9 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { IGame } from "../../../../shared/src/interfaces/Game";
 import { IPlayer } from "../../../../shared/src/interfaces/Player";
-import { ISpell } from "../../../../shared/src/interfaces/Spell";
+import { IPassiveAction, ISpell } from "../../../../shared/src/interfaces/Spell";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
-import SPELL_NAME from "../../../../shared/src/SpellName";
+import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 import Notification from "../../components/Notification";
 import SpellAnimation from "../../components/SpellAnimation";
 import socket from "../../services/socket";
@@ -75,6 +75,15 @@ const Game = (): JSX.Element => {
       setTimeout(() => dispatch({ name: PLAYER_LIST_ACTION_NAME.CleanUpSpells }), 450);
     });
 
+    socket.on(SOCKET_EVENT.ActivatePassive, (payload: IPassiveAction[]) => {
+      dispatch({
+        name: PLAYER_LIST_ACTION_NAME.ActivatePassive,
+        payload,
+      });
+
+      setTimeout(() => dispatch({ name: PLAYER_LIST_ACTION_NAME.CleanUpSpells }), 450);
+    });
+
     return (): void => {
       socket.off(SOCKET_EVENT.GetGameInfo);
       socket.off(SOCKET_EVENT.HitPointChanged);
@@ -82,6 +91,7 @@ const Game = (): JSX.Element => {
       socket.off(SOCKET_EVENT.TakeSpell);
       socket.off(SOCKET_EVENT.PlayerEliminated);
       socket.off(SOCKET_EVENT.GameOver);
+      socket.off(SOCKET_EVENT.ActivatePassive);
     };
   }, []);
 
@@ -99,7 +109,7 @@ const Game = (): JSX.Element => {
     <div className="game" onClick={clearCardChoice}>
       <OpponentList opponents={Object.values(playerList).filter((p) => p.id !== socket.id)} />
       <GameBoard />
-      <SpellAnimation spell={playerList[socket.id]?.currentSpell || SPELL_NAME.Void} scale={4} />
+      <SpellAnimation name={playerList[socket.id]?.currentSpell || SPELL_NAME.Void} scale={4} />
       <Player info={playerList[socket.id]} />
       <GameOverDialog open={!!winner} onClose={onGameOver} winner={winner as Winner} />
       <Notification />

@@ -1,7 +1,9 @@
 import { ISpell } from "../../../../shared/src/interfaces/Spell";
-import SPELL_NAME from "../../../../shared/src/SpellName";
+import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 import generateUniqueId from "../../utilities/generateUniqueId";
 import Player from "../Player";
+
+const debuffs = [SPELL_NAME.Poison, SPELL_NAME.Punch];
 
 abstract class Spell {
   protected power = 0;
@@ -20,6 +22,18 @@ abstract class Spell {
 
   public getPower(): number {
     return this.power;
+  }
+
+  public getDuration(): number {
+    return this.duration;
+  }
+
+  public getCaster(): Player {
+    return this.caster;
+  }
+
+  public isDebuff(): boolean {
+    return debuffs.includes(this.name);
   }
 
   public toJsonData(): ISpell {

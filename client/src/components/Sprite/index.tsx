@@ -4,7 +4,7 @@ import "./Sprite.scss";
 
 interface Props {
   size: [number, number];
-  src: string;
+  src?: string;
   scale?: number;
   step?: number;
   tick?: number;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Sprite = ({
-  src,
+  src = "",
   step = 1,
   tick = 1,
   size,

@@ -1,6 +1,6 @@
-import SPELL_NAME from "../../../../shared/src/SpellName";
 import Player from "../Player";
 import Spell from ".";
+import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 
 class HealSpell extends Spell {
   constructor(chargePoint: number, caster: Player) {

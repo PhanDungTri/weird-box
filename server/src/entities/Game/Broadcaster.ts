@@ -1,46 +1,31 @@
-import { ISpell } from "../../../../shared/src/interfaces/Spell";
+import { IPassiveAction, ISpell } from "../../../../shared/src/interfaces/Spell";
 import { IPlayer } from "../../../../shared/src/interfaces/Player";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
 import Game from ".";
 
+type Debounce<T> = (payload: T) => void;
+
 class Broadcaster {
-  public readonly dispatchChangeHitPoint: (payload: Omit<IPlayer, "name">) => void;
-  public readonly dispatchTakeSpell: (payload: ISpell) => void;
+  public readonly dispatchChangeHitPoint: Debounce<Omit<IPlayer, "name">>;
+  public readonly dispatchTakeSpell: Debounce<ISpell>;
+  public readonly dispatchTriggerPassive: Debounce<IPassiveAction>;
 
   constructor(private game: Game) {
-    this.dispatchChangeHitPoint = this.debounceChangeHitPoint();
-    this.dispatchTakeSpell = this.debounceTakeSpell();
+    this.dispatchChangeHitPoint = this.createDebounce<Omit<IPlayer, "name">>(SOCKET_EVENT.HitPointChanged);
+    this.dispatchTakeSpell = this.createDebounce<ISpell>(SOCKET_EVENT.TakeSpell);
+    this.dispatchTriggerPassive = this.createDebounce<IPassiveAction>(SOCKET_EVENT.ActivatePassive);
   }
 
-  private debounceChangeHitPoint(): (payload: Omit<IPlayer, "name">) => void {
+  private createDebounce<T>(event: SOCKET_EVENT): Debounce<T> {
     let timeout: NodeJS.Timeout;
-    let data: Omit<IPlayer, "name">[] = [];
+    let data: T[] = [];
 
-    return (payload: Omit<IPlayer, "name">): void => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
+    return (payload: T): void => {
+      if (timeout) clearTimeout(timeout);
 
       data.push(payload);
-      timeout = setTimeout((): void => {
-        this.game.sendToAll(SOCKET_EVENT.HitPointChanged, data);
-        data = [];
-      }, 100);
-    };
-  }
-
-  private debounceTakeSpell(): (payload: ISpell) => void {
-    let timeout: NodeJS.Timeout;
-    let data: ISpell[] = [];
-
-    return (payload: ISpell): void => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-
-      data.push(payload);
-      timeout = setTimeout((): void => {
-        this.game.sendToAll(SOCKET_EVENT.TakeSpell, data);
+      timeout = setTimeout(() => {
+        this.game.sendToAll(event, data);
         data = [];
       }, 100);
     };

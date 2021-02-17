@@ -1,5 +1,5 @@
 import React from "react";
-import SPELL_NAME from "../../../../../../shared/src/SpellName";
+import { SPELL_NAME } from "../../../../../../shared/src/interfaces/Spell";
 import { PlayerState } from "../../business/reducers/playerListReducer";
 import Hand from "./Hand";
 import Status from "./Status";
