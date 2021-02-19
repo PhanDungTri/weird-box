@@ -5,9 +5,9 @@ import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";
 import Deck from "./Deck";
-import Player from "../Player";
 import SpellFactory from "../Spell/SpellFactory";
 import Broadcaster from "./Broadcaster";
+import Player from "../Player";
 
 interface GameOptions {
   maxHP: number;
@@ -104,7 +104,6 @@ class Game {
   }
 
   public eliminatePlayer(player: Player): void {
-    player.purify();
     this.alivePlayers = this.alivePlayers.filter((p) => p !== player);
     this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
   }

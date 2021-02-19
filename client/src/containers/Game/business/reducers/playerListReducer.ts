@@ -8,7 +8,6 @@ enum PLAYER_LIST_ACTION_NAME {
   AddSpells,
   CleanUpSpells,
   UpdateHitPoints,
-  Purify,
   ActivatePassive,
 }
 
@@ -107,18 +106,6 @@ const updateHitPoints = (list: PlayerList, payload: Omit<IPlayer, "name">[]): Pl
     };
   }, list);
 
-const purifyPlayer = (list: PlayerList, id: string): PlayerList => {
-  if (!list[id]) return list;
-
-  return {
-    ...list,
-    [id]: {
-      ...list[id],
-      spells: {},
-    },
-  };
-};
-
 const activatePassiveSpell = (list: PlayerList, payload: IPassiveAction[]): PlayerList =>
   payload.reduce<PlayerList>((acc, { id, target, action }) => {
     if (!acc[target]) return acc;
@@ -142,7 +129,6 @@ const handlerHolder = {
   [PLAYER_LIST_ACTION_NAME.AddSpells]: addSpells,
   [PLAYER_LIST_ACTION_NAME.CleanUpSpells]: cleanUpSpells,
   [PLAYER_LIST_ACTION_NAME.UpdateHitPoints]: updateHitPoints,
-  [PLAYER_LIST_ACTION_NAME.Purify]: purifyPlayer,
   [PLAYER_LIST_ACTION_NAME.ActivatePassive]: activatePassiveSpell,
 };
 

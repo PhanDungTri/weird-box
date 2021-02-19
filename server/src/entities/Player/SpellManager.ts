@@ -21,11 +21,6 @@ class SpellManager {
     }
   }
 
-  public purify(): void {
-    this.debuffs = [];
-    this.curses = [];
-  }
-
   private addTalisman(talisman: PassiveSpell): void {
     this.talismans.push(talisman);
     this.player.getClient().send(SOCKET_EVENT.TakeSpell, [talisman.toJsonData()]);

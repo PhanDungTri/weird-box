@@ -12,7 +12,6 @@ enum SOCKET_EVENT {
   ChargePointChanged = "charge point changed",
   StartTurn = "start turn",
   TakeSpell = "take spell",
-  Purify = "purify",
   FindGame = "find game",
   Connected = "connected",
   PlayerEliminated = "player eliminated",

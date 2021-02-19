@@ -10,7 +10,6 @@ class HealSpell extends Spell {
 
   public trigger(): void {
     this.target.changeHitPoint(this.power);
-    this.target.purify();
   }
 }
 

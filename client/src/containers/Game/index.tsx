@@ -59,13 +59,6 @@ const Game = (): JSX.Element => {
       });
     });
 
-    socket.on(SOCKET_EVENT.Purify, (id: string) => {
-      dispatch({
-        name: PLAYER_LIST_ACTION_NAME.Purify,
-        payload: id,
-      });
-    });
-
     socket.on(SOCKET_EVENT.TakeSpell, (payload: ISpell[]) => {
       dispatch({
         name: PLAYER_LIST_ACTION_NAME.AddSpells,
@@ -87,7 +80,6 @@ const Game = (): JSX.Element => {
     return (): void => {
       socket.off(SOCKET_EVENT.GetGameInfo);
       socket.off(SOCKET_EVENT.HitPointChanged);
-      socket.off(SOCKET_EVENT.Purify);
       socket.off(SOCKET_EVENT.TakeSpell);
       socket.off(SOCKET_EVENT.PlayerEliminated);
       socket.off(SOCKET_EVENT.GameOver);

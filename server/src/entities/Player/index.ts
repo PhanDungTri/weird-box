@@ -80,11 +80,6 @@ class Player {
     await this.spellManager.takeSpell(spell, shouldPierceThrough);
   }
 
-  public purify(): void {
-    this.spellManager.purify();
-    this.game.sendToAll(SOCKET_EVENT.Purify, this.client.id);
-  }
-
   public leaveGame(): void {
     this.client.off(SOCKET_EVENT.PlayCard);
     this.game.removePlayer(this);
