@@ -184,8 +184,8 @@ class Game {
     this.newTurn();
   }
 
-  public sendToAll(event: SOCKET_EVENT, data?: unknown, wait = 0): void {
-    this.players.forEach((p) => p.getClient().send(event, data, wait));
+  public sendToAll(event: SOCKET_EVENT, data?: unknown): void {
+    this.players.forEach((p) => p.getClient().send(event, data));
   }
 }
 

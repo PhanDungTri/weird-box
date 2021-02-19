@@ -1,5 +1,5 @@
 import Spell from ".";
-import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
+import { PASSIVE_ACTION, SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 import Player from "../Player";
 
 abstract class PassiveSpell extends Spell {
@@ -11,7 +11,7 @@ abstract class PassiveSpell extends Spell {
     return;
   }
 
-  public abstract activate(origin: Spell): void;
+  public abstract activate(origin: Spell): Generator<PASSIVE_ACTION, void, unknown>;
 }
 
 export default PassiveSpell;
