@@ -6,6 +6,8 @@ import PunchSpellAnimation from "../../assets/sprites/punch_animation.png";
 import ShieldSpellAnimation from "../../assets/sprites/shield_animation.png";
 import ShieldBlockAnimation from "../../assets/sprites/shield_block_animation.png";
 import ShieldPierceAnimation from "../../assets/sprites/shield_pierce_animation.png";
+import MirrorReflectAnimation from "../../assets/sprites/mirror_reflect_animation.png";
+import MirrorPierceAnimation from "../../assets/sprites/mirror_pierce_animation.png";
 import Sprite from "../Sprite";
 
 interface SpellAnimationProps {
@@ -34,9 +36,17 @@ const animationProps: Partial<Record<SPELL_NAME | PASSIVE_ACTION, { step: number
     step: 8,
     src: ShieldBlockAnimation,
   },
-  [PASSIVE_ACTION.Pierce]: {
+  [PASSIVE_ACTION.ShieldPierce]: {
     step: 8,
     src: ShieldPierceAnimation,
+  },
+  [PASSIVE_ACTION.Reflect]: {
+    step: 8,
+    src: MirrorReflectAnimation,
+  },
+  [PASSIVE_ACTION.MirrorPierce]: {
+    step: 8,
+    src: MirrorPierceAnimation,
   },
 };
 

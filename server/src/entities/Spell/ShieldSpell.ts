@@ -13,7 +13,7 @@ class ShieldSpell extends PassiveSpell {
     if (origin.getPower() < this.getPower()) {
       yield PASSIVE_ACTION.Block;
     } else {
-      yield PASSIVE_ACTION.Pierce;
+      yield PASSIVE_ACTION.ShieldPierce;
       this.target.takeSpell(origin, true);
     }
   }

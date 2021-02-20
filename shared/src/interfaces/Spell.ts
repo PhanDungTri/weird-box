@@ -4,11 +4,14 @@ enum SPELL_NAME {
   Heal = "heal",
   Void = "void",
   Shield = "shield",
+  Mirror = "mirror",
 }
 
 enum PASSIVE_ACTION {
   Block = "block",
-  Pierce = "pierce",
+  ShieldPierce = "shield pierce",
+  Reflect = "reflect",
+  MirrorPierce = "mirror pierce",
 }
 
 interface ISpell {

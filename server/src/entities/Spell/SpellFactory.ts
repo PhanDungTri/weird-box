@@ -1,6 +1,7 @@
 import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 import Player from "../Player";
 import HealSpell from "./HealSpell";
+import MirrorSpell from "./MirrorSpell";
 import PoisonSpell from "./PoisonSpell";
 import PunchSpell from "./PunchSpell";
 import ShieldSpell from "./ShieldSpell";
@@ -22,6 +23,10 @@ class SpellFactory {
       }
       case SPELL_NAME.Shield: {
         caster.takeSpell(new ShieldSpell(chargePoint, caster));
+        break;
+      }
+      case SPELL_NAME.Mirror: {
+        caster.takeSpell(new MirrorSpell(chargePoint, caster));
         break;
       }
       case SPELL_NAME.Void: {

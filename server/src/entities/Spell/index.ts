@@ -32,6 +32,10 @@ abstract class Spell {
     return this.caster;
   }
 
+  public setTarget(target: Player): void {
+    this.target = target;
+  }
+
   public isDebuff(): boolean {
     return debuffs.includes(this.name);
   }

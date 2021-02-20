@@ -5,12 +5,14 @@ import PunchSpellSprite from "../assets/sprites/punch.png";
 import ShieldSpellSprite from "../assets/sprites/shield.png";
 import ChargeSprite from "../assets/sprites/charge.png";
 import ConsumeSprite from "../assets/sprites/consume.png";
+import MirrorSpellSprite from "../assets/sprites/mirror.png";
 
 const spriteLibrary: Record<string, string> = {
   [SPELL_NAME.Heal]: HealSpellSprite,
   [SPELL_NAME.Punch]: PunchSpellSprite,
   [SPELL_NAME.Poison]: PoisonSpellSprite,
   [SPELL_NAME.Shield]: ShieldSpellSprite,
+  [SPELL_NAME.Mirror]: MirrorSpellSprite,
   Charge: ChargeSprite,
   Consume: ConsumeSprite,
 };
