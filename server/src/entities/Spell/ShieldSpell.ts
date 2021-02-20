@@ -14,7 +14,7 @@ class ShieldSpell extends PassiveSpell {
       yield PASSIVE_ACTION.Block;
     } else {
       yield PASSIVE_ACTION.ShieldPierce;
-      this.target.takeSpell(origin, true);
+      this.target.takeSpell(origin);
     }
   }
 }

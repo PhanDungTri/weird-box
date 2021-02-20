@@ -14,10 +14,11 @@ class MirrorSpell extends PassiveSpell {
       yield PASSIVE_ACTION.Reflect;
       const caster = origin.getCaster();
       origin.setTarget(caster);
+      origin.setCaster(this.target);
       caster.takeSpell(origin);
     } else {
       yield PASSIVE_ACTION.MirrorPierce;
-      this.target.takeSpell(origin, true);
+      this.target.takeSpell(origin);
     }
   }
 }

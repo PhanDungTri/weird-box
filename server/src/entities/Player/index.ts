@@ -76,8 +76,8 @@ class Player {
     this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());
   }
 
-  public async takeSpell(spell: Spell, shouldPierceThrough = false): Promise<void> {
-    await this.spellManager.takeSpell(spell, shouldPierceThrough);
+  public async takeSpell(spell: Spell): Promise<void> {
+    await this.spellManager.takeSpell(spell);
   }
 
   public leaveGame(): void {

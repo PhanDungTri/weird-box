@@ -49,8 +49,8 @@ class SpellManager {
     return false;
   }
 
-  public async takeSpell(spell: Spell, shouldPierceThrough = false): Promise<void> {
-    if (shouldPierceThrough || !(await this.activateTalisman(spell))) {
+  public async takeSpell(spell: Spell): Promise<void> {
+    if (!(await this.activateTalisman(spell))) {
       if (spell.getDuration() === 0) spell.trigger();
       else if (spell.isDebuff()) {
         if (spell instanceof PassiveSpell) this.curses.push(spell);
