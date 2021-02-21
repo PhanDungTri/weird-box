@@ -79,7 +79,7 @@ const addSpells = (list: PlayerList, spells: ISpell[]): PlayerList =>
 const cleanUpSpells = (list: PlayerList, _: unknown): PlayerList =>
   Object.keys(list).reduce<PlayerList>((acc, cur) => {
     const spells = Object.values(acc[cur].spells).reduce<Record<string, ISpell>>((acc, cur) => {
-      if (cur.duration !== 0) acc[cur.id] = cur;
+      if (cur.duration !== 0 && cur.power > 0) acc[cur.id] = cur;
       return acc;
     }, {});
 
@@ -110,15 +110,20 @@ const activatePassiveSpell = (list: PlayerList, payload: IPassiveAction[]): Play
   payload.reduce<PlayerList>((acc, { id, target, action }) => {
     if (!acc[target]) return acc;
 
-    const nextSpellList = { ...acc[target].spells };
-    delete nextSpellList[id];
+    const spells = { ...acc[target].spells };
 
     return {
       ...acc,
       [target]: {
         ...acc[target],
         currentSpell: action,
-        spells: nextSpellList,
+        spells: {
+          ...spells,
+          [id]: {
+            ...spells[id],
+            power: 0,
+          },
+        },
       },
     };
   }, list);

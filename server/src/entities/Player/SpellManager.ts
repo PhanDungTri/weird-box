@@ -29,6 +29,8 @@ class SpellManager {
   private async activateTalisman(spell: Spell): Promise<boolean> {
     if (this.talismans.length > 0 && spell.isDebuff()) {
       const talisman = this.talismans[0];
+      this.talismans = this.talismans.filter((t) => t !== talisman);
+
       const talismanActivator = talisman.activate(spell);
       let res = talismanActivator.next();
 
@@ -41,8 +43,6 @@ class SpellManager {
         await waitFor(600);
         res = talismanActivator.next();
       }
-
-      this.talismans = this.talismans.filter((t) => t !== talisman);
       return true;
     }
 
