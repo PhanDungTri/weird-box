@@ -13,6 +13,10 @@ class Card {
   public getSpell(): SPELL_NAME {
     return this.spell;
   }
+
+  public hideSpell(): void {
+    this.spell = SPELL_NAME.Void;
+  }
 }
 
 export default Card;

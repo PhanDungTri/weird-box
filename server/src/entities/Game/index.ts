@@ -8,6 +8,8 @@ import Deck from "./Deck";
 import SpellFactory from "../Spell/SpellFactory";
 import Broadcaster from "./Broadcaster";
 import Player from "../Player";
+import PassiveSpell from "../Spell/PassiveSpell";
+import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 
 interface GameOptions {
   maxHP: number;
@@ -153,7 +155,10 @@ class Game {
   public async consumeCard(card: Card): Promise<void> {
     let penalty = 0;
     const oldChargePoint = this.chargePoint;
+    const spell = card.getSpell();
     this.chargePoint += card.getPowerPoint();
+
+    if ([SPELL_NAME.Shield, SPELL_NAME.Mirror].includes(spell)) card.hideSpell();
 
     this.sendToAll(SOCKET_EVENT.CardPlayed, card);
 
@@ -171,7 +176,7 @@ class Game {
       this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged);
       this.getCurrentPlayer().changeHitPoint(-penalty);
     } else if (oldChargePoint > 0) {
-      SpellFactory.create(card.getSpell(), oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
+      SpellFactory.create(spell, oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
       // wait for spell animation
       await waitFor(600);
     }

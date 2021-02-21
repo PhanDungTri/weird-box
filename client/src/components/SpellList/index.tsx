@@ -20,7 +20,7 @@ const SpellList = ({ spells = [], align = "center" }: SpellListProps): JSX.Eleme
     <TransitionGroup className={`spell-list -align-${align}`}>
       {spells.map((s) => (
         <CSSTransition classNames="spell-transition" timeout={600} key={s.id}>
-          <SpellTracker id={s.id} name={s.name} duration={s.duration} />
+          <SpellTracker id={s.id} name={s.name} counter={s.duration === -1 ? s.power : s.duration} />
         </CSSTransition>
       ))}
     </TransitionGroup>

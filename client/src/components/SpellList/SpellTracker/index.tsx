@@ -5,7 +5,7 @@ import "./SpellTracker.scss";
 
 interface SpellTrackerProps {
   id: string;
-  duration: number;
+  counter: number;
   name: string;
 }
 
@@ -29,7 +29,7 @@ const transitionStyles: Record<TransitionStatus, React.CSSProperties> = {
   unmounted: {},
 };
 
-const SpellTracker = ({ duration, name }: SpellTrackerProps): JSX.Element => {
+const SpellTracker = ({ counter, name }: SpellTrackerProps): JSX.Element => {
   const [triggered, setTriggered] = useState(false);
   const firstRender = useRef(true);
 
@@ -40,7 +40,7 @@ const SpellTracker = ({ duration, name }: SpellTrackerProps): JSX.Element => {
       setTriggered(true);
       setTimeout(() => setTriggered(false), 400);
     }
-  }, [duration]);
+  }, [counter]);
 
   return (
     <div className="spell-tracker">
@@ -56,7 +56,7 @@ const SpellTracker = ({ duration, name }: SpellTrackerProps): JSX.Element => {
           />
         )}
       </Transition>
-      {duration >= 0 && <div className="spell-tracker__counter">{duration}</div>}
+      <div className="spell-tracker__counter">{counter}</div>
     </div>
   );
 };
