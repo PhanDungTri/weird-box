@@ -7,11 +7,11 @@ abstract class PassiveSpell extends Spell {
     super(name, caster, target, -1);
   }
 
-  public trigger(): void {
+  public async trigger(): Promise<void> {
     return;
   }
 
-  public abstract activate(origin: Spell): Generator<PASSIVE_ACTION, void, unknown>;
+  public abstract activate(origin: Spell): AsyncGenerator<PASSIVE_ACTION, void, unknown>;
 }
 
 export default PassiveSpell;

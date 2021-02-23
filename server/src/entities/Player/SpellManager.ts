@@ -1,6 +1,5 @@
 import Player from ".";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
-import waitFor from "../../utilities/waitFor";
 import Broadcaster from "../Game/Broadcaster";
 import Spell from "../Spell";
 import PassiveSpell from "../Spell/PassiveSpell";
@@ -14,10 +13,9 @@ class SpellManager {
 
   public async triggerPendingDebuffs(): Promise<void> {
     for (const debuff of this.debuffs) {
-      debuff.trigger();
+      await debuff.trigger();
       if (debuff.getDuration() === 0) this.debuffs = this.debuffs.filter((d) => d !== debuff);
-      this.boardcaster.dispatchTakeSpell(debuff.toJsonData());
-      await waitFor(600);
+      await this.boardcaster.dispatchTakeSpell(debuff.toJsonData());
     }
   }
 
@@ -32,16 +30,15 @@ class SpellManager {
       this.talismans = this.talismans.filter((t) => t !== talisman);
 
       const talismanActivator = talisman.activate(spell);
-      let res = talismanActivator.next();
+      let res = await talismanActivator.next();
 
       while (!res.done) {
-        this.boardcaster.dispatchTriggerPassive({
+        await this.boardcaster.dispatchTriggerPassive({
           id: talisman.id,
           target: this.player.getClient().id,
           action: res.value,
         });
-        await waitFor(600);
-        res = talismanActivator.next();
+        res = await talismanActivator.next();
       }
       return true;
     }
@@ -51,13 +48,13 @@ class SpellManager {
 
   public async takeSpell(spell: Spell): Promise<void> {
     if (!(await this.activateTalisman(spell))) {
-      if (spell.getDuration() === 0) spell.trigger();
+      if (spell.getDuration() === 0) await spell.trigger();
       else if (spell.isDebuff()) {
         if (spell instanceof PassiveSpell) this.curses.push(spell);
         else this.debuffs.push(spell);
       } else return this.addTalisman(spell as PassiveSpell);
 
-      this.boardcaster.dispatchTakeSpell(spell.toJsonData());
+      await this.boardcaster.dispatchTakeSpell(spell.toJsonData());
     }
   }
 }

@@ -1,0 +1,30 @@
+@keyframes countdown {
+  from {
+    width: calc(100% - 8px);
+    background-color: orange;
+  }
+
+  to {
+    width: 0%;
+    background-color: red;
+  }
+}
+
+.timer {
+  display: grid;
+  gap: 4px;
+  margin: 4px;
+  grid-template-columns: 16px auto;
+  align-items: center;
+
+  &__counter {
+    height: 8px;
+    animation-name: countdown;
+    animation-timing-function: linear;
+    animation-delay: 200ms;
+  }
+
+  &.-fluid {
+    grid-column: 1/3;
+  }
+}

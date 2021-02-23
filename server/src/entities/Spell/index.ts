@@ -18,7 +18,7 @@ abstract class Spell {
     this.id = generateUniqueId();
   }
 
-  public abstract trigger(): void;
+  public abstract trigger(): Promise<void>;
 
   public getPower(): number {
     return this.power;

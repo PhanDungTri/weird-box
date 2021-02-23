@@ -1,5 +1,6 @@
 import { IPlayer } from "../../../../shared/src/interfaces/Player";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
+import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";
 import Game from "../Game";
@@ -60,12 +61,13 @@ class Player {
     this.shouldPlayCard = true;
   }
 
-  public receiveCards(...cards: Card[]): void {
+  public async receiveCards(...cards: Card[]): Promise<void> {
     this.cards.push(...cards);
     this.getClient().send(SOCKET_EVENT.TakeCard, cards);
+    await waitFor(600);
   }
 
-  public changeHitPoint(difference: number): void {
+  public async changeHitPoint(difference: number): Promise<void> {
     this.hitPoint += difference;
 
     if (this.hitPoint <= 0) {
@@ -73,7 +75,7 @@ class Player {
       this.cards = [];
     } else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());
+    await this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());
   }
 
   public async takeSpell(spell: Spell): Promise<void> {

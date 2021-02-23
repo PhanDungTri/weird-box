@@ -4,6 +4,7 @@ import socket from "../../../../services/socket";
 
 interface CurrentPlayerHook {
   currentPlayer: string;
+  finishTurn: () => void;
 }
 
 const useCurrentPlayer = (): CurrentPlayerHook => {
@@ -17,7 +18,9 @@ const useCurrentPlayer = (): CurrentPlayerHook => {
     };
   }, []);
 
-  return { currentPlayer };
+  const finishTurn = (): void => setCurrentPlayer("");
+
+  return { currentPlayer, finishTurn };
 };
 
 export default useCurrentPlayer;

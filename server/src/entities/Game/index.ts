@@ -1,22 +1,23 @@
 import { IGame } from "../../../../shared/src/interfaces/Game";
+import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
 import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
 import generateUniqueId from "../../utilities/generateUniqueId";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";
-import Deck from "./Deck";
+import Player from "../Player";
 import SpellFactory from "../Spell/SpellFactory";
 import Broadcaster from "./Broadcaster";
-import Player from "../Player";
-import PassiveSpell from "../Spell/PassiveSpell";
-import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
+import Deck from "./Deck";
 
 interface GameOptions {
-  maxHP: number;
+  maxHP?: number;
+  timePerTurn?: number;
 }
 
 const defaultOptions: GameOptions = {
   maxHP: 100,
+  timePerTurn: 15000,
 };
 
 const STARTING_HAND = 5;
@@ -28,13 +29,16 @@ class Game {
   private players: Player[];
   private currentPlayerIndex: number;
   private maxHP: number;
+  private timePerTurn: number;
   private chargePoint = 0;
   private numOfReadyPlayers = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck({ isEmpty: true });
+  private turnTimer: NodeJS.Timeout | null = null;
 
   constructor(options = defaultOptions, ...clients: Client[]) {
-    this.maxHP = options.maxHP;
+    this.maxHP = options.maxHP as number;
+    this.timePerTurn = options.timePerTurn as number;
     this.alivePlayers = clients.map((cl) => new Player(cl, this));
     this.players = [...this.alivePlayers];
     this.currentPlayerIndex = this.alivePlayers.length - 1;
@@ -77,6 +81,7 @@ class Game {
     const info: IGame = {
       maxHP: this.maxHP,
       players: this.players.map((p) => p.toJsonData()),
+      timePerTurn: this.timePerTurn,
     };
 
     this.sendToAll(SOCKET_EVENT.GetGameInfo, info);
@@ -116,9 +121,17 @@ class Game {
     this.sendToAll(SOCKET_EVENT.PlayerLeftGame, player.getClient().id);
   }
 
+  private overtime(): void {
+    this.eliminatePlayer(this.getCurrentPlayer());
+    this.newTurn();
+  }
+
   public async newTurn(): Promise<void> {
     // wait for all players complete their updates
-    await Promise.all(this.alivePlayers.map((p) => p.update()));
+    //await Promise.all(this.alivePlayers.map((p) => p.update()));
+    for (const p of this.alivePlayers) {
+      await p.update();
+    }
 
     // check if player is eliminated
     this.alivePlayers.forEach((player) => {
@@ -143,53 +156,49 @@ class Game {
       currentPlayer = this.getCurrentPlayer();
     } while (!this.alivePlayers.includes(currentPlayer));
 
-    currentPlayer.receiveCards(this.dealCard());
-
-    // wait for deal card animation
-    await waitFor(600);
-
+    await currentPlayer.receiveCards(this.dealCard());
     currentPlayer.startTurn();
+
+    if (this.turnTimer) {
+      clearTimeout(this.turnTimer);
+    }
+
+    this.turnTimer = setTimeout(this.overtime.bind(this), this.timePerTurn);
+
     this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
 
+  private async sendPlayedCard(card: Card): Promise<void> {
+    if ([SPELL_NAME.Shield, SPELL_NAME.Mirror].includes(card.getSpell())) card.hideSpell();
+    await this.sendToAll(SOCKET_EVENT.CardPlayed, card, 600);
+  }
+
   public async consumeCard(card: Card): Promise<void> {
-    let penalty = 0;
+    if (this.turnTimer) {
+      clearTimeout(this.turnTimer);
+    }
+
     const oldChargePoint = this.chargePoint;
     const spell = card.getSpell();
     this.chargePoint += card.getPowerPoint();
 
-    if ([SPELL_NAME.Shield, SPELL_NAME.Mirror].includes(spell)) card.hideSpell();
+    await this.sendPlayedCard(card);
 
-    this.sendToAll(SOCKET_EVENT.CardPlayed, card);
-
-    // wait for played card animation
-    await waitFor(600);
-
-    if (this.chargePoint < 0) {
-      penalty = Math.abs(this.chargePoint);
-    } else if (this.chargePoint > 10) {
-      penalty = this.chargePoint - 10;
-    }
-
-    if (penalty > 0) {
+    if (this.chargePoint < 0 || this.chargePoint > 10) {
       this.chargePoint = 0;
       this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged);
-      this.getCurrentPlayer().changeHitPoint(-penalty);
-    } else if (oldChargePoint > 0) {
-      SpellFactory.create(spell, oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
-      // wait for spell animation
-      await waitFor(600);
-    }
+      await this.getCurrentPlayer().changeHitPoint(-10);
+    } else if (oldChargePoint > 0)
+      await SpellFactory.create(spell, oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
 
-    this.sendToAll(SOCKET_EVENT.ChargePointChanged, this.chargePoint);
-    // wait for changing charge point animation
-    await waitFor(600);
+    await this.sendToAll(SOCKET_EVENT.ChargePointChanged, this.chargePoint, 600);
     this.discardDeck.push(card);
     this.newTurn();
   }
 
-  public sendToAll(event: SOCKET_EVENT, data?: unknown): void {
+  public async sendToAll(event: SOCKET_EVENT, data?: unknown, wait = 0): Promise<void> {
     this.players.forEach((p) => p.getClient().send(event, data));
+    await waitFor(wait);
   }
 }
 

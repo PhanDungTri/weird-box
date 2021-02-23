@@ -1,8 +1,6 @@
 import React from "react";
-import HitPointBar from "../../../../../components/HitPointBar";
 import SpellAnimation from "../../../../../components/SpellAnimation";
-import SpellList from "../../../../../components/SpellList";
-import { useGameInfoContext } from "../../../business/context";
+import Status from "../../../../../components/Status";
 import { PlayerState } from "../../../business/reducers/playerListReducer";
 import "./Opponent.scss";
 
@@ -11,13 +9,10 @@ interface OpponentProps {
 }
 
 const Opponent = ({ info }: OpponentProps): JSX.Element => {
-  const { maxHP } = useGameInfoContext();
-
   return (
     <div className={`opponent ${info.isEliminated ? "-disabled" : ""}`}>
+      <Status id={info.id} hp={info.hp} spells={Object.values(info.spells)} />
       <div className="opponent__name">{info.name}</div>
-      <SpellList spells={Object.values(info.spells)} />
-      <HitPointBar hp={info.hp} maxHP={maxHP} />
       <SpellAnimation name={info.currentSpell} />
     </div>
   );

@@ -5,6 +5,7 @@ import SOCKET_EVENT from "../../../../../../shared/src/SocketEvent";
 import Card from "../../../../components/Card";
 import ICard from "../../../../interfaces/ICard";
 import socket from "../../../../services/socket";
+import { useCurrentPlayerContext } from "../../business/context";
 import BoxOfCard from "./BoxOfCard";
 import ChargePointBar from "./ChargePointBar";
 import "./GameBoard.scss";
@@ -36,8 +37,10 @@ const transitionStyles: Record<TransitionStatus, React.CSSProperties> = {
 const GameBoard = (): JSX.Element => {
   const [playedCard, setPlayedCard] = useState<ICard>();
   const [shouldCosumeAnimationPlay, setShouldCosumeAnimationPlay] = useState(false);
+  const { finishTurn } = useCurrentPlayerContext();
 
   const showPlayedCard = (card: ICard): void => {
+    finishTurn();
     setPlayedCard(card);
     setShouldCosumeAnimationPlay(true);
     setTimeout(() => setShouldCosumeAnimationPlay(false), ANIMATION_DURATION.ConsumeCard);

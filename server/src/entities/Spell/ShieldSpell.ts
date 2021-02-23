@@ -9,12 +9,12 @@ class ShieldSpell extends PassiveSpell {
     this.power = chargePoint;
   }
 
-  public *activate(origin: Spell): Generator<PASSIVE_ACTION, void, unknown> {
+  public async *activate(origin: Spell): AsyncGenerator<PASSIVE_ACTION, void, unknown> {
     if (origin.getPower() < this.getPower()) {
       yield PASSIVE_ACTION.Block;
     } else {
       yield PASSIVE_ACTION.ShieldPierce;
-      this.target.takeSpell(origin);
+      await this.target.takeSpell(origin);
     }
   }
 }

@@ -1,10 +1,10 @@
 import React from "react";
-import Trans from "./Trans";
+import Timer from "../../components/Timer";
 
 const Test = (): JSX.Element => {
   return (
     <div>
-      <Trans />
+      <Timer duration={5} />
     </div>
   );
 };

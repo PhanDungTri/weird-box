@@ -14,10 +14,10 @@ import playerListReducer, {
   PlayerState,
   PLAYER_LIST_ACTION_NAME,
 } from "./business/reducers/playerListReducer";
-import GameBoard from "./components/GameBoard";
-import GameOverDialog from "./components/GameOverDialog";
-import OpponentList from "./components/OpponentList";
-import Player from "./components/Player";
+import GameBoard from "./childrens/GameBoard";
+import GameOverDialog from "./childrens/GameOverDialog";
+import OpponentList from "./childrens/OpponentList";
+import Player from "./childrens/Player";
 import "./Game.scss";
 
 type Winner = Pick<PlayerState, "id" | "name">;
@@ -37,8 +37,8 @@ const Game = (): JSX.Element => {
   useEffect(() => {
     socket.emit(SOCKET_EVENT.Ready);
 
-    socket.on(SOCKET_EVENT.GetGameInfo, ({ players, maxHP }: IGame) => {
-      setGameInfo({ maxHP: maxHP });
+    socket.on(SOCKET_EVENT.GetGameInfo, ({ players, maxHP, timePerTurn }: IGame) => {
+      setGameInfo({ maxHP, timePerTurn });
       dispatch({
         name: PLAYER_LIST_ACTION_NAME.Populate,
         payload: players,

@@ -8,8 +8,8 @@ class PoisonSpell extends Spell {
     this.power = chargePoint;
   }
 
-  public trigger(): void {
-    this.target.changeHitPoint(-this.power);
+  public async trigger(): Promise<void> {
+    await this.target.changeHitPoint(-this.power);
     this.duration--;
   }
 }
