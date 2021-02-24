@@ -34,7 +34,7 @@ class Game {
   private numOfReadyPlayers = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck({ isEmpty: true });
-  private turnTimer: number | undefined;
+  private turnTimer: NodeJS.Timeout | undefined;
 
   constructor(private server: Server, options = defaultOptions, ...clients: Client[]) {
     this.maxHP = options.maxHP as number;
@@ -174,7 +174,7 @@ class Game {
     const oldChargePoint = this.chargePoint;
     this.chargePoint += card.getPowerPoint();
 
-    await this.sendToAll(SOCKET_EVENT.CardPlayed, card.toJson(), 600);
+    await this.sendToAll(SOCKET_EVENT.CardPlayed, card.toJsonData(), 600);
 
     if (this.chargePoint < 0 || this.chargePoint > 10) {
       this.chargePoint = 0;

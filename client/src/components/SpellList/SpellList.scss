@@ -8,26 +8,26 @@
   25% {
     opacity: 0;
     margin: 0px 6px;
-    max-width: 5rem;
+    max-width: 24px;
   }
 
   100% {
     opacity: 1;
     margin: 0px 6px;
-    max-width: 5rem;
+    max-width: 24px;
   }
 }
 
 @keyframes spell-exit {
   0% {
     opacity: 1;
-    max-width: 5rem;
+    max-width: 24px;
     margin: 0px 6px;
   }
 
   75% {
     opacity: 0;
-    max-width: 5rem;
+    max-width: 24px;
     margin: 0px 6px;
   }
 
@@ -63,6 +63,8 @@
 .spell-list {
   padding: 4px;
   display: flex;
+  max-height: 36px;
+  transition: max-height 200ms;
 
   &.-align-center {
     justify-content: center;
@@ -70,5 +72,9 @@
 
   &.-align-left {
     justify-content: left;
+  }
+
+  &.-empty {
+    max-height: 0px;
   }
 }

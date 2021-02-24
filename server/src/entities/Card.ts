@@ -15,7 +15,7 @@ class Card {
     return this.spell;
   }
 
-  public toJson(): ICard {
+  public toJsonData(): ICard {
     return {
       id: this.id,
       powerPoint: this.powerPoint,
