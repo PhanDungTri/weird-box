@@ -14,14 +14,6 @@
   transform: translate(-50%, -50%);
 }
 
-.-disabled::before {
-  position: absolute;
-  display: block;
-  height: 100%;
-  width: 100%;
-  content: "";
-  background-color: rgba($color: #000, $alpha: 0.6);
-  z-index: 1;
-  animation-name: fade-in;
-  animation-duration: 450ms;
+.-disabled {
+  filter: grayscale(100%);
 }

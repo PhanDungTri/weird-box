@@ -12,25 +12,21 @@ interface TimerProps {
 }
 
 const defaultStyle: React.CSSProperties = {
-  transition: `max-height 200ms, opacity 200ms`,
+  transition: `opacity 200ms`,
   overflow: "hidden",
 };
 
 const transitionStyles: Record<TransitionStatus, React.CSSProperties> = {
   entering: {
-    maxHeight: "16px",
     opacity: 1,
   },
   entered: {
-    maxHeight: "16px",
     opacity: 1,
   },
   exiting: {
-    maxHeight: "0px",
     opacity: 0,
   },
   exited: {
-    maxHeight: "0px",
     opacity: 0,
   },
   unmounted: {},
@@ -38,7 +34,7 @@ const transitionStyles: Record<TransitionStatus, React.CSSProperties> = {
 
 const Timer = ({ duration = 15000, fluid = false, isRunning = false }: TimerProps): JSX.Element => {
   return (
-    <Transition in={isRunning} timeout={200}>
+    <Transition in={isRunning} timeout={500}>
       {(state) => (
         <div
           className={`timer ${fluid ? "-fluid" : ""}`}
@@ -52,7 +48,7 @@ const Timer = ({ duration = 15000, fluid = false, isRunning = false }: TimerProp
             <div
               className="timer__counter"
               style={{
-                animationDuration: `${duration - 200}ms`,
+                animationDuration: `${duration}ms`,
               }}
             />
           )}

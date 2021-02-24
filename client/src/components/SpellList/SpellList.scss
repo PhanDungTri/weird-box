@@ -63,8 +63,6 @@
 .spell-list {
   padding: 4px;
   display: flex;
-  max-height: 36px;
-  transition: max-height 200ms;
 
   &.-align-center {
     justify-content: center;
@@ -72,9 +70,5 @@
 
   &.-align-left {
     justify-content: left;
-  }
-
-  &.-empty {
-    max-height: 0px;
   }
 }
