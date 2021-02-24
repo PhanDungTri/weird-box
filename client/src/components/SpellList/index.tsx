@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { ISpell } from "../../../../shared/src/interfaces/Spell";
 import "./SpellList.scss";
@@ -10,12 +10,6 @@ interface SpellListProps {
 }
 
 const SpellList = ({ spells = [], align = "center" }: SpellListProps): JSX.Element => {
-  const counter = useRef(0);
-
-  useEffect(() => {
-    console.log(counter.current++);
-  }, [spells]);
-
   return (
     <TransitionGroup className={`spell-list -align-${align}`}>
       {spells.map((s) => (

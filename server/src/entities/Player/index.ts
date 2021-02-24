@@ -19,6 +19,7 @@ class Player {
 
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
     client.on(SOCKET_EVENT.Ready, this.ready.bind(this));
+    client.on(SOCKET_EVENT.Disconnect, this.leaveGame.bind(this));
     client.once(SOCKET_EVENT.LeaveGame, this.leaveGame.bind(this));
   }
 

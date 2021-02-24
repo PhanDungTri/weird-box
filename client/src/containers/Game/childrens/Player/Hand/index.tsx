@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { ICard } from "../../../../../../../shared/src/interfaces/Card";
 import SOCKET_EVENT from "../../../../../../../shared/src/SocketEvent";
 import Card from "../../../../../components/Card";
 import NOTI_VARIANT from "../../../../../constants/NOTI_VARIANT";
-import ICard from "../../../../../interfaces/ICard";
 import socket from "../../../../../services/socket";
 import useNotificationState from "../../../../../state/notificationState";
 import { useCardChoiceContext, useCurrentPlayerContext } from "../../../business/context";
@@ -38,7 +38,6 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
     socket.on(SOCKET_EVENT.TakeCard, (cards: ICard[]) => setCards((list) => [...list, ...cards]));
 
     return (): void => {
-      console.log("off");
       socket.off(SOCKET_EVENT.TakeCard);
     };
   }, []);

@@ -50,7 +50,6 @@ const GameBoard = (): JSX.Element => {
     socket.on(SOCKET_EVENT.CardPlayed, showPlayedCard);
 
     return (): void => {
-      console.log("off");
       socket.off(SOCKET_EVENT.CardPlayed);
     };
   }, []);
