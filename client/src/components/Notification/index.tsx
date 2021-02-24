@@ -24,7 +24,6 @@ const Notification = (): JSX.Element => {
     socket.on("info", showNotification(NOTI_VARIANT.Info));
 
     return (): void => {
-      console.log("off");
       socket.off("error");
       socket.off("info");
     };

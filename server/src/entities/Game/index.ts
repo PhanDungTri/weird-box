@@ -6,6 +6,7 @@ import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";
 import Player from "../Player";
+import Server from "../Server";
 import SpellFactory from "../Spell/SpellFactory";
 import Broadcaster from "./Broadcaster";
 import Deck from "./Deck";
@@ -34,9 +35,9 @@ class Game {
   private numOfReadyPlayers = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck({ isEmpty: true });
-  private turnTimer: NodeJS.Timeout | null = null;
+  private turnTimer: number | undefined;
 
-  constructor(options = defaultOptions, ...clients: Client[]) {
+  constructor(private server: Server, options = defaultOptions, ...clients: Client[]) {
     this.maxHP = options.maxHP as number;
     this.timePerTurn = options.timePerTurn as number;
     this.alivePlayers = clients.map((cl) => new Player(cl, this));
@@ -110,20 +111,31 @@ class Game {
     // TODO timeout when there is one or more players haven't readied
   }
 
-  public eliminatePlayer(player: Player): void {
-    this.alivePlayers = this.alivePlayers.filter((p) => p !== player);
-    this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
+  private eliminatePlayer(player: Player): void {
+    if (this.alivePlayers.includes(player)) {
+      this.alivePlayers = this.alivePlayers.filter((p) => p !== player);
+      this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
+      if (this.getCurrentPlayer() === player) this.newTurn();
+    }
   }
 
   public removePlayer(player: Player): void {
-    if (this.alivePlayers.includes(player)) this.eliminatePlayer(player);
-    this.players = this.players.filter((p) => p !== player);
+    if (!this.players.includes(player)) return;
+    this.eliminatePlayer(player);
     this.sendToAll(SOCKET_EVENT.PlayerLeftGame, player.getClient().id);
+    this.shouldEnd();
   }
 
-  private overtime(): void {
-    this.eliminatePlayer(this.getCurrentPlayer());
-    this.newTurn();
+  private shouldEnd(): boolean {
+    if (this.alivePlayers.length === 0) return true;
+    if (this.alivePlayers.length === 1) {
+      if (this.turnTimer) clearTimeout(this.turnTimer);
+      this.sendToAll(SOCKET_EVENT.GameOver, this.alivePlayers[0].getClient().id);
+      this.server.removeGame(this);
+      return true;
+    }
+
+    return false;
   }
 
   public async newTurn(): Promise<void> {
@@ -131,23 +143,10 @@ class Game {
     //await Promise.all(this.alivePlayers.map((p) => p.update()));
     for (const p of this.alivePlayers) {
       await p.update();
+      if (p.getHitPoint() <= 0) this.eliminatePlayer(p);
     }
 
-    // check if player is eliminated
-    this.alivePlayers.forEach((player) => {
-      if (player.getHitPoint() <= 0) this.eliminatePlayer(player);
-    });
-
-    if (this.alivePlayers.length === 0) {
-      // TODO draw
-      return;
-    }
-
-    if (this.alivePlayers.length === 1) {
-      this.sendToAll(SOCKET_EVENT.GameOver, this.alivePlayers[0].getClient().id);
-      // TODO etc
-      return;
-    }
+    if (this.shouldEnd()) return;
 
     let currentPlayer: Player;
 
@@ -163,7 +162,7 @@ class Game {
       clearTimeout(this.turnTimer);
     }
 
-    this.turnTimer = setTimeout(this.overtime.bind(this), this.timePerTurn);
+    this.turnTimer = setTimeout(this.eliminatePlayer.bind(this), this.timePerTurn, this.getCurrentPlayer());
 
     this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
