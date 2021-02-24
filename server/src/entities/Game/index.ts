@@ -168,28 +168,22 @@ class Game {
     this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
 
-  private async sendPlayedCard(card: Card): Promise<void> {
-    if ([SPELL_NAME.Shield, SPELL_NAME.Mirror].includes(card.getSpell())) card.hideSpell();
-    await this.sendToAll(SOCKET_EVENT.CardPlayed, card, 600);
-  }
-
   public async consumeCard(card: Card): Promise<void> {
     if (this.turnTimer) {
       clearTimeout(this.turnTimer);
     }
 
     const oldChargePoint = this.chargePoint;
-    const spell = card.getSpell();
     this.chargePoint += card.getPowerPoint();
 
-    await this.sendPlayedCard(card);
+    await this.sendToAll(SOCKET_EVENT.CardPlayed, card.toJson(), 600);
 
     if (this.chargePoint < 0 || this.chargePoint > 10) {
       this.chargePoint = 0;
       this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged);
       await this.getCurrentPlayer().changeHitPoint(-10);
     } else if (oldChargePoint > 0)
-      await SpellFactory.create(spell, oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
+      await SpellFactory.create(card.getSpell(), oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
 
     await this.sendToAll(SOCKET_EVENT.ChargePointChanged, this.chargePoint, 600);
     this.discardDeck.push(card);

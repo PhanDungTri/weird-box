@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Transition, { TransitionStatus } from "react-transition-group/Transition";
 import ANIMATION_DURATION from "../../../../../../shared/src/AnimationDuration";
+import { ICard } from "../../../../../../shared/src/interfaces/Card";
 import SOCKET_EVENT from "../../../../../../shared/src/SocketEvent";
 import Card from "../../../../components/Card";
-import ICard from "../../../../interfaces/ICard";
 import socket from "../../../../services/socket";
 import { useCurrentPlayerContext } from "../../business/context";
 import BoxOfCard from "./BoxOfCard";

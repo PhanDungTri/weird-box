@@ -1,4 +1,5 @@
 import { SPELL_NAME } from "../../../shared/src/interfaces/Spell";
+import { ICard } from "../../../shared/src/interfaces/Card";
 import generateUniqueId from "../utilities/generateUniqueId";
 
 class Card {
@@ -14,8 +15,12 @@ class Card {
     return this.spell;
   }
 
-  public hideSpell(): void {
-    this.spell = SPELL_NAME.Void;
+  public toJson(): ICard {
+    return {
+      id: this.id,
+      powerPoint: this.powerPoint,
+      spell: [SPELL_NAME.Shield, SPELL_NAME.Mirror].includes(this.spell) ? SPELL_NAME.Void : this.spell,
+    };
   }
 }
 
