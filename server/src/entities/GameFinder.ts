@@ -3,17 +3,30 @@ import Game from "./Game";
 
 class GameFinder {
   private queue: Client[] = [];
+  private timeout: NodeJS.Timeout | undefined;
+
+  public createNewGame(): Game {
+    const clients: Client[] = [];
+    let client = this.queue.shift();
+
+    while (clients.length < 4 && client) {
+      clients.push(client);
+      client = this.queue.shift();
+    }
+
+    return new Game(undefined, ...clients);
+  }
 
   public addClient(client: Client): void {
+    if (this.timeout) clearTimeout(this.timeout);
     if (!this.queue.includes(client)) this.queue.push(client);
-
-    if (this.queue.length >= 3) {
-      const clients: Client[] = [];
-      for (let i = 0; i < 3; i++) {
-        clients.push(this.queue.shift() as Client);
-      }
-      new Game(undefined, ...clients);
+    if (this.queue.length === 1) return;
+    if (this.queue.length >= 4) {
+      this.createNewGame();
+      return;
     }
+
+    this.timeout = setTimeout(() => this.createNewGame(), 5000);
   }
 }
 
