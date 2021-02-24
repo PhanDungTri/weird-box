@@ -3,4 +3,4 @@ interface IChangeHitPoint {
   difference: number;
 }
 
-export { IChangeHitPoint };
+export type { IChangeHitPoint };

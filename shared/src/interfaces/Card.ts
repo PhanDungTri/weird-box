@@ -6,4 +6,4 @@ interface ICard {
   spell: SPELL_NAME;
 }
 
-export { ICard };
+export type { ICard };

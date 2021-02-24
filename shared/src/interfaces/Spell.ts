@@ -28,4 +28,5 @@ interface IPassiveAction {
   target: string;
 }
 
-export { ISpell, SPELL_NAME, PASSIVE_ACTION, IPassiveAction };
+export { SPELL_NAME, PASSIVE_ACTION };
+export type { ISpell, IPassiveAction };

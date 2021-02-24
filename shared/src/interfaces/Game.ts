@@ -6,4 +6,4 @@ interface IGame {
   timePerTurn: number;
 }
 
-export { IGame };
+export type { IGame };

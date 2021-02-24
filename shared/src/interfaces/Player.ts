@@ -4,4 +4,4 @@ interface IPlayer {
   hp: number;
 }
 
-export { IPlayer };
+export type { IPlayer };
