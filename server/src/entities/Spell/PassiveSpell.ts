@@ -1,5 +1,5 @@
 import Spell from ".";
-import { PASSIVE_ACTION, SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
+import { PASSIVE_ACTION, SPELL_NAME } from "../../../../shared/src/@enums";
 import Player from "../Player";
 
 abstract class PassiveSpell extends Spell {

@@ -1,0 +1,55 @@
+@import "../../../styles/utilities/createPixelBorder.scss";
+
+$border-width: 2px;
+$content-border-width: $border-width * 6;
+$color-border: #2f2f2f;
+$color-content-border: #4f4f4f;
+$color-background: #f2eecb;
+$color-inner-shadow: #beba96;
+$color-reflection: #ffffff;
+
+.card {
+  position: relative;
+  box-sizing: border-box;
+  margin: $border-width;
+  background-color: $color-background;
+  box-shadow: createPixelBorder($border-width, $color-border), createShadingBorder($border-width, $color-inner-shadow),
+    inset 0px $border-width 0px 0px $color-reflection;
+  width: 4rem;
+  height: 6rem;
+  user-select: none;
+
+  &.-chosen {
+    transform: translateY(-30px);
+    transition: transform 0.2s;
+  }
+
+  &__content {
+    position: absolute;
+    border: $content-border-width solid transparent;
+    border-image: url(../../../assets/sprites/card_content_frame.png) 12 round;
+    width: 1rem;
+    height: 3rem;
+  }
+
+  &__spec {
+    position: absolute;
+    display: inline-block;
+    background-color: $color-background;
+    color: $color-content-border;
+    font-family: "Dogica Pixel";
+    font-size: 10px;
+    font-weight: bold;
+    left: 50%;
+
+    &.-power {
+      top: -$content-border-width;
+      transform: translate(-50%, -25%);
+    }
+
+    &.-action {
+      bottom: -$content-border-width;
+      transform: translate(-50%, 25%);
+    }
+  }
+}

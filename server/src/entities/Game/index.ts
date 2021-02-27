@@ -1,5 +1,4 @@
-import { IGame } from "../../../../shared/src/interfaces/Game";
-import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
+import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import generateUniqueId from "../../utilities/generateUniqueId";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
@@ -7,7 +6,6 @@ import Client from "../Client";
 import Player from "../Player";
 import Server from "../Server";
 import SpellFactory from "../Spell/SpellFactory";
-import Broadcaster from "./Broadcaster";
 import Deck from "./Deck";
 
 interface GameOptions {
@@ -24,7 +22,6 @@ const STARTING_HAND = 5;
 
 class Game {
   public readonly id = generateUniqueId();
-  public readonly broadcaster = new Broadcaster(this);
   private alivePlayers: Player[];
   private players: Player[];
   private currentPlayerIndex: number;
@@ -78,13 +75,20 @@ class Game {
      * With above approach, the server will only send up to 4 events to all clients in the game.
      */
     const startingHands: Card[][] = [];
-    const info: IGame = {
-      maxHP: this.maxHP,
-      players: this.players.map((p) => p.toJsonData()),
-      timePerTurn: this.timePerTurn,
-    };
 
-    this.sendToAll(SOCKET_EVENT.GetGameInfo, info);
+    this.sendToAll(SOCKET_EVENT.GetGameSettings, {
+      maxHP: this.maxHP,
+      timePerTurn: this.timePerTurn,
+    });
+
+    this.sendToAll(
+      SOCKET_EVENT.GetPlayerList,
+      this.players.map((p) => ({
+        id: p.getClient().id,
+        name: p.getClient().name,
+        isEliminated: false,
+      }))
+    );
 
     for (let i = 0; i < STARTING_HAND; i++) {
       for (let j = 0; j < this.alivePlayers.length; j++) {
@@ -128,9 +132,16 @@ class Game {
   private shouldEnd(): boolean {
     if (this.alivePlayers.length === 0) return true;
     if (this.alivePlayers.length === 1) {
+      const winner = this.alivePlayers[0].getClient();
+
       if (this.turnTimer) clearTimeout(this.turnTimer);
-      this.sendToAll(SOCKET_EVENT.GameOver, this.alivePlayers[0].getClient().id);
+
+      this.sendToAll(SOCKET_EVENT.GameOver, {
+        id: winner.id,
+        name: winner.name,
+      });
       this.server.removeGame(this);
+
       return true;
     }
 
@@ -172,7 +183,7 @@ class Game {
     }
 
     const oldChargePoint = this.chargePoint;
-    this.chargePoint += card.getPowerPoint();
+    this.chargePoint += card.getPower();
 
     await this.sendToAll(SOCKET_EVENT.CardPlayed, card.toJsonData(), 600);
 

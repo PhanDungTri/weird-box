@@ -1,0 +1,19 @@
+@import "../../../../../styles/utilities/createPixelBorder.scss";
+
+$size: 14px;
+
+.spell-indicator {
+  position: relative;
+
+  &__counter {
+    position: absolute;
+    font-size: $size;
+    background-color: #2f2f2f;
+    width: $size;
+    height: $size;
+    top: $size;
+    left: $size;
+    text-align: center;
+    color: white;
+  }
+}

@@ -1,0 +1,74 @@
+@keyframes spell-enter {
+  0% {
+    opacity: 0;
+    margin: 0px;
+    max-width: 0px;
+  }
+
+  25% {
+    opacity: 0;
+    margin: 0px 6px;
+    max-width: 24px;
+  }
+
+  100% {
+    opacity: 1;
+    margin: 0px 6px;
+    max-width: 24px;
+  }
+}
+
+@keyframes spell-exit {
+  0% {
+    opacity: 1;
+    max-width: 24px;
+    margin: 0px 6px;
+  }
+
+  75% {
+    opacity: 0;
+    max-width: 24px;
+    margin: 0px 6px;
+  }
+
+  100% {
+    opacity: 0;
+    max-width: 0px;
+    margin: 0px;
+  }
+}
+
+.spell-transition {
+  &-enter {
+    &-active {
+      animation-name: spell-enter;
+      animation-duration: 600ms;
+      animation-fill-mode: forwards;
+    }
+
+    &-done {
+      margin: 0px 6px;
+    }
+  }
+
+  &-exit {
+    &-active {
+      animation-name: spell-exit;
+      animation-duration: 600ms;
+      animation-fill-mode: forwards;
+    }
+  }
+}
+
+.spells {
+  padding: 4px;
+  display: flex;
+
+  &.-center {
+    justify-content: center;
+  }
+
+  &.-left {
+    justify-content: left;
+  }
+}

@@ -1,4 +1,4 @@
-import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
+import { SPELL_NAME } from "../../../../shared/src/@enums";
 import Card from "../Card";
 
 interface DeckOptions {

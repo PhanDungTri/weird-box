@@ -1,27 +1,28 @@
 import Player from ".";
-import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
-import Broadcaster from "../Game/Broadcaster";
+import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Spell from "../Spell";
 import PassiveSpell from "../Spell/PassiveSpell";
+
+type BroadcastFunction = (event: SOCKET_EVENT, data?: unknown, wait?: number) => Promise<void>;
 
 class SpellManager {
   private debuffs: Spell[] = [];
   private talismans: PassiveSpell[] = [];
   private curses: PassiveSpell[] = [];
 
-  constructor(private player: Player, private boardcaster: Broadcaster) {}
+  constructor(private player: Player, private broadcast: BroadcastFunction) {}
 
   public async triggerPendingDebuffs(): Promise<void> {
     for (const debuff of this.debuffs) {
       await debuff.trigger();
       if (debuff.getDuration() === 0) this.debuffs = this.debuffs.filter((d) => d !== debuff);
-      await this.boardcaster.dispatchTakeSpell(debuff.toJsonData());
+      await this.broadcast(SOCKET_EVENT.TakeSpell, debuff.toJsonData(), 600);
     }
   }
 
   private addTalisman(talisman: PassiveSpell): void {
     this.talismans.push(talisman);
-    this.player.getClient().send(SOCKET_EVENT.TakeSpell, [talisman.toJsonData()]);
+    this.player.getClient().send(SOCKET_EVENT.TakeSpell, talisman.toJsonData());
   }
 
   private async activateTalisman(spell: Spell): Promise<boolean> {
@@ -33,11 +34,16 @@ class SpellManager {
       let res = await talismanActivator.next();
 
       while (!res.done) {
-        await this.boardcaster.dispatchTriggerPassive({
-          id: talisman.id,
-          target: this.player.getClient().id,
-          action: res.value,
-        });
+        await this.broadcast(
+          SOCKET_EVENT.ActivatePassive,
+          {
+            id: talisman.id,
+            target: this.player.getClient().id,
+            action: res.value,
+          },
+          600
+        );
+
         res = await talismanActivator.next();
       }
       return true;
@@ -54,7 +60,7 @@ class SpellManager {
         else this.debuffs.push(spell);
       } else return this.addTalisman(spell as PassiveSpell);
 
-      await this.boardcaster.dispatchTakeSpell(spell.toJsonData());
+      await this.broadcast(SOCKET_EVENT.TakeSpell, spell.toJsonData(), 600);
     }
   }
 }

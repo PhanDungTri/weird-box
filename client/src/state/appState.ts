@@ -1,5 +1,5 @@
 import { createState, StateMethods, useState } from "@hookstate/core";
-import SOCKET_EVENT from "../../../shared/src/SocketEvent";
+import { SOCKET_EVENT } from "../../../shared/src/@enums";
 import socket from "../services/socket";
 
 enum APP_STATE {

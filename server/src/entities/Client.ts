@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Socket } from "socket.io";
-import { IClient } from "../../../shared/src/interfaces/Client";
-import SOCKET_EVENT from "../../../shared/src/SocketEvent";
+import { SOCKET_EVENT } from "../../../shared/src/@enums";
 import Server from "./Server";
 
 class Client {
@@ -34,13 +33,6 @@ class Client {
 
   public send(event: SOCKET_EVENT, data: unknown): void {
     this.socket.emit(event, data);
-  }
-
-  public toJsonData(): IClient {
-    return {
-      id: this.id,
-      name: this.name,
-    };
   }
 }
 

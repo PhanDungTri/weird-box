@@ -1,4 +1,4 @@
-import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
+import { SPELL_NAME } from "../../../../shared/src/@enums";
 import Player from "../Player";
 import HealSpell from "./HealSpell";
 import MirrorSpell from "./MirrorSpell";

@@ -1,5 +1,5 @@
-import { ISpell } from "../../../../shared/src/interfaces/Spell";
-import { SPELL_NAME } from "../../../../shared/src/interfaces/Spell";
+import { SpellInfo } from "../../../../shared/src/@types";
+import { SPELL_NAME } from "../../../../shared/src/@enums";
 import generateUniqueId from "../../utilities/generateUniqueId";
 import Player from "../Player";
 
@@ -44,7 +44,7 @@ abstract class Spell {
     return debuffs.includes(this.name);
   }
 
-  public toJsonData(): ISpell {
+  public toJsonData(): SpellInfo {
     return {
       id: this.id,
       name: this.name,

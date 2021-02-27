@@ -1,24 +1,24 @@
-import { SPELL_NAME } from "../../../shared/src/interfaces/Spell";
-import { ICard } from "../../../shared/src/interfaces/Card";
+import { SPELL_NAME } from "../../../shared/src/@enums";
+import { CardInfo } from "../../../shared/src/@types";
 import generateUniqueId from "../utilities/generateUniqueId";
 
 class Card {
   public readonly id = generateUniqueId();
 
-  constructor(private powerPoint: number, private spell: SPELL_NAME = SPELL_NAME.Void) {}
+  constructor(private power: number, private spell: SPELL_NAME = SPELL_NAME.Void) {}
 
-  public getPowerPoint(): number {
-    return this.powerPoint;
+  public getPower(): number {
+    return this.power;
   }
 
   public getSpell(): SPELL_NAME {
     return this.spell;
   }
 
-  public toJsonData(): ICard {
+  public toJsonData(): CardInfo {
     return {
       id: this.id,
-      powerPoint: this.powerPoint,
+      power: this.power,
       spell: [SPELL_NAME.Shield, SPELL_NAME.Mirror].includes(this.spell) ? SPELL_NAME.Void : this.spell,
     };
   }

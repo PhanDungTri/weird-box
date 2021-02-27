@@ -1,6 +1,6 @@
 import React from "react";
+import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import socket from "../../services/socket";
-import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
 
 const Hub = (): JSX.Element => {
   const findGame = (): void => {

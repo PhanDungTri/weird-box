@@ -1,5 +1,4 @@
-import { IPlayer } from "../../../../shared/src/interfaces/Player";
-import SOCKET_EVENT from "../../../../shared/src/SocketEvent";
+import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";
@@ -15,7 +14,7 @@ class Player {
 
   constructor(private client: Client, private game: Game) {
     this.hitPoint = game.getMaxHP();
-    this.spellManager = new SpellManager(this, this.game.broadcaster);
+    this.spellManager = new SpellManager(this, this.game.sendToAll.bind(this.game));
 
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
     client.on(SOCKET_EVENT.Ready, this.ready.bind(this));
@@ -76,7 +75,10 @@ class Player {
       this.cards = [];
     } else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    await this.game.broadcaster.dispatchChangeHitPoint(this.toJsonData());
+    await this.game.sendToAll(SOCKET_EVENT.HitPointChanged, {
+      target: this.getClient().id,
+      hp: this.hitPoint,
+    });
   }
 
   public async takeSpell(spell: Spell): Promise<void> {
@@ -86,13 +88,6 @@ class Player {
   public leaveGame(): void {
     this.client.off(SOCKET_EVENT.PlayCard);
     this.game.removePlayer(this);
-  }
-
-  public toJsonData(): IPlayer {
-    return {
-      ...this.client.toJsonData(),
-      hp: this.hitPoint,
-    };
   }
 }
 
