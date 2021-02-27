@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Transition } from "react-transition-group";
 import { TransitionStatus } from "react-transition-group/Transition";
 import SandClockSprite from "../../../../assets/sprites/sand_clock_animation.png";
 import { useGameContext } from "../../context";
 import Sprite from "../../../../components/Sprite";
 import "./Timer.scss";
+import socket from "../../../../services/socket";
+import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
+import { GameSettings } from "../../../../../../shared/src/@types";
 
 interface TimerProps {
   id: string;
@@ -33,7 +36,12 @@ const transitionStyles: Record<TransitionStatus, React.CSSProperties> = {
 };
 
 const Timer = ({ id, fluid = false }: TimerProps): JSX.Element => {
-  const { timePerTurn, currentPlayer } = useGameContext();
+  const { currentPlayer } = useGameContext();
+  const [timePerTurn, setTimePerTurn] = useState(0);
+
+  useEffect(() => {
+    socket.once(SOCKET_EVENT.GetGameSettings, (settings: GameSettings) => setTimePerTurn(settings.timePerTurn));
+  }, []);
 
   return (
     <Transition in={id === currentPlayer} timeout={500}>

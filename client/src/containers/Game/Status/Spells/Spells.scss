@@ -42,7 +42,7 @@
   &-enter {
     &-active {
       animation-name: spell-enter;
-      animation-duration: 600ms;
+      animation-duration: 400ms;
       animation-fill-mode: forwards;
     }
 
@@ -54,7 +54,7 @@
   &-exit {
     &-active {
       animation-name: spell-exit;
-      animation-duration: 600ms;
+      animation-duration: 400ms;
       animation-fill-mode: forwards;
     }
   }

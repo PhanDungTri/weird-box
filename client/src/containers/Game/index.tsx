@@ -1,19 +1,18 @@
 import React, { useEffect } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Notification from "../../components/Notification";
-import SpellAnimation from "./SpellAnimation";
 import socket from "../../services/socket";
 import useAppState, { APP_STATE } from "../../state/appState";
-import GameBoard from "./GameBoard";
-import { GameContextProvider, useGameContext } from "./context";
+import { GameContextProvider } from "./context";
 import "./Game.scss";
+import GameBoard from "./GameBoard";
 import GameOverDialog from "./GameOverDialog";
 import Opponents from "./Opponents";
 import Player from "./Player";
+import SpellAnimation from "./SpellAnimation";
 
 const Game = (): JSX.Element => {
   const appState = useAppState();
-  const { resetCardChoice } = useGameContext();
 
   const onGameOver = (): void => {
     socket.emit(SOCKET_EVENT.LeaveGame);
@@ -23,11 +22,11 @@ const Game = (): JSX.Element => {
   useEffect(() => void socket.emit(SOCKET_EVENT.Ready), []);
 
   return (
-    <div className="game" onClick={resetCardChoice}>
+    <div className="game">
       <Opponents />
       <GameBoard />
-      <SpellAnimation id={socket.id} scale={4} />
       <Player />
+      <SpellAnimation id={socket.id} scale={4} />
       <GameOverDialog onClose={onGameOver} />
       <Notification />
     </div>

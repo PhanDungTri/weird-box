@@ -28,14 +28,14 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
         setSpells((list) =>
           spell.duration > 0 || spell.duration === -1 || list[spell.id] ? { ...list, [spell.id]: spell } : list
         );
-        cleanUpTimeout = setTimeout(() => setSpells((list) => cleanUpSpells(list)), 500);
+        cleanUpTimeout = setTimeout(() => setSpells((list) => cleanUpSpells(list)), 400);
       }
     });
 
     socket.on(SOCKET_EVENT.ActivatePassive, (payload: PassiveAction) => {
       if (payload.target === id) {
         setSpells((list) => ({ ...list, [payload.id]: { ...list[payload.id], power: 0 } }));
-        cleanUpTimeout = setTimeout(() => setSpells((list) => cleanUpSpells(list)), 500);
+        cleanUpTimeout = setTimeout(() => setSpells((list) => cleanUpSpells(list)), 400);
       }
     });
 
@@ -48,7 +48,7 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
   return (
     <TransitionGroup className={`spells -${align}`}>
       {Object.values(spells).map((s) => (
-        <CSSTransition classNames="spell-transition" timeout={600} key={s.id}>
+        <CSSTransition classNames="spell-transition" timeout={400} key={s.id}>
           <SpellIndicator {...s} key={s.id} />
         </CSSTransition>
       ))}

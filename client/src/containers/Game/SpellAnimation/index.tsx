@@ -19,14 +19,14 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
     socket.on(SOCKET_EVENT.TakeSpell, (spell: SpellInfo) => {
       if (spell.target === id) {
         setAnimation(spell.name);
-        cleanUpTimeout = setTimeout(() => setAnimation(SPELL_NAME.Void), 500);
+        cleanUpTimeout = setTimeout(() => setAnimation(SPELL_NAME.Void), 450);
       }
     });
 
     socket.on(SOCKET_EVENT.ActivatePassive, (payload: PassiveAction) => {
       if (payload.target === id) {
         setAnimation(payload.action);
-        cleanUpTimeout = setTimeout(() => setAnimation(SPELL_NAME.Void), 500);
+        cleanUpTimeout = setTimeout(() => setAnimation(SPELL_NAME.Void), 450);
       }
     });
 
