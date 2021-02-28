@@ -1,0 +1,19 @@
+@import "../../styles/utilities/createPixelBorder.scss";
+
+.input {
+  display: flex;
+  border-bottom: 2px solid #2b2e4a;
+  margin: 2px;
+
+  & > input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+  }
+
+  &::before {
+    content: ">";
+    padding: 2px;
+    font-weight: bold;
+  }
+}

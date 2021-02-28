@@ -8,10 +8,10 @@ import Server from "../Server";
 import SpellFactory from "../Spell/SpellFactory";
 import Deck from "./Deck";
 
-interface GameOptions {
+type GameOptions = {
   maxHP?: number;
   timePerTurn?: number;
-}
+};
 
 const defaultOptions: GameOptions = {
   maxHP: 100,
@@ -76,18 +76,19 @@ class Game {
      */
     const startingHands: Card[][] = [];
 
-    this.sendToAll(SOCKET_EVENT.GetGameSettings, {
-      maxHP: this.maxHP,
-      timePerTurn: this.timePerTurn,
-    });
-
     this.sendToAll(
       SOCKET_EVENT.GetPlayerList,
       this.players.map((p) => ({
         id: p.getClient().id,
         name: p.getClient().name,
         isEliminated: false,
-      }))
+      })),
+      100
+    ).then(() =>
+      this.sendToAll(SOCKET_EVENT.GetGameSettings, {
+        maxHP: this.maxHP,
+        timePerTurn: this.timePerTurn,
+      })
     );
 
     for (let i = 0; i < STARTING_HAND; i++) {
@@ -149,8 +150,6 @@ class Game {
   }
 
   public async newTurn(): Promise<void> {
-    // wait for all players complete their updates
-    //await Promise.all(this.alivePlayers.map((p) => p.update()));
     for (const p of this.alivePlayers) {
       await p.update();
       if (p.getHitPoint() <= 0) this.eliminatePlayer(p);
@@ -168,19 +167,14 @@ class Game {
     await currentPlayer.receiveCards(this.dealCard());
     currentPlayer.startTurn();
 
-    if (this.turnTimer) {
-      clearTimeout(this.turnTimer);
-    }
-
+    if (this.turnTimer) clearTimeout(this.turnTimer);
     this.turnTimer = setTimeout(this.eliminatePlayer.bind(this), this.timePerTurn, this.getCurrentPlayer());
 
     this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
 
   public async consumeCard(card: Card): Promise<void> {
-    if (this.turnTimer) {
-      clearTimeout(this.turnTimer);
-    }
+    if (this.turnTimer) clearTimeout(this.turnTimer);
 
     const oldChargePoint = this.chargePoint;
     this.chargePoint += card.getPower();

@@ -1,9 +1,9 @@
 import { SPELL_NAME } from "../../../../shared/src/@enums";
 import Card from "../Card";
 
-interface DeckOptions {
+type DeckOptions = {
   isEmpty: boolean;
-}
+};
 
 const generateCards = (): Card[] => {
   const cards: Card[] = [];

@@ -13,10 +13,20 @@ class Client {
   public run(): void {
     this.socket.emit(SOCKET_EVENT.Connected);
     this.socket.on(SOCKET_EVENT.FindGame, () => this.server.enqueueClient(this));
+
+    this.socket.on(SOCKET_EVENT.Rename, (name: string, ack: (name: string) => void) => {
+      this.rename(name);
+      ack(name);
+    });
+
     this.socket.on("disconnect", () => {
       this.server.disconnectClient(this);
       console.log("Client left: " + this.id);
     });
+  }
+
+  private rename(name: string): void {
+    this.name = name;
   }
 
   public on(event: SOCKET_EVENT, listener: (...args: any[]) => void): void {

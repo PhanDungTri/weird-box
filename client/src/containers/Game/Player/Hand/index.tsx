@@ -9,16 +9,16 @@ import useNotificationState from "../../../../state/notificationState";
 import { useGameContext } from "../../context";
 import "./Hand.scss";
 
-interface HandProps {
+type HandProps = {
   eliminated?: boolean;
-}
+};
 
 const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
   const { currentPlayer } = useGameContext();
-  const [chosenCard, setChosenCard] = useState("");
   const ref = useRef<HTMLDivElement>(null);
   const setNotification = useNotificationState().set;
   const [cards, setCards] = useState<CardInfo[]>([]);
+  const [chosenCard, setChosenCard] = useState("");
 
   const handleClickOutside = (event: MouseEvent): void => {
     if (ref.current && !ref.current.contains(event.target as Node)) setChosenCard("");

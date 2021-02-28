@@ -22,6 +22,7 @@ enum SOCKET_EVENT {
   PlayerLeftGame = "player left game",
   ActivatePassive = "activate passive",
   Disconnect = "disconnect",
+  Rename = "rename",
 }
 
 export default SOCKET_EVENT;

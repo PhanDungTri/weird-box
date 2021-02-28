@@ -6,10 +6,10 @@ import socket from "../../../../services/socket";
 import "./Spells.scss";
 import SpellIndicator from "./SpellIndicator";
 
-interface SpellsProps {
+type SpellsProps = {
   id: string;
   align?: "center" | "left";
-}
+};
 
 const cleanUpSpells = (spells: Record<string, SpellInfo>): typeof spells => {
   const result: typeof spells = {};

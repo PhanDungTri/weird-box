@@ -1,16 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 
-interface AnimationParams {
+type AnimationParams = {
   step: number;
   tick: number;
   repeat?: number;
   start?: boolean;
-}
+};
 
-interface StepAnimationHook {
+type StepAnimationHook = {
   currentStep: number;
   animate: (trigger: boolean) => void;
-}
+};
 
 /** `repeat`: -1 is infinite, 0 is no repeat, other numbers are how many times the animation will be played. */
 const useStepAnimation = ({ step, tick, repeat = -1, start = true }: AnimationParams): StepAnimationHook => {

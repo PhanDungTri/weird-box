@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import useStepAnimation from "../../hooks/useStepAnimation";
 import "./Sprite.scss";
 
-interface Props {
+type SpriteProps = {
   size: [number, number];
   src?: string;
   scale?: number;
@@ -11,7 +11,7 @@ interface Props {
   repeat?: number;
   centerize?: boolean;
   style?: React.CSSProperties;
-}
+};
 
 const Sprite = ({
   src = "",
@@ -22,7 +22,7 @@ const Sprite = ({
   repeat = -1,
   centerize = false,
   style,
-}: Props): JSX.Element => {
+}: SpriteProps): JSX.Element => {
   const { currentStep } = useStepAnimation({ step, tick, repeat, start: true });
   const [width, height] = useRef(size.map((s) => s * scale)).current;
 

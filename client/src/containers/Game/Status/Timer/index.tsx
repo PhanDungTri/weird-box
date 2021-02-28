@@ -9,10 +9,10 @@ import socket from "../../../../services/socket";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import { GameSettings } from "../../../../../../shared/src/@types";
 
-interface TimerProps {
+type TimerProps = {
   id: string;
   fluid?: boolean;
-}
+};
 
 const defaultStyle: React.CSSProperties = {
   transition: `opacity 200ms`,
@@ -53,14 +53,17 @@ const Timer = ({ id, fluid = false }: TimerProps): JSX.Element => {
             ...transitionStyles[state],
           }}
         >
-          <Sprite src={SandClockSprite} step={9} size={[16, 16]} style={{ position: "relative" }} tick={2} />
           {id === currentPlayer && (
-            <div
-              className="timer__counter"
-              style={{
-                animationDuration: `${timePerTurn}ms`,
-              }}
-            />
+            <>
+              <Sprite src={SandClockSprite} step={9} size={[16, 16]} style={{ position: "relative" }} tick={2} />
+
+              <div
+                className="timer__counter"
+                style={{
+                  animationDuration: `${timePerTurn}ms`,
+                }}
+              />
+            </>
           )}
         </div>
       )}

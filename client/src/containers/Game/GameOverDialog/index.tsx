@@ -5,9 +5,9 @@ import Button from "../../../components/Button";
 import socket from "../../../services/socket";
 import "./GameOverDialog.scss";
 
-interface GameOverDialogProps {
+type GameOverDialogProps = {
   onClose?: () => void;
-}
+};
 
 const GameOverDialog = ({ onClose }: GameOverDialogProps): JSX.Element => {
   const [winner, setWinner] = useState<PlayerInfo>();

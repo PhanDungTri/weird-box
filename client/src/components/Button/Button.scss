@@ -2,9 +2,8 @@
 
 .button {
   margin: 4px;
-  box-shadow: createPixelBorder(2px, black);
+  box-shadow: createPixelBorder(2px, var(--border-color));
   outline: none;
-  background-color: white;
   border: none;
   cursor: pointer;
 }

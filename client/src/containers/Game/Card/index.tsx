@@ -15,12 +15,12 @@ const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
   return isCharge ? spriteLookup.Charge : spriteLookup.Consume;
 };
 
-interface CardProps {
+type CardProps = {
   card: CardInfo;
   onClick?: (id: string) => void;
   chosen?: boolean;
   disabled?: boolean;
-}
+};
 
 const defaultStyle: React.CSSProperties = {
   transition: `transform 300ms`,

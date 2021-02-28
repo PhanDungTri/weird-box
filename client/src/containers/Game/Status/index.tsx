@@ -4,10 +4,10 @@ import Spells from "./Spells";
 import Timer from "./Timer";
 import "./Status.scss";
 
-interface StatusProps {
+type StatusProps = {
   id: string;
   horizontal?: boolean;
-}
+};
 
 const Status = ({ id, horizontal = false }: StatusProps): JSX.Element => {
   return (
