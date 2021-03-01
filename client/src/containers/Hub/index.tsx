@@ -28,8 +28,8 @@ const Hub = (): JSX.Element => {
       <div>UNTITLED CARD GAME</div>
       <Input default={name} onChange={changeName} />
       <Button onClick={findGame}>Find game</Button>
-      <Button onClick={findGame}>How to play</Button>
-      <Button onClick={findGame}>About</Button>
+      <Button>How to play</Button>
+      <Button>About</Button>
     </Page>
   );
 };

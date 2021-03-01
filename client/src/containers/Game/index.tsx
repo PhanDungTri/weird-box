@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Notification from "../../components/Notification";
+import Page from "../../components/Page";
 import socket from "../../services/socket";
 import useAppState, { APP_STATE } from "../../state/appState";
 import { GameContextProvider } from "./context";
-import "./Game.scss";
 import GameBoard from "./GameBoard";
 import GameOverDialog from "./GameOverDialog";
 import Opponents from "./Opponents";
 import Player from "./Player";
 import SpellAnimation from "./SpellAnimation";
+import gameStyle from "./styles";
 
 const Game = (): JSX.Element => {
   const appState = useAppState();
@@ -22,14 +23,14 @@ const Game = (): JSX.Element => {
   useEffect(() => void socket.emit(SOCKET_EVENT.Ready), []);
 
   return (
-    <div className="game">
+    <Page css={gameStyle}>
       <Opponents />
       <GameBoard />
       <Player />
       <SpellAnimation id={socket.id} scale={4} />
       <GameOverDialog onClose={onGameOver} />
       <Notification />
-    </div>
+    </Page>
   );
 };
 
