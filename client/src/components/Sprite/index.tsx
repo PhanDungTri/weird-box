@@ -1,43 +1,28 @@
-import { useRef } from "react";
-import useStepAnimation from "../../hooks/useStepAnimation";
-import "./Sprite.scss";
+import { css } from "@emotion/react";
+import { spriteStyle } from "./styles";
 
 type SpriteProps = {
   size: [number, number];
-  src?: string;
+  src: string;
   scale?: number;
-  step?: number;
-  tick?: number;
-  repeat?: number;
-  centerize?: boolean;
-  style?: React.CSSProperties;
+  className?: string;
 };
 
-const Sprite = ({
-  src = "",
-  step = 1,
-  tick = 1,
-  size,
-  scale = 1,
-  repeat = -1,
-  centerize = false,
-  style,
-}: SpriteProps): JSX.Element => {
-  const { currentStep } = useStepAnimation({ step, tick, repeat, start: true });
-  const [width, height] = useRef(size.map((s) => s * scale)).current;
-
+const Sprite = ({ size: [width, height], src, scale = 1, className }: SpriteProps): JSX.Element => {
   return (
     <div
-      className={`sprite ${centerize ? "-centerize" : ""}`}
-      style={{
-        ...style,
-        width: width + "px",
-        height: height + "px",
-        backgroundImage: `url(${src})`,
-        backgroundPositionX: -currentStep * width,
-      }}
+      css={[
+        spriteStyle,
+        css`
+          width: ${width * scale}px;
+          height: ${height * scale}px;
+          background-image: url(${src});
+        `,
+      ]}
+      className={className}
     />
   );
 };
 
 export default Sprite;
+export type { SpriteProps };
