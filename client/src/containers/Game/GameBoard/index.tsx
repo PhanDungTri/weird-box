@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Transition, { TransitionStatus } from "react-transition-group/Transition";
 import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../shared/src/@types";

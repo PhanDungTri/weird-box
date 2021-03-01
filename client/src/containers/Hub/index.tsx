@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import React from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Button from "../../components/Button";
 import Input from "../../components/Input";

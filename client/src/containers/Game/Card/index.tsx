@@ -1,4 +1,3 @@
-import React from "react";
 import { Transition } from "react-transition-group";
 import { TransitionStatus } from "react-transition-group/Transition";
 import { SPELL_NAME } from "../../../../../shared/src/@enums";

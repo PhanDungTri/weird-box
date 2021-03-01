@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../../../../services/socket";
 import useStepAnimation from "../../../../hooks/useStepAnimation";
 import "./ChargePointBar.scss";

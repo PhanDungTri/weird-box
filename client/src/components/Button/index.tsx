@@ -1,4 +1,3 @@
-import React from "react";
 import { isDarkColor } from "../../utils/color";
 import "./Button.scss";
 

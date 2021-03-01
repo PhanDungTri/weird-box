@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
 import { PlayerInfo } from "../../../@types";
 import Button from "../../../components/Button";

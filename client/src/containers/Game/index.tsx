@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Notification from "../../components/Notification";
 import socket from "../../services/socket";

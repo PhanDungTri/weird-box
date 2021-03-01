@@ -1,4 +1,3 @@
-import React from "react";
 import HitPointBar from "./HitPointBar";
 import Spells from "./Spells";
 import Timer from "./Timer";

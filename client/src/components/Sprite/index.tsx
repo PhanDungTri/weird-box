@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import useStepAnimation from "../../hooks/useStepAnimation";
 import "./Sprite.scss";
 

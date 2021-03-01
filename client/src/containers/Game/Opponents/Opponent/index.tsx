@@ -1,4 +1,3 @@
-import React from "react";
 import { PlayerInfo } from "../../../../@types";
 import SpellAnimation from "../../SpellAnimation";
 import Status from "../../Status";

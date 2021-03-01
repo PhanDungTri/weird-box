@@ -1,4 +1,3 @@
-import React from "react";
 import useAppState, { APP_STATE } from "../state/appState";
 import Game from "./Game";
 import Hub from "./Hub";

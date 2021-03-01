@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import NOTI_VARIANT from "../../constants/NOTI_VARIANT";
 import socket from "../../services/socket";

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Transition, { TransitionStatus } from "react-transition-group/Transition";
 import { SpellInfo } from "../../../../../../../shared/src/@types";
 import spriteLookup from "../../../../../utils/spriteLookup";
