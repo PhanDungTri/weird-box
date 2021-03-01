@@ -1,9 +1,10 @@
-import { css } from "@emotion/react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import socket from "../../services/socket";
 import useNameState, { nameState } from "../../state/nameState";
+import pageStyle from "../../styles/pageStyle";
+import { hubStyle } from "./styles";
 
 const changeName = (() => {
   let timeout: number;
@@ -17,23 +18,13 @@ const changeName = (() => {
   };
 })();
 
-const style = css`
-  display: grid;
-  height: 100vw;
-  width: 100vw;
-  gap: 4px;
-  justify-content: center;
-  justify-items: center;
-  align-content: center;
-`;
-
 const Hub = (): JSX.Element => {
   const name = useNameState().value;
 
   const findGame = (): void => void socket.emit(SOCKET_EVENT.FindGame);
 
   return (
-    <div css={style}>
+    <div css={[hubStyle, pageStyle]}>
       <div>UNTITLED CARD GAME</div>
       <Input default={name} onChange={changeName} />
       <Button onClick={findGame}>Find game</Button>
