@@ -12,6 +12,7 @@ export const hexToRgb = (color: string): RGB => {
 };
 
 export const rgbToHex = (color: RGB): string =>
+  "#" +
   color.reduce((acc, cur) => {
     const hex = cur.toString(16);
     return acc + (hex.length === 1 ? "0" + hex : hex);

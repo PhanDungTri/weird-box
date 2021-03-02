@@ -8,7 +8,7 @@ enum APP_STATE {
   Test,
 }
 
-const appState = createState<APP_STATE>(APP_STATE.Test);
+const appState = createState<APP_STATE>(APP_STATE.Hub);
 const useAppState = (): StateMethods<APP_STATE> => useState(appState);
 
 socket.on(SOCKET_EVENT.GameFound, () => appState.set(APP_STATE.InGame));

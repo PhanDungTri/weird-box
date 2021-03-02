@@ -1,10 +1,10 @@
-import { Transition } from "react-transition-group";
-import { TransitionStatus } from "react-transition-group/Transition";
 import { SPELL_NAME } from "../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../shared/src/@types";
+import Sprite from "../../../components/Sprite";
+import { centerizeStyle } from "../../../styles";
 import spriteLookup from "../../../utils/spriteLookup";
-import Sprite from "../../../components/OldSprite";
 import "./Card.scss";
+import { CardAction, CardContent, CardPower, cardStyle } from "./styles";
 
 const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
   if (spriteLookup[spellName]) {
@@ -21,26 +21,6 @@ type CardProps = {
   disabled?: boolean;
 };
 
-const defaultStyle: React.CSSProperties = {
-  transition: `transform 300ms`,
-};
-
-const transitionStyles: Record<TransitionStatus, React.CSSProperties> = {
-  entering: {
-    transform: "translateY(-30px)",
-  },
-  entered: {
-    transform: "translateY(-30px)",
-  },
-  exiting: {
-    transform: "translateY(0px)",
-  },
-  exited: {
-    transform: "translateY(0px)",
-  },
-  unmounted: {},
-};
-
 const Card = ({ onClick, chosen = false, card, disabled = false }: CardProps): JSX.Element => {
   const choose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     if (!disabled && onClick) {
@@ -50,24 +30,13 @@ const Card = ({ onClick, chosen = false, card, disabled = false }: CardProps): J
   };
 
   return (
-    <Transition in={chosen} timeout={200}>
-      {(state) => (
-        <div
-          className={`card ${disabled ? "-disabled" : ""}`}
-          onClick={choose}
-          style={{
-            ...defaultStyle,
-            ...transitionStyles[state],
-          }}
-        >
-          <div className="card__content -centerize">
-            <div className="card__spec -power">{Math.abs(card.power)}</div>
-            <Sprite src={setSprite(card.spell, card.power >= 0)} size={[24, 24]} centerize />
-            <div className="card__spec -action">{card.power >= 0 ? "+" : "-"}</div>
-          </div>
-        </div>
-      )}
-    </Transition>
+    <div css={cardStyle(chosen, disabled)} onClick={choose}>
+      <CardContent>
+        <CardPower>{Math.abs(card.power)}</CardPower>
+        <Sprite src={setSprite(card.spell, card.power >= 0)} size={[24, 24]} css={centerizeStyle} />
+        <CardAction>{card.power >= 0 ? "+" : "-"}</CardAction>
+      </CardContent>
+    </div>
   );
 };
 
