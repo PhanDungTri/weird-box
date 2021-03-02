@@ -3,7 +3,7 @@ import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import IdleSprite from "../../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../../assets/sprites/box_of_cards_overcharged.png";
-import Sprite from "../../../../components/Sprite";
+import Sprite from "../../../../components/OldSprite";
 import socket from "../../../../services/socket";
 
 type State = "idle" | "deal" | "overcharged";

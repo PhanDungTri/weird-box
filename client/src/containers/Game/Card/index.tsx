@@ -3,7 +3,7 @@ import { TransitionStatus } from "react-transition-group/Transition";
 import { SPELL_NAME } from "../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../shared/src/@types";
 import spriteLookup from "../../../utils/spriteLookup";
-import Sprite from "../../../components/Sprite";
+import Sprite from "../../../components/OldSprite";
 import "./Card.scss";
 
 const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {

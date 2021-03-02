@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PASSIVE_ACTION, SOCKET_EVENT, SPELL_NAME } from "../../../../../shared/src/@enums";
 import { PassiveAction, SpellInfo } from "../../../../../shared/src/@types";
-import Sprite from "../../../components/Sprite";
+import Sprite from "../../../components/OldSprite";
 import socket from "../../../services/socket";
 import spellAnimationLookup from "./spellAnimationLookup";
 

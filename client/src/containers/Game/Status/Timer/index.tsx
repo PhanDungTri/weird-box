@@ -3,7 +3,7 @@ import { Transition } from "react-transition-group";
 import { TransitionStatus } from "react-transition-group/Transition";
 import SandClockSprite from "../../../../assets/sprites/sand_clock_animation.png";
 import { useGameContext } from "../../context";
-import Sprite from "../../../../components/Sprite";
+import Sprite from "../../../../components/OldSprite";
 import "./Timer.scss";
 import socket from "../../../../services/socket";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
