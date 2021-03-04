@@ -3,7 +3,6 @@ import { CardInfo } from "../../../../../shared/src/@types";
 import Sprite from "../../../components/Sprite";
 import { centerizeStyle } from "../../../styles";
 import spriteLookup from "../../../utils/spriteLookup";
-import "./Card.scss";
 import { CardAction, CardContent, CardPower, cardStyle } from "./styles";
 
 const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
@@ -19,9 +18,10 @@ type CardProps = {
   onClick?: (id: string) => void;
   chosen?: boolean;
   disabled?: boolean;
+  className?: string;
 };
 
-const Card = ({ onClick, chosen = false, card, disabled = false }: CardProps): JSX.Element => {
+const Card = ({ onClick, chosen = false, card, disabled = false, className }: CardProps): JSX.Element => {
   const choose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     if (!disabled && onClick) {
       event.stopPropagation();
@@ -30,7 +30,7 @@ const Card = ({ onClick, chosen = false, card, disabled = false }: CardProps): J
   };
 
   return (
-    <div css={cardStyle(chosen, disabled)} onClick={choose}>
+    <div className={className} css={cardStyle(chosen, disabled)} onClick={choose}>
       <CardContent>
         <CardPower>{Math.abs(card.power)}</CardPower>
         <Sprite src={setSprite(card.spell, card.power >= 0)} size={[24, 24]} css={centerizeStyle} />

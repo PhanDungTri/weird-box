@@ -6,9 +6,10 @@ type SpriteProps = {
   src: string;
   scale?: number;
   className?: string;
+  onAnimationEnd?: () => void;
 };
 
-const Sprite = ({ size: [width, height], src, scale = 1, className }: SpriteProps): JSX.Element => {
+const Sprite = ({ size: [width, height], src, scale = 1, ...props }: SpriteProps): JSX.Element => {
   return (
     <div
       css={[
@@ -19,7 +20,7 @@ const Sprite = ({ size: [width, height], src, scale = 1, className }: SpriteProp
           background-image: url(${src});
         `,
       ]}
-      className={className}
+      {...props}
     />
   );
 };

@@ -11,7 +11,7 @@ to {
 `;
 
 const spriteSheetStyle = (steps: number, fps: number, loop: boolean, sheetWidth: number): SerializedStyles => css`
-  animation: ${spriteAnimation(sheetWidth)} ${(steps / fps) * 1000}ms steps(${steps}) ${loop ? "infinite" : ""};
+  animation: ${spriteAnimation(sheetWidth)} ${steps / fps}s steps(${steps}) ${loop ? "infinite" : ""};
 `;
 
 export { spriteSheetStyle };

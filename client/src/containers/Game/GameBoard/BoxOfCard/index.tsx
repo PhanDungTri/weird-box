@@ -3,51 +3,38 @@ import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import IdleSprite from "../../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../../assets/sprites/box_of_cards_overcharged.png";
-import Sprite from "../../../../components/OldSprite";
+import SpriteSheet from "../../../../components/SpriteSheet";
 import socket from "../../../../services/socket";
+import { centerizeStyle } from "../../../../styles";
 
-type State = "idle" | "deal" | "overcharged";
+type State = "idle" | "deal";
 
-const setSprite = (state: State): JSX.Element => {
-  let spriteProps = {
+const boxOfCardAnimationState = {
+  idle: {
     src: IdleSprite,
-    step: 1,
-  };
+    steps: 1,
+  },
+  deal: {
+    src: DealCardSprite,
+    steps: 11,
+  },
+};
 
-  if (state === "deal")
-    spriteProps = {
-      src: DealCardSprite,
-      step: 10,
-    };
-
-  return (
-    <Sprite
-      centerize
-      key={state === "overcharged" ? "idle" : state}
-      size={[59, 59]}
-      scale={3}
-      {...spriteProps}
-      tick={3}
-    />
-  );
+const commonProps = {
+  size: [59, 59] as [number, number],
+  scale: 3,
+  css: centerizeStyle,
 };
 
 const BoxOfCard = (): JSX.Element => {
   const [state, setState] = useState<State>("idle");
-
-  useEffect(() => {
-    const resetState = setTimeout(() => setState("idle"), 600);
-
-    return () => {
-      clearTimeout(resetState);
-    };
-  }, [state]);
+  const [isOvercharged, overcharge] = useState(false);
 
   useEffect(() => {
     socket.on(SOCKET_EVENT.TakeCard, () => setState("deal"));
-    socket.on(SOCKET_EVENT.ChargePointBarOvercharged, () => setState("overcharged"));
+    socket.on(SOCKET_EVENT.ChargePointBarOvercharged, () => overcharge(true));
 
-    return (): void => {
+    return () => {
       socket.off(SOCKET_EVENT.TakeCard);
       socket.off(SOCKET_EVENT.ChargePointBarOvercharged);
     };
@@ -55,9 +42,14 @@ const BoxOfCard = (): JSX.Element => {
 
   return (
     <>
-      {setSprite(state)}
-      {state === "overcharged" && (
-        <Sprite centerize key="overcharged" size={[59, 59]} scale={3} tick={3} step={9} src={OverChargedSprite} />
+      <SpriteSheet
+        key={state}
+        onAnimationEnd={() => setState("idle")}
+        {...boxOfCardAnimationState[state]}
+        {...commonProps}
+      />
+      {isOvercharged && (
+        <SpriteSheet src={OverChargedSprite} steps={9} {...commonProps} onAnimationEnd={() => overcharge(false)} />
       )}
     </>
   );
