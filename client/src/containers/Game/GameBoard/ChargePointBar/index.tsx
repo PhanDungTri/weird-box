@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Transition } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import socket from "../../../../services/socket";
 import { ChargePointNode, StyledChargePointBar } from "./styles";
@@ -12,7 +13,7 @@ const charge = (value: number): boolean[] => {
 
 const ChargePointBar = (): JSX.Element => {
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(0));
-  const [state, setState] = useState<ChargePointBarState>("safe");
+  const [barState, setBarState] = useState<ChargePointBarState>("safe");
   const [shouldAnimate, animate] = useState(false);
   const isIncreased = useRef(true);
 
@@ -22,9 +23,9 @@ const ChargePointBar = (): JSX.Element => {
       return charge(value);
     });
 
-    if (value < 5) setState("safe");
-    else if (value >= 5 && value < 8) setState("warning");
-    else setState("danger");
+    if (value < 5) setBarState("safe");
+    else if (value >= 5 && value < 8) setBarState("warning");
+    else setBarState("danger");
   };
 
   useEffect(() => {
@@ -40,12 +41,16 @@ const ChargePointBar = (): JSX.Element => {
   return (
     <StyledChargePointBar onAnimationEnd={() => animate(false)} shouldAnimate={shouldAnimate}>
       {nodes.map((isCharged, i) => (
-        <ChargePointNode
-          empty={!isCharged}
-          barState={state}
-          delay={0.2 * (isIncreased.current ? i : nodes.length - 1 - i)}
-          key={i}
-        />
+        <Transition in={isCharged} key={i} timeout={500 + 200 * (isIncreased.current ? i : nodes.length - 1 - i)}>
+          {(state) => (
+            <ChargePointNode
+              transitionState={state}
+              barState={barState}
+              delay={0.2 * (isIncreased.current ? i : nodes.length - 1 - i)}
+              key={i}
+            />
+          )}
+        </Transition>
       ))}
     </StyledChargePointBar>
   );

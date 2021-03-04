@@ -8,7 +8,6 @@ import { ChargePointBarState } from "./types";
 type ChargePointNodeProps = {
   transitionState: TransitionStatus;
   barState: ChargePointBarState;
-  empty: boolean;
   delay: number;
 };
 
@@ -28,10 +27,16 @@ const emptyNodeKeyframes = keyframes`
 `;
 
 const chargedNodeKeyframes = (barState: ChargePointBarState) => keyframes`
-to {
-  background-color: ${chargePointBarColor[barState][0]};
-  box-shadow: inset 0px -8px 0px 0px ${chargePointBarColor[barState][1]};
-}`;
+  from {
+    background-color: ${nodeBorderColor};
+    box-shadow: inset 0px 8px 0px 0px #a79995;
+  }
+  
+  to {
+    background-color: ${chargePointBarColor[barState][0]};
+    box-shadow: inset 0px -8px 0px 0px ${chargePointBarColor[barState][1]};
+  }
+`;
 
 const bouncingKeyframes = keyframes`
   0%, 100% {
@@ -55,23 +60,17 @@ const bouncingKeyframes = keyframes`
   }
 `;
 
-const foo = (transitionState: TransitionStatus, barState: ChargePointBarState, delay: number) => {};
-
 export const ChargePointNode = styled.div<ChargePointNodeProps>`
   padding-top: 40%;
   transition: background-color 0.5s, box-shadow 0.5s;
-  ${({ barState: state }) => css`
-    background-color: ${chargePointBarColor[state][0]};
-    box-shadow: inset 0px -8px 0px 0px ${chargePointBarColor[state][1]};
-  `}
-  ${({ empty, barState, transitionState, delay }) =>
-    empty
-      ? css`
-          animation: ${emptyNodeKeyframes} 0.5s ${delay}s forwards;
-        `
-      : css`
-          animation: ${chargedNodeKeyframes(barState)} 0.5s ${delay}s forwards;
-        `}
+  background-color: ${nodeBorderColor};
+  box-shadow: inset 0px 8px 0px 0px #a79995;
+  animation: ${({ barState, transitionState }) =>
+      transitionState === "entering" || transitionState === "entered"
+        ? chargedNodeKeyframes(barState)
+        : emptyNodeKeyframes}
+    0.5s forwards;
+  animation-delay: ${({ delay }) => delay}s;
 `;
 
 export const StyledChargePointBar = styled.div<{ shouldAnimate: boolean }>`
