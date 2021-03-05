@@ -44,8 +44,8 @@ const ChargePointBar = (): JSX.Element => {
         <Transition in={isCharged} key={i} timeout={500 + 200 * (isIncreased.current ? i : nodes.length - 1 - i)}>
           {(state) => (
             <ChargePointNode
-              transitionState={state}
               barState={barState}
+              transitionState={state}
               delay={0.2 * (isIncreased.current ? i : nodes.length - 1 - i)}
               key={i}
             />
