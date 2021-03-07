@@ -12,7 +12,7 @@ const GameBoard = (): JSX.Element => {
   const [playedCard, setPlayedCard] = useState<CardInfo>();
   const { finishTurn } = useGameContext();
 
-  const showPlayedCard = (card: CardInfo): void => {
+  const showPlayedCard = (card: CardInfo) => {
     finishTurn();
     setPlayedCard(card);
   };

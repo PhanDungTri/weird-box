@@ -14,11 +14,11 @@ const cardChosenStyle = css`
 export const cardStyle = (chosen = false, disabled = false): SerializedStyles => css`
   ${pixelBorderStyle(2, [COLOR.Coal], [
     COLOR.White,
-    ...new Array<string>(3).fill(shadeColor(COLOR.Paper, 20)),
+    ...new Array<string>(3).fill(shadeColor(COLOR.Primary, 20)),
   ] as BorderColors)};
   position: relative;
   box-sizing: border-box;
-  background-color: ${COLOR.Paper};
+  background-color: ${COLOR.Primary};
   width: 4rem;
   height: 6rem;
   user-select: none;
@@ -38,7 +38,7 @@ export const CardContent = styled.div`
 const cardInfoStyle = css`
   position: absolute;
   display: inline-block;
-  background-color: ${COLOR.Paper};
+  background-color: ${COLOR.Primary};
   color: ${tintColor(COLOR.Coal, 20)};
   font-family: "Dogica Pixel";
   font-size: 10px;

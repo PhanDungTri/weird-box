@@ -1,1 +1,1 @@
-export type ChargePointBarState = "safe" | "warning" | "danger";
+export type ChargePointBarState = "Safe" | "Warning" | "Danger";

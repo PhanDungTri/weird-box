@@ -5,7 +5,7 @@ import { centerizeStyle } from "../../../styles";
 import spriteLookup from "../../../utils/spriteLookup";
 import { CardAction, CardContent, CardPower, cardStyle } from "./styles";
 
-const setSprite = (spellName: SPELL_NAME, isCharge: boolean): string => {
+const setSprite = (spellName: SPELL_NAME, isCharge: boolean) => {
   if (spriteLookup[spellName]) {
     return spriteLookup[spellName];
   }

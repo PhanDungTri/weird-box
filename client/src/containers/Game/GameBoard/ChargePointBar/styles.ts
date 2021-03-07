@@ -1,8 +1,10 @@
 import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { TransitionStatus } from "react-transition-group/Transition";
+import COLOR from "../../../../constants/COLOR";
 import SIZE from "../../../../constants/SIZE";
 import { centerizeStyle, gridStyle, pixelBorderStyle } from "../../../../styles";
+import { shadeColor } from "../../../../utils/color";
 import { ChargePointBarState } from "./types";
 
 type ChargePointNodeProps = {
@@ -12,12 +14,6 @@ type ChargePointNodeProps = {
 };
 
 const nodeBorderColor = "#2e1710";
-
-const chargePointBarColor = {
-  safe: ["#99e550", "#6abe30"],
-  warning: ["#ffd04c", "#d19c07"],
-  danger: ["#ff4412", "#9e371c"],
-};
 
 const bouncingKeyframes = keyframes`
   0%, 100% {
@@ -47,8 +43,8 @@ const emptyNode = css`
 `;
 
 const chargeNode = (barState: ChargePointBarState) => css`
-  background-color: ${chargePointBarColor[barState][0]};
-  box-shadow: inset 0px -8px 0px 0px ${chargePointBarColor[barState][1]};
+  background-color: ${COLOR[barState]};
+  box-shadow: inset 0px -8px 0px 0px ${shadeColor(COLOR[barState], 30)};
 `;
 
 const chargePointNodeTransition = ({ transitionState, barState, delay }: ChargePointNodeProps) => {

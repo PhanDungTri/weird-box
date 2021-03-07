@@ -13,15 +13,15 @@ const charge = (value: number): boolean[] => {
 
 const ChargePointBar = (): JSX.Element => {
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(0));
-  const [barState, setBarState] = useState<ChargePointBarState>("safe");
+  const [barState, setBarState] = useState<ChargePointBarState>("Danger");
   const [shouldAnimate, animate] = useState(false);
   const [value, setValue] = useState(0);
   const isIncreased = useRef(true);
 
   const updateBarState = () => {
-    if (value < 5) setBarState("safe");
-    else if (value >= 5 && value < 8) setBarState("warning");
-    else setBarState("danger");
+    if (value < 5) setBarState("Safe");
+    else if (value >= 5 && value < 8) setBarState("Warning");
+    else setBarState("Danger");
   };
 
   const renderNodes = () =>
