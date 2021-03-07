@@ -19,28 +19,6 @@ const chargePointBarColor = {
   danger: ["#ff4412", "#9e371c"],
 };
 
-const emptyNodeKeyframes = keyframes`
-  from {
-    background-color: inherit;
-    box-shadow: inherit;
-  }
-  to {
-    background-color: ${nodeBorderColor};
-    box-shadow: inset 0px 8px 0px 0px #a79995;
-  }
-`;
-
-const chargedNodeKeyframes = keyframes`
-  from {
-    background-color: ${nodeBorderColor};
-    box-shadow: inset 0px 8px 0px 0px #a79995;
-  }
-  to {
-    background-color: inherit;
-    box-shadow: inherit;
-  }
-`;
-
 const bouncingKeyframes = keyframes`
   0%, 100% {
     transform: translateX(calc(-50% - 4px));
@@ -63,19 +41,46 @@ const bouncingKeyframes = keyframes`
   }
 `;
 
+const emptyNode = css`
+  background-color: ${nodeBorderColor};
+  box-shadow: inset 0px 8px 0px 0px #a79995;
+`;
+
+const chargeNode = (barState: ChargePointBarState) => css`
+  background-color: ${chargePointBarColor[barState][0]};
+  box-shadow: inset 0px -8px 0px 0px ${chargePointBarColor[barState][1]};
+`;
+
+const chargePointNodeTransition = ({ transitionState, barState, delay }: ChargePointNodeProps) => {
+  switch (transitionState) {
+    case "entering":
+      return css`
+        ${chargeNode(barState)};
+        transition-delay: ${delay}s;
+      `;
+    case "entered":
+      return css`
+        ${chargeNode(barState)};
+        transition-delay: 0s;
+      `;
+    case "exiting":
+      return css`
+        ${emptyNode};
+        transition-delay: ${delay}s;
+      `;
+    default:
+      return css`
+        ${emptyNode};
+        transition-delay: 0s;
+      `;
+  }
+};
+
 export const ChargePointNode = styled.div<ChargePointNodeProps>`
-  transition: background-color 0.5s, box-shadow 0.5s;
-  ${({ transitionState, barState }) =>
-    transitionState === "entering" || transitionState === "entered"
-      ? css`
-          background-color: ${chargePointBarColor[barState][0]};
-          box-shadow: inset 0px -8px 0px 0px ${chargePointBarColor[barState][1]};
-        `
-      : css`
-          background-color: ${nodeBorderColor};
-          box-shadow: inset 0px 8px 0px 0px #a79995;
-        `};
-  transition-delay: ${({ delay }) => delay}s;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  background-color: ${nodeBorderColor};
+  box-shadow: inset 0px 8px 0px 0px #a79995;
+  ${chargePointNodeTransition}
 `;
 
 export const StyledChargePointBar = styled.div<{ shouldAnimate: boolean }>`

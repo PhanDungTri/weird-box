@@ -15,24 +15,50 @@ const ChargePointBar = (): JSX.Element => {
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(0));
   const [barState, setBarState] = useState<ChargePointBarState>("safe");
   const [shouldAnimate, animate] = useState(false);
+  const [value, setValue] = useState(0);
   const isIncreased = useRef(true);
 
-  const updateChargePoint = (value: number): void => {
-    setNodeStatus((list) => {
-      isIncreased.current = list.filter(Boolean).length <= value;
-      return charge(value);
-    });
-
+  const updateBarState = () => {
     if (value < 5) setBarState("safe");
     else if (value >= 5 && value < 8) setBarState("warning");
     else setBarState("danger");
   };
 
+  const renderNodes = () =>
+    nodes.map((isCharged, i, arr) => {
+      // Triggered on the final node in the transition chain
+      const onTransitionEnd =
+        (isIncreased.current && (i === arr.length - 1 || !arr[i + 1])) ||
+        (!isIncreased.current && (i === 0 || arr[i - 1]))
+          ? updateBarState
+          : undefined;
+
+      const delay = 0.1 * (isIncreased.current ? i : nodes.length - 1 - i);
+
+      return (
+        <Transition in={isCharged} key={i} timeout={200}>
+          {(state) => (
+            <ChargePointNode
+              barState={barState}
+              transitionState={state}
+              delay={delay}
+              onTransitionEnd={onTransitionEnd}
+            />
+          )}
+        </Transition>
+      );
+    });
+
   useEffect(() => {
-    socket.on(SOCKET_EVENT.ChargePointChanged, updateChargePoint);
+    isIncreased.current = nodes.filter(Boolean).length <= value;
+    setNodeStatus(charge(value));
+  }, [value]);
+
+  useEffect(() => {
+    socket.on(SOCKET_EVENT.ChargePointChanged, setValue);
     socket.on(SOCKET_EVENT.TakeCard, () => animate(true));
 
-    return (): void => {
+    return () => {
       socket.off(SOCKET_EVENT.ChargePointChanged);
       socket.off(SOCKET_EVENT.TakeCard);
     };
@@ -40,18 +66,7 @@ const ChargePointBar = (): JSX.Element => {
 
   return (
     <StyledChargePointBar onAnimationEnd={() => animate(false)} shouldAnimate={shouldAnimate}>
-      {nodes.map((isCharged, i) => (
-        <Transition in={isCharged} key={i} timeout={500 + 200 * (isIncreased.current ? i : nodes.length - 1 - i)}>
-          {(state) => (
-            <ChargePointNode
-              barState={barState}
-              transitionState={state}
-              delay={0.2 * (isIncreased.current ? i : nodes.length - 1 - i)}
-              key={i}
-            />
-          )}
-        </Transition>
-      ))}
+      {renderNodes()}
     </StyledChargePointBar>
   );
 };
