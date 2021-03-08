@@ -35,8 +35,6 @@ export const dialogContentStyle = (borderColor: string): SerializedStyles => css
 export const dialogHeaderStyle = (color: string): SerializedStyles => css`
   background-color: ${color};
   color: ${isDarkColor(color) ? COLOR.White : COLOR.Black};
-  font-size: 16px;
-  font-weight: bold;
   text-transform: uppercase;
 `;
 

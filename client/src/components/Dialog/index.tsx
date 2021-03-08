@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { Transition } from "react-transition-group";
 import COLOR from "../../constants/COLOR";
 import { pageStyle } from "../../styles";
+import { headingStyle } from "../../styles/textStyle";
 import { shadeColor } from "../../utils/color";
 import Button from "../Button";
 import { dialogContentStyle, dialogFooterStyle, dialogHeaderStyle, dialogStyle } from "./styles";
@@ -31,7 +32,7 @@ const Dialog = ({
       {(state) => (
         <div css={[dialogStyle(state), pageStyle]}>
           <div css={dialogContentStyle(shadeColor(color, 70))}>
-            {title && <div css={dialogHeaderStyle(color)}>{title}</div>}
+            {title && <div css={[dialogHeaderStyle(color), headingStyle]}>{title}</div>}
             {children}
             <div css={dialogFooterStyle}>
               <Button variation="Safe" onClick={onConfirm}>
