@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { Transition, TransitionGroup } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../../shared/src/@types";
-import Card from "../../Card";
 import NOTI_VARIANT from "../../../../constants/NOTI_VARIANT";
 import socket from "../../../../services/socket";
 import useNotificationState from "../../../../state/notificationState";
+import Card from "../../Card";
 import { useGameContext } from "../../context";
-import "./Hand.scss";
+import { cardTransition, handStyle } from "./styles";
 
 type HandProps = {
   eliminated?: boolean;
@@ -51,11 +51,15 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
 
   return (
     <div ref={ref}>
-      <TransitionGroup className="player__hand">
+      <TransitionGroup css={handStyle}>
         {cards.map((c) => (
-          <CSSTransition timeout={600} classNames="card-transition" key={c.id}>
-            <Card disabled={eliminated} card={c} onClick={playCard} chosen={chosenCard === c.id} />
-          </CSSTransition>
+          <Transition timeout={600} key={c.id}>
+            {(state) => (
+              <div css={cardTransition(state)}>
+                <Card disabled={eliminated} card={c} onClick={playCard} chosen={chosenCard === c.id} />
+              </div>
+            )}
+          </Transition>
         ))}
       </TransitionGroup>
     </div>

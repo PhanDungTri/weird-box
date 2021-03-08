@@ -49,6 +49,6 @@ export const cardTransition = (transition: TransitionStatus): SerializedStyles =
 export const handStyle = css`
   display: flex;
   margin: 8px;
-  gap: 4px;
+  gap: 8px;
   justify-content: center;
 `;
