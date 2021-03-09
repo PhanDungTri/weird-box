@@ -1,8 +1,10 @@
+import { css } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import { GameSettings, HitPointChange } from "../../../../../../shared/src/@types";
 import socket from "../../../../services/socket";
-import "./HitPointBar.scss";
+import { centerizeStyle } from "../../../../styles";
+import { hitPointBarStyle, hitPointCapacityStyle, hitPointCapacityUnderlayStyle } from "./styles";
 
 type HitPointBarProps = {
   id: string;
@@ -26,10 +28,19 @@ const HitPointBar = ({ id }: HitPointBarProps): JSX.Element => {
   }, []);
 
   return (
-    <div className="hit-point">
-      <div className="hit-point__bar -underlay" style={{ width: `${(hp * 100) / maxHP.current}%` }} />
-      <div className="hit-point__bar" style={{ width: `${(hp * 100) / maxHP.current}%` }} />
-      <div className="hit-point__text -centerize">{hp}</div>
+    <div css={hitPointBarStyle}>
+      <div css={[hitPointCapacityStyle((hp * 100) / maxHP.current), hitPointCapacityUnderlayStyle]} />
+      <div css={hitPointCapacityStyle((hp * 100) / maxHP.current)} />
+      <div
+        css={[
+          css`
+            font-weight: bold;
+          `,
+          centerizeStyle,
+        ]}
+      >
+        {hp}
+      </div>
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import { PlayerInfo } from "../../../@types";
-import { headingStyle } from "../../../styles/textStyle";
+import { disabledStyle, gridStyle, headingStyle } from "../../../styles";
 import SpellAnimation from "../SpellAnimation";
 import Status from "../Status";
 import { opponentNameStyle, opponentStyle } from "./styles";
 
 const Opponent = ({ id, name, isEliminated }: PlayerInfo): JSX.Element => {
   return (
-    <div css={opponentStyle(isEliminated)}>
+    <div css={[gridStyle, opponentStyle, isEliminated && disabledStyle]}>
       <Status id={id} />
       <div css={[opponentNameStyle, headingStyle]}>{name}</div>
       <SpellAnimation id={id} />

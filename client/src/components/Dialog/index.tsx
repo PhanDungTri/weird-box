@@ -1,12 +1,11 @@
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { Transition } from "react-transition-group";
 import COLOR from "../../constants/COLOR";
 import { pageStyle } from "../../styles";
 import { headingStyle } from "../../styles/textStyle";
 import { shadeColor } from "../../utils/color";
 import Button from "../Button";
-import { dialogContentStyle, dialogFooterStyle, dialogHeaderStyle, dialogStyle } from "./styles";
+import { dialogContentStyle, dialogFooterStyle, dialogHeaderStyle, dialogStyle, showDialogStyle } from "./styles";
 
 type DialogProps = {
   color?: string;
@@ -28,26 +27,22 @@ const Dialog = ({
   confirmMessage = "OK",
 }: DialogProps): JSX.Element => {
   return createPortal(
-    <Transition in={show} timeout={200}>
-      {(state) => (
-        <div css={[dialogStyle(state), pageStyle]}>
-          <div css={dialogContentStyle(shadeColor(color, 70))}>
-            {title && <div css={[dialogHeaderStyle(color), headingStyle]}>{title}</div>}
-            {children}
-            <div css={dialogFooterStyle}>
-              <Button variation="Safe" onClick={onConfirm}>
-                {confirmMessage}
-              </Button>
-              {onCancel && (
-                <Button variation="Danger" onClick={onCancel}>
-                  Cancel
-                </Button>
-              )}
-            </div>
-          </div>
+    <div css={[pageStyle, dialogStyle, show && showDialogStyle]}>
+      <div css={dialogContentStyle(shadeColor(color, 70))}>
+        {title && <div css={[dialogHeaderStyle(color), headingStyle]}>{title}</div>}
+        {children}
+        <div css={dialogFooterStyle}>
+          <Button variation="Safe" onClick={onConfirm}>
+            {confirmMessage}
+          </Button>
+          {onCancel && (
+            <Button variation="Danger" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
         </div>
-      )}
-    </Transition>,
+      </div>
+    </div>,
     document.getElementById("dialog") as HTMLDivElement
   );
 };

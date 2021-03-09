@@ -1,9 +1,0 @@
-.status {
-  display: grid;
-  gap: 4px;
-
-  &.-horizontal {
-    margin: 24px 8px;
-    grid-template-columns: 1fr 2fr;
-  }
-}

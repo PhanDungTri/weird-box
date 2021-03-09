@@ -79,7 +79,11 @@ export const ChargePointNode = styled.div<ChargePointNodeProps>`
   ${chargePointNodeTransition}
 `;
 
-export const StyledChargePointBar = styled.div<{ shouldAnimate: boolean }>`
+export const chargePointBarDealAnimation = css`
+  animation: ${bouncingKeyframes} ${10 / 12}s steps(1);
+`;
+
+export const StyledChargePointBar = styled.div`
   ${gridStyle};
   ${centerizeStyle};
   ${pixelBorderStyle(4, ["#ad9587"])};
@@ -90,9 +94,4 @@ export const StyledChargePointBar = styled.div<{ shouldAnimate: boolean }>`
   transform: translateX(calc(-50% - 4px));
   border: 4px solid ${nodeBorderColor};
   background-color: ${nodeBorderColor};
-  ${({ shouldAnimate }) =>
-    shouldAnimate &&
-    css`
-      animation: ${bouncingKeyframes} ${10 / 12}s steps(1);
-    `}
 `;

@@ -8,42 +8,42 @@ import ShieldSpellAnimation from "../../../assets/sprites/shield_animation.png";
 import ShieldBlockAnimation from "../../../assets/sprites/shield_block_animation.png";
 import ShieldPierceAnimation from "../../../assets/sprites/shield_pierce_animation.png";
 
-type AnimationProps = {
-  step: number;
+export type AnimationProps = {
+  steps: number;
   src: string;
 };
 
 const spellAnimationLookup: Partial<Record<SPELL_NAME | PASSIVE_ACTION, AnimationProps>> = {
   [SPELL_NAME.Punch]: {
-    step: 7,
+    steps: 7,
     src: PunchSpellAnimation,
   },
   [SPELL_NAME.Heal]: {
-    step: 8,
+    steps: 8,
     src: HealSpellAnimation,
   },
   [SPELL_NAME.Poison]: {
-    step: 8,
+    steps: 8,
     src: PoisonSpellAnimation,
   },
   [SPELL_NAME.Shield]: {
-    step: 9,
+    steps: 9,
     src: ShieldSpellAnimation,
   },
   [PASSIVE_ACTION.Block]: {
-    step: 8,
+    steps: 8,
     src: ShieldBlockAnimation,
   },
   [PASSIVE_ACTION.ShieldPierce]: {
-    step: 8,
+    steps: 8,
     src: ShieldPierceAnimation,
   },
   [PASSIVE_ACTION.Reflect]: {
-    step: 8,
+    steps: 8,
     src: MirrorReflectAnimation,
   },
   [PASSIVE_ACTION.MirrorPierce]: {
-    step: 8,
+    steps: 8,
     src: MirrorPierceAnimation,
   },
 };

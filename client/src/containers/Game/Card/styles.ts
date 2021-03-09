@@ -1,17 +1,17 @@
-import { css, SerializedStyles } from "@emotion/react";
-import COLOR from "../../../constants/COLOR";
-import { BorderColors, centerizeStyle, disabledStyle, pixelBorderStyle } from "../../../styles";
-import { shadeColor, tintColor } from "../../../utils/color";
-import ContentFrameSprite from "../../../assets/sprites/card_content_frame.png";
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import ContentFrameSprite from "../../../assets/sprites/card_content_frame.png";
+import COLOR from "../../../constants/COLOR";
+import { BorderColors, centerizeStyle, pixelBorderStyle } from "../../../styles";
+import { shadeColor, tintColor } from "../../../utils/color";
 
 const contentBorderWidth = 12;
 
-const cardChosenStyle = css`
+export const cardChosenStyle = css`
   transform: translateY(-30px);
 `;
 
-export const cardStyle = (chosen = false, disabled = false): SerializedStyles => css`
+export const cardStyle = css`
   ${pixelBorderStyle(2, [COLOR.Coal], [
     COLOR.White,
     ...new Array<string>(3).fill(shadeColor(COLOR.Primary, 20)),
@@ -23,8 +23,6 @@ export const cardStyle = (chosen = false, disabled = false): SerializedStyles =>
   height: 6rem;
   user-select: none;
   transition: transform 0.3s;
-  ${chosen && cardChosenStyle};
-  ${disabled && disabledStyle}
 `;
 
 export const CardContent = styled.div`

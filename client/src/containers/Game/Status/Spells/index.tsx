@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { Transition, TransitionGroup } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
-import { SpellInfo, PassiveAction } from "../../../../../../shared/src/@types";
+import { PassiveAction, SpellInfo } from "../../../../../../shared/src/@types";
 import socket from "../../../../services/socket";
-import "./Spells.scss";
 import SpellIndicator from "./SpellIndicator";
+import { spellsStyle, spellTransition } from "./styles";
 
 type SpellsProps = {
   id: string;
@@ -46,11 +46,15 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
   }, []);
 
   return (
-    <TransitionGroup className={`spells -${align}`}>
+    <TransitionGroup css={[spellsStyle(align)]}>
       {Object.values(spells).map((s) => (
-        <CSSTransition classNames="spell-transition" timeout={400} key={s.id}>
-          <SpellIndicator {...s} key={s.id} />
-        </CSSTransition>
+        <Transition timeout={400} key={s.id}>
+          {(state) => (
+            <div css={spellTransition(state)}>
+              <SpellIndicator {...s} />
+            </div>
+          )}
+        </Transition>
       ))}
     </TransitionGroup>
   );

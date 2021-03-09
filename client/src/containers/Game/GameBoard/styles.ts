@@ -1,5 +1,4 @@
 import { css, keyframes } from "@emotion/react";
-import { centerizeStyle } from "../../../styles";
 
 export const gameBoard = css`
   position: relative;
@@ -24,7 +23,6 @@ const cardPlayedKeyframes = keyframes`
 `;
 
 export const cardPlayedAnimation = css`
-  ${centerizeStyle};
   animation: ${cardPlayedKeyframes} 1s;
   animation-fill-mode: forwards;
 `;

@@ -1,9 +1,9 @@
 import { SPELL_NAME } from "../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../shared/src/@types";
 import Sprite from "../../../components/Sprite";
-import { centerizeStyle } from "../../../styles";
+import { centerizeStyle, disabledStyle } from "../../../styles";
 import spriteLookup from "../../../utils/spriteLookup";
-import { CardAction, CardContent, CardPower, cardStyle } from "./styles";
+import { CardAction, cardChosenStyle, CardContent, CardPower, cardStyle } from "./styles";
 
 const setSprite = (spellName: SPELL_NAME, isCharge: boolean) => {
   if (spriteLookup[spellName]) {
@@ -30,7 +30,7 @@ const Card = ({ onClick, chosen = false, card, disabled = false, className }: Ca
   };
 
   return (
-    <div className={className} css={cardStyle(chosen, disabled)} onClick={choose}>
+    <div className={className} css={[cardStyle, chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
       <CardContent>
         <CardPower>{Math.abs(card.power)}</CardPower>
         <Sprite src={setSprite(card.spell, card.power >= 0)} size={[24, 24]} css={centerizeStyle} />

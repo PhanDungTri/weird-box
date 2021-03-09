@@ -1,23 +1,19 @@
 import { css, SerializedStyles } from "@emotion/react";
-import { TransitionStatus } from "react-transition-group/Transition";
 import COLOR from "../../constants/COLOR";
 import { hexToRgb, isDarkColor } from "../../utils/color";
 
-export const dialogStyle = (transitionState: TransitionStatus): SerializedStyles => css`
+export const showDialogStyle = css`
+  opacity: 1;
   z-index: 1;
+  backdrop-filter: blur(2px);
+  transition: opacity 0.2s, backdrop-filter 0.2s;
+`;
+
+export const dialogStyle = css`
   background-color: rgba(${hexToRgb(COLOR.Coal).join(", ")}, 0.4);
   overflow: auto;
-  ${transitionState === "entered" || transitionState === "entering"
-    ? css`
-        opacity: 1;
-        z-index: 1;
-        backdrop-filter: blur(2px);
-      `
-    : css`
-        opacity: 0;
-        z-index: -1;
-      `}
-  transition: opacity 0.2s, backdrop-filter 0.2s;
+  opacity: 0;
+  z-index: -1;
 `;
 
 export const dialogContentStyle = (borderColor: string): SerializedStyles => css`

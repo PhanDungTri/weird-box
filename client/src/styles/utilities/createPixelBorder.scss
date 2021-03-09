@@ -1,9 +1,0 @@
-@function createPixelBorder($width, $color) {
-  @return $width 0px 0px 0px $color, (-$width) 0px 0px 0px $color, 0px $width 0px 0px $color,
-    0px (-$width) 0px 0px $color;
-}
-
-@function createShadingBorder($width, $color) {
-  @return inset $width 0px 0px 0px $color, inset (-$width) 0px 0px 0px $color, inset 0px $width 0px 0px $color,
-    inset 0px (-$width) 0px 0px $color;
-}

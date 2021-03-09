@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Transition } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import socket from "../../../../services/socket";
-import { ChargePointNode, StyledChargePointBar } from "./styles";
+import { chargePointBarDealAnimation, ChargePointNode, StyledChargePointBar } from "./styles";
 import { ChargePointBarState } from "./types";
 
 const charge = (value: number): boolean[] => {
@@ -65,7 +65,7 @@ const ChargePointBar = (): JSX.Element => {
   }, []);
 
   return (
-    <StyledChargePointBar onAnimationEnd={() => animate(false)} shouldAnimate={shouldAnimate}>
+    <StyledChargePointBar onAnimationEnd={() => animate(false)} css={shouldAnimate && chargePointBarDealAnimation}>
       {renderNodes()}
     </StyledChargePointBar>
   );

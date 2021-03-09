@@ -1,9 +1,11 @@
+import { css } from "@emotion/react";
 import { useEffect, useState } from "react";
 import { PASSIVE_ACTION, SOCKET_EVENT, SPELL_NAME } from "../../../../../shared/src/@enums";
 import { PassiveAction, SpellInfo } from "../../../../../shared/src/@types";
-import Sprite from "../../../components/OldSprite";
+import SpriteSheet from "../../../components/SpriteSheet";
 import socket from "../../../services/socket";
-import spellAnimationLookup from "./spellAnimationLookup";
+import { centerizeStyle } from "../../../styles";
+import spellAnimationLookup, { AnimationProps } from "./spellAnimationLookup";
 
 type SpellAnimationProps = {
   id: string;
@@ -39,14 +41,16 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
   return animation === SPELL_NAME.Void ? (
     <></>
   ) : (
-    <Sprite
-      style={{ zIndex: 2 }}
-      {...spellAnimationLookup[animation]}
-      tick={3}
-      repeat={0}
+    <SpriteSheet
+      {...(spellAnimationLookup[animation] as AnimationProps)}
       size={[62, 46]}
       scale={scale}
-      centerize
+      css={[
+        centerizeStyle,
+        css`
+          z-index: 2;
+        `,
+      ]}
     />
   );
 };

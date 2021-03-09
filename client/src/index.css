@@ -11,6 +11,7 @@
 html {
   font-size: 12px;
   font-family: "Free Pixel";
+  color: black;
   image-rendering: optimizeSpeed;
   image-rendering: pixelated;
 }

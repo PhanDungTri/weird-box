@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../shared/src/@types";
 import socket from "../../../services/socket";
+import { centerizeStyle } from "../../../styles";
 import Card from "../Card";
 import { useGameContext } from "../context";
 import BoxOfCard from "./BoxOfCard";
@@ -27,7 +28,7 @@ const GameBoard = (): JSX.Element => {
       <BoxOfCard />
       <ChargePointBar />
       {!!playedCard && (
-        <div onAnimationEnd={() => setPlayedCard(undefined)} css={cardPlayedAnimation}>
+        <div onAnimationEnd={() => setPlayedCard(undefined)} css={[cardPlayedAnimation, centerizeStyle]}>
           <Card card={playedCard} />
         </div>
       )}
