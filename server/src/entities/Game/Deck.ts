@@ -10,12 +10,9 @@ const generateCards = (): Card[] => {
 
   // power point is from 0 - 9
   for (let i = 0; i < 10; i++) {
-    [SPELL_NAME.Poison, SPELL_NAME.Mirror].forEach((eff) => {
-      // each type of card has 4 cards in deck
-      for (let j = 0; j < 4; j++) {
-        cards.push(new Card(i, eff));
-        cards.push(new Card(-i, eff));
-      }
+    Object.values(SPELL_NAME).forEach((eff) => {
+      cards.push(new Card(i, eff));
+      cards.push(new Card(-i, eff));
     });
   }
 
