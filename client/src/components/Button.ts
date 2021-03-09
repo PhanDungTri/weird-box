@@ -1,13 +1,12 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { StyleVariant } from "../@types";
 import COLOR from "../constants/COLOR";
 import { pixelBorderStyle } from "../styles";
 import { isDarkColor, shadeColor, tintColor } from "../utils/color";
 
-type ButtonVariation = "Safe" | "Danger" | "Warning" | "Primary";
-
 type ButtonProps = {
-  variation?: ButtonVariation;
+  variation?: StyleVariant;
 };
 
 const Button = styled.button<ButtonProps>`

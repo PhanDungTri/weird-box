@@ -6,7 +6,7 @@ enum COLOR {
   Danger = "#ff4412",
   Warning = "#ffd04c",
   Safe = "#99e550",
-  Info = "",
+  Info = "#1ca27f",
 }
 
 export default COLOR;

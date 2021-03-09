@@ -1,36 +1,48 @@
+import { css } from "@emotion/react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import NOTI_VARIANT from "../../constants/NOTI_VARIANT";
+import { SOCKET_EVENT } from "../../../../shared/src/@enums";
+import { StyleVariant } from "../../@types";
+import COLOR from "../../constants/COLOR";
 import socket from "../../services/socket";
 import useNotificationState from "../../state/notificationState";
-import "./Notification.scss";
+import { notificationStyle } from "./style";
 
 const Notification = (): JSX.Element => {
   const state = useNotificationState();
   const { show, variant, message } = state.value;
 
-  const showNotification = (variant: NOTI_VARIANT) => (message: string) => {
+  const showNotification = (variant: StyleVariant) => (message: string) => {
     state.set({ variant, message, show: true });
   };
 
   useEffect(() => {
-    if (show && message) {
-      setTimeout(() => state.show.set(false), 2000);
-    }
+    if (show && message) setTimeout(() => state.show.set(false), 2000);
   }, [show]);
 
   useEffect(() => {
-    socket.on("error", showNotification(NOTI_VARIANT.Error));
-    socket.on("info", showNotification(NOTI_VARIANT.Info));
+    socket.on(SOCKET_EVENT.Error, showNotification("Danger"));
+    socket.on(SOCKET_EVENT.Info, showNotification("Info"));
 
-    return (): void => {
-      socket.off("error");
-      socket.off("info");
+    return () => {
+      socket.off(SOCKET_EVENT.Error);
+      socket.off(SOCKET_EVENT.Info);
     };
   }, []);
 
   return createPortal(
-    <div className={`notification -${variant} ${show ? "" : "-hide"}`}>{message}</div>,
+    <div
+      css={[
+        notificationStyle(COLOR[variant]),
+        show &&
+          css`
+            transform: translate(-50%, -100%);
+            z-index: 1;
+          `,
+      ]}
+    >
+      {message}
+    </div>,
     document.getElementById("notification") as HTMLElement
   );
 };

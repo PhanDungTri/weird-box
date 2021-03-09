@@ -1,14 +1,14 @@
 import { createState, State, useState } from "@hookstate/core";
-import NOTI_VARIANT from "../constants/NOTI_VARIANT";
+import { StyleVariant } from "../@types";
 
 type NotificationState = {
-  variant: NOTI_VARIANT;
+  variant: StyleVariant;
   message: string;
   show: boolean;
 };
 
 const notificationState = createState<NotificationState>({
-  variant: NOTI_VARIANT.Info,
+  variant: "Info",
   message: "",
   show: false,
 });

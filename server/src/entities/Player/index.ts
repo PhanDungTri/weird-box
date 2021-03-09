@@ -59,6 +59,7 @@ class Player {
 
   public startTurn(): void {
     this.shouldPlayCard = true;
+    this.getClient().send(SOCKET_EVENT.Info, "It's your turn!");
   }
 
   public async receiveCards(...cards: Card[]): Promise<void> {

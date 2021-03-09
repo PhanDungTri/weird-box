@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Transition, TransitionGroup } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../../shared/src/@types";
-import NOTI_VARIANT from "../../../../constants/NOTI_VARIANT";
 import socket from "../../../../services/socket";
 import useNotificationState from "../../../../state/notificationState";
 import Card from "../../Card";
@@ -33,7 +32,7 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
     } else {
       setNotification({
         message: "Not your turn!",
-        variant: NOTI_VARIANT.Error,
+        variant: "Danger",
         show: true,
       });
     }
