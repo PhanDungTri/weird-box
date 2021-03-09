@@ -1,6 +1,5 @@
-import { gridStyle } from "./containerStyles";
+import { gridStyle, pageStyle } from "./containerStyles";
 import { centerizeStyle, disabledStyle } from "./modifyStyles";
-import pageStyle from "./pageStyle";
 import pixelBorderStyle, { BorderColors } from "./pixelBorderStyle";
 import { headingStyle } from "./textStyle";
 
