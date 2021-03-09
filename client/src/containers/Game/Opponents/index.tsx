@@ -11,19 +11,11 @@ const Opponents = (): JSX.Element => {
   const [opponents, setOpponents] = useState<Array<PlayerInfo | null>>([]);
 
   useEffect(() => {
-    socket.on(SOCKET_EVENT.PlayerEliminated, (id: string) => setOpponents((list) => list.filter((o) => o?.id !== id)));
-
     socket.once(SOCKET_EVENT.GetPlayerList, (players: PlayerInfo[]) => {
       const opponents: Array<PlayerInfo | null> = players.filter((p) => p.id !== socket.id);
-
-      for (let i = 0; i < 3; i++) {
-        if (!opponents[i]) opponents[i] = null;
-      }
-
+      for (let i = 0; i < 3; i++) if (!opponents[i]) opponents[i] = null;
       setOpponents(opponents);
     });
-
-    return () => void socket.off(SOCKET_EVENT.PlayerEliminated);
   }, []);
 
   return (
