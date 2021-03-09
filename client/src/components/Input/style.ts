@@ -1,8 +1,9 @@
-@import "../../styles/utilities/createPixelBorder.scss";
+import { css } from "@emotion/react";
+import COLOR from "../../constants/COLOR";
 
-.input {
+export const inputStyle = css`
   display: flex;
-  border-bottom: 2px solid #2b2e4a;
+  border-bottom: 2px solid ${COLOR.Coal};
   margin: 2px;
 
   & > input {
@@ -16,4 +17,4 @@
     padding: 2px;
     font-weight: bold;
   }
-}
+`;

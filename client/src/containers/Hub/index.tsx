@@ -25,7 +25,7 @@ const Hub = (): JSX.Element => {
   return (
     <div css={hubStyle}>
       <div>UNTITLED CARD GAME</div>
-      <Input default={name} onChange={changeName} />
+      <Input defaultValue={name} onChange={changeName} />
       <Button onClick={findGame}>Find game</Button>
       <Button>How to play</Button>
       <Button>About</Button>

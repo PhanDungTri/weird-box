@@ -1,15 +1,15 @@
-import "./Input.scss";
+import { Interpolation, Theme } from "@emotion/react";
+import { inputStyle } from "./style";
 
-type InputProps = {
-  default?: string;
-  placeholder?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
-
-const Input = (props: InputProps): JSX.Element => {
+const Input = (
+  props: React.ClassAttributes<HTMLInputElement> &
+    React.InputHTMLAttributes<HTMLInputElement> & {
+      css?: Interpolation<Theme>;
+    }
+): JSX.Element => {
   return (
-    <div className="input">
-      <input defaultValue={props.default} placeholder={props.placeholder} onChange={props.onChange} />
+    <div css={inputStyle}>
+      <input {...props} />
     </div>
   );
 };
