@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
-import Notification from "../../components/Notification";
 import socket from "../../services/socket";
 import { GameContextProvider } from "./context";
 import GameBoard from "./GameBoard";
@@ -20,7 +19,6 @@ const Game = (): JSX.Element => {
       <Player />
       <SpellAnimation id={socket.id} scale={4} />
       <GameOverDialog />
-      <Notification />
     </div>
   );
 };

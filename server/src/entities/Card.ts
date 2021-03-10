@@ -1,6 +1,6 @@
 import { SPELL_NAME } from "../../../shared/src/@enums";
 import { CardInfo } from "../../../shared/src/@types";
-import generateUniqueId from "../utilities/generateUniqueId";
+import generateUniqueId from "../../../shared/src/utils/generateUniqueId";
 
 class Card {
   public readonly id = generateUniqueId();

@@ -1,5 +1,5 @@
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
-import generateUniqueId from "../../utilities/generateUniqueId";
+import generateUniqueId from "../../../../shared/src/utils/generateUniqueId";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";

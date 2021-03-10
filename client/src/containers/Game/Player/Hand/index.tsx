@@ -15,7 +15,7 @@ type HandProps = {
 const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
   const { currentPlayer } = useGameContext();
   const ref = useRef<HTMLDivElement>(null);
-  const setNotification = useNotificationState().set;
+  const { notify } = useNotificationState();
   const [cards, setCards] = useState<CardInfo[]>([]);
   const [chosenCard, setChosenCard] = useState("");
 
@@ -29,13 +29,7 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
     else if (currentPlayer === socket.id) {
       socket.emit(SOCKET_EVENT.PlayCard, id);
       socket.once(SOCKET_EVENT.CardPlayed, () => setCards(cards.filter((c) => c.id !== id)));
-    } else {
-      setNotification({
-        message: "Not your turn!",
-        variant: "Danger",
-        show: true,
-      });
-    }
+    } else notify("Danger")("Not your turn!");
   };
 
   useEffect(() => {

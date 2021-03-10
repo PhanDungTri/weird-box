@@ -1,11 +1,13 @@
-import { gridStyle } from "../../styles";
-import Opponent from "../Game/Opponents/Opponent";
-import { opponentsStyle } from "../Game/Opponents/styles";
+import Button from "../../components/Button";
+import useNotificationState from "../../state/notificationState";
+import { pageStyle } from "../../styles";
 
 const Test = (): JSX.Element => {
+  const { notify } = useNotificationState();
+
   return (
-    <div css={[gridStyle, opponentsStyle]}>
-      <Opponent id="" name="abcd" isEliminated={false} />
+    <div css={pageStyle}>
+      <Button onClick={() => notify("Info", 3000)("Test")}>Notify!</Button>
     </div>
   );
 };
