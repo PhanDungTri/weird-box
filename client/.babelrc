@@ -1,4 +1,4 @@
 {
   "presets": [["@babel/preset-react", { "runtime": "automatic", "importSource": "@emotion/react" }]],
-  "plugins": ["transform-inline-environment-variables", "@emotion/babel-plugin"]
+  "plugins": ["@emotion/babel-plugin", "transform-inline-environment-variables"]
 }

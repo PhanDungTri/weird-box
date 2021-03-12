@@ -2,15 +2,13 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Transition, TransitionGroup } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
+import COLOR from "../../constants/COLOR";
 import socket from "../../services/socket";
 import useNotificationState from "../../state/notificationState";
-import Notification from "./Notification";
-import { notificationTransition } from "./styles";
+import { notificationStyle } from "./styles";
 
 const Notifications = (): JSX.Element => {
   const { notify, notifications } = useNotificationState();
-
-  useEffect(() => console.table(notifications), [notifications]);
 
   useEffect(() => {
     socket.on(SOCKET_EVENT.Error, notify("Danger"));
@@ -24,9 +22,9 @@ const Notifications = (): JSX.Element => {
 
   return createPortal(
     <TransitionGroup>
-      {notifications.map((n, i) => (
-        <Transition timeout={300} key={n.id}>
-          {(state) => <Notification {...n} css={notificationTransition(state, notifications.length - 1 - i)} />}
+      {notifications.map(({ message, variant, id }, i) => (
+        <Transition timeout={300} key={id}>
+          {(state) => <div css={notificationStyle(COLOR[variant], state)}>{message}</div>}
         </Transition>
       ))}
     </TransitionGroup>,
