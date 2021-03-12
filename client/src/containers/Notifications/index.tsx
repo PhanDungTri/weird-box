@@ -1,26 +1,12 @@
-import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
 import { Transition, TransitionGroup } from "react-transition-group";
-import { SOCKET_EVENT } from "../../../../shared/src/@enums";
-import socket from "../../services/socket";
-import useNotificationState from "../../state/notificationState";
+import { RootState } from "../../store";
 import Notification from "./Notification";
 import { notificationTransition } from "./styles";
 
 const Notifications = (): JSX.Element => {
-  const { notify, notifications } = useNotificationState();
-
-  useEffect(() => console.table(notifications), [notifications]);
-
-  useEffect(() => {
-    socket.on(SOCKET_EVENT.Error, notify("Danger"));
-    socket.on(SOCKET_EVENT.Info, notify("Info"));
-
-    return () => {
-      socket.off(SOCKET_EVENT.Error);
-      socket.off(SOCKET_EVENT.Info);
-    };
-  }, []);
+  const notifications = useSelector((state: RootState) => state.notification);
 
   return createPortal(
     <TransitionGroup>

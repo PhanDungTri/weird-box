@@ -1,13 +1,14 @@
+import { useDispatch } from "react-redux";
 import Button from "../../components/Button";
-import useNotificationState from "../../state/notificationState";
+import { requestNotifyAction } from "../../store/actions";
 import { pageStyle } from "../../styles";
 
 const Test = (): JSX.Element => {
-  const { notify } = useNotificationState();
+  const dispatch = useDispatch();
 
   return (
     <div css={pageStyle}>
-      <Button onClick={() => notify("Info", 3000)("Test")}>Notify!</Button>
+      <Button onClick={() => dispatch(requestNotifyAction({ message: "Test", variant: "Info" }))}>Notify!</Button>
     </div>
   );
 };

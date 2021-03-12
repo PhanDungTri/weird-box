@@ -1,7 +1,4 @@
-import { gridStyle, pageStyle } from "./containerStyles";
-import { centerizeStyle, disabledStyle } from "./modifyStyles";
-import pixelBorderStyle, { BorderColors } from "./pixelBorderStyle";
-import { headingStyle } from "./textStyle";
-
-export { gridStyle, pageStyle, centerizeStyle, disabledStyle, pixelBorderStyle, headingStyle };
-export type { BorderColors };
+export * from "./containerStyles";
+export * from "./modifyStyles";
+export * from "./pixelBorderStyle";
+export * from "./textStyle";

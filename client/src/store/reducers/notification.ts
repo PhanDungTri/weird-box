@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
-import { NotificationProps } from "../../../@types";
-import { NotificationActionType, NOTIFICATION_ACTION } from "./actions";
+import { NotificationProps } from "../../@types";
+import { NOTIFICATION_ACTION, NotificationActionType } from "../actions";
 
 const addNotification = (state: NotificationProps[], notification: NotificationProps): NotificationProps[] => [
   ...state,

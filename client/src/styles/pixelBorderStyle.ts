@@ -2,7 +2,7 @@ import { css, SerializedStyles } from "@emotion/react";
 
 type BorderColors = [string] | [string, string] | [string, string, string, string];
 
-const pixelBorderStyle = (width: number, color: BorderColors, innerColor?: BorderColors): SerializedStyles => {
+export const pixelBorderStyle = (width: number, color: BorderColors, innerColor?: BorderColors): SerializedStyles => {
   const shape = [`0px ${width}px 0px`, `${-width}px 0px 0px`, `0px ${-width}px 0px`, `${width}px 0px 0px`];
   const border = shape.map((edge, i) => `${edge} ${color[i] || color[i - 2] || color[0]}`).join(", ");
   const innerBorder = innerColor
@@ -15,5 +15,4 @@ const pixelBorderStyle = (width: number, color: BorderColors, innerColor?: Borde
   `;
 };
 
-export default pixelBorderStyle;
 export type { BorderColors };

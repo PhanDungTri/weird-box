@@ -1,10 +1,13 @@
-import generateUniqueId from "../../../../../shared/src/utils/generateUniqueId";
-import { NotificationProps, StyleVariant } from "../../../@types";
+import { NotificationPayload, NotificationProps, StyleVariant } from "../../@types";
 
 export enum NOTIFICATION_ACTION {
   Notify = "notify",
   HideNotification = "hide notification",
   HideOldestNotification = "hide oldest notification",
+}
+
+export enum NOTIFICATION_REQUEST_ACTION {
+  RequestNotify = "request notify",
 }
 
 type NotifyAction = {
@@ -22,15 +25,24 @@ type HideOldestNotificationAction = {
   payload: undefined;
 };
 
+export type RequestNotifyAction = {
+  type: NOTIFICATION_REQUEST_ACTION;
+  payload: {
+    message: string;
+    variant: StyleVariant;
+  };
+};
+
 export type NotificationActionType = NotifyAction | HideNotificationAction | HideOldestNotificationAction;
 
-export const notifyAction = (message: string, variant: StyleVariant = "Info"): NotifyAction => ({
+export const requestNotifyAction = ({ message, variant }: NotificationPayload): RequestNotifyAction => ({
+  type: NOTIFICATION_REQUEST_ACTION.RequestNotify,
+  payload: { message, variant },
+});
+
+export const notifyAction = (notification: NotificationProps): NotifyAction => ({
   type: NOTIFICATION_ACTION.Notify,
-  payload: {
-    id: generateUniqueId(),
-    message,
-    variant,
-  },
+  payload: notification,
 });
 
 export const hideNotificationAction = (id: string): HideNotificationAction => ({
