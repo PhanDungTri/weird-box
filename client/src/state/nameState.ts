@@ -1,7 +1,5 @@
-import { createState, StateMethods, useState } from "@hookstate/core";
+import { createSharedStateHook } from "./createSharedStateHook";
 
-const nameState = createState("player");
-const useNameState = (): StateMethods<string> => useState(nameState);
+const useNameState = createSharedStateHook("player");
 
 export default useNameState;
-export { nameState };

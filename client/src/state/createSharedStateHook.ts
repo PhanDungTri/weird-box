@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 type StateSetter<T> = (val: React.SetStateAction<T>) => void;
-type SharedStateHook<T> = [T, StateSetter<T>];
+export type SharedStateHook<T> = [T, StateSetter<T>];
 
 export const createSharedStateHook = <T>(init: T): (() => SharedStateHook<T>) => {
   const stateSetters: React.Dispatch<React.SetStateAction<T>>[] = [];

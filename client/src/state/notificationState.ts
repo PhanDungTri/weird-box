@@ -1,7 +1,6 @@
 import generateUniqueId from "../../../shared/src/utils/generateUniqueId";
 import { NotificationProps, StyleVariant } from "../@types";
-import { createSharedStateHook } from "../utils/state";
-
+import { createSharedStateHook } from "./createSharedStateHook";
 type NotificationsState = {
   notify: (variant: StyleVariant, timeout?: number) => (message: string) => void;
   notifications: NotificationProps[];

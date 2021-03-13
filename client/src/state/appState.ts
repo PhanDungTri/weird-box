@@ -1,17 +1,6 @@
-import { createState, StateMethods, useState } from "@hookstate/core";
-import { SOCKET_EVENT } from "../../../shared/src/@enums";
-import socket from "../services/socket";
+import APP_STATE from "../constants/APP_STATE";
+import { createSharedStateHook } from "./createSharedStateHook";
 
-enum APP_STATE {
-  Hub,
-  InGame,
-  Test,
-}
-
-const appState = createState<APP_STATE>(APP_STATE.Test);
-const useAppState = (): StateMethods<APP_STATE> => useState(appState);
-
-socket.on(SOCKET_EVENT.GameFound, () => appState.set(APP_STATE.InGame));
+const useAppState = createSharedStateHook(APP_STATE.Test);
 
 export default useAppState;
-export { APP_STATE, appState };

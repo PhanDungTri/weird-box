@@ -1,4 +1,8 @@
-import useAppState, { APP_STATE } from "../state/appState";
+import { useEffect } from "react";
+import { SOCKET_EVENT } from "../../../shared/src/@enums";
+import APP_STATE from "../constants/APP_STATE";
+import socket from "../services/socket";
+import useAppState from "../state/appState";
 import Game from "./Game";
 import Hub from "./Hub";
 import Notifications from "./Notifications";
@@ -11,7 +15,13 @@ const pages = {
 };
 
 const App = (): JSX.Element => {
-  const appState = useAppState().value;
+  const [appState, setAppState] = useAppState();
+
+  useEffect(() => {
+    socket.on(SOCKET_EVENT.GameFound, () => setAppState(APP_STATE.InGame));
+
+    return () => void socket.off(SOCKET_EVENT.GameFound);
+  });
 
   return (
     <>
