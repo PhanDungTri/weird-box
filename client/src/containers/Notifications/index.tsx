@@ -22,9 +22,9 @@ const Notifications = (): JSX.Element => {
 
   return createPortal(
     <TransitionGroup>
-      {notifications.map(({ message, variant, id }, i) => (
+      {notifications.map(({ message, variant, id }, i, arr) => (
         <Transition timeout={300} key={id}>
-          {(state) => <div css={notificationStyle(COLOR[variant], state)}>{message}</div>}
+          {(state) => <div css={notificationStyle(COLOR[variant], state, arr.length - 1 - i)}>{message}</div>}
         </Transition>
       ))}
     </TransitionGroup>,
