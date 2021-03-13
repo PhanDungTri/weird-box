@@ -1,8 +1,6 @@
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import COLOR from "../../constants/COLOR";
-import { pageStyle } from "../../styles";
-import { headingStyle } from "../../styles/textStyle";
 import { shadeColor } from "../../utils/color";
 import Button from "../Button";
 import { dialogContentStyle, dialogFooterStyle, dialogHeaderStyle, dialogStyle, showDialogStyle } from "./styles";
@@ -27,9 +25,9 @@ const Dialog = ({
   confirmMessage = "OK",
 }: DialogProps): JSX.Element => {
   return createPortal(
-    <div css={[pageStyle, dialogStyle, show && showDialogStyle]}>
+    <div css={[dialogStyle, show && showDialogStyle]}>
       <div css={dialogContentStyle(shadeColor(color, 70))}>
-        {title && <div css={[dialogHeaderStyle(color), headingStyle]}>{title}</div>}
+        {title && <div css={dialogHeaderStyle(color)}>{title}</div>}
         {children}
         <div css={dialogFooterStyle}>
           <Button variation="Safe" onClick={onConfirm}>

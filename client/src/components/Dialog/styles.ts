@@ -1,5 +1,6 @@
 import { css, SerializedStyles } from "@emotion/react";
 import COLOR from "../../constants/COLOR";
+import { headingStyle, pageStyle } from "../../styles";
 import { hexToRgb, isDarkColor } from "../../utils/color";
 
 export const showDialogStyle = css`
@@ -10,6 +11,7 @@ export const showDialogStyle = css`
 `;
 
 export const dialogStyle = css`
+  ${pageStyle};
   background-color: rgba(${hexToRgb(COLOR.Coal).join(", ")}, 0.4);
   overflow: auto;
   opacity: 0;
@@ -29,6 +31,7 @@ export const dialogContentStyle = (borderColor: string): SerializedStyles => css
 `;
 
 export const dialogHeaderStyle = (color: string): SerializedStyles => css`
+  ${headingStyle};
   background-color: ${color};
   color: ${isDarkColor(color) ? COLOR.White : COLOR.Black};
   text-transform: uppercase;

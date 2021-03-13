@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
 import { PlayerInfo } from "../../../@types";
 import socket from "../../../services/socket";
-import { gridStyle } from "../../../styles";
 import EmptySlot from "./EmptySlot";
 import Opponent from "./Opponent";
 import { opponentsStyle } from "./styles";
@@ -19,7 +18,7 @@ const Opponents = (): JSX.Element => {
   }, []);
 
   return (
-    <div css={[gridStyle, opponentsStyle]}>
+    <div css={opponentsStyle}>
       {opponents.map((o, i) => (o ? <Opponent {...o} key={o.id} /> : <EmptySlot key={i} />))}
     </div>
   );
