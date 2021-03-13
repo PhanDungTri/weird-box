@@ -15,7 +15,7 @@ export const slotStyle = css`
 `;
 
 export const opponentStyle = css`
-  ${slotStyle}
+  ${slotStyle};
   grid-template-rows: auto 24px;
 `;
 
