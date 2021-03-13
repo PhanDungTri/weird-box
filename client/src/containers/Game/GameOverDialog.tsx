@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import { PlayerInfo } from "../../@types";
 import Dialog from "../../components/Dialog";
+import APP_STATE from "../../constants/APP_STATE";
 import socket from "../../services/socket";
-import useAppState, { APP_STATE } from "../../state/appState";
+import useAppState from "../../state/appState";
 
 const GameOverDialog = (): JSX.Element => {
-  const appState = useAppState();
+  const [, setAppState] = useAppState();
   const [winner, setWinner] = useState<PlayerInfo>();
 
   const onGameOver = () => {
     socket.emit(SOCKET_EVENT.LeaveGame);
-    appState.set(APP_STATE.Hub);
+    setAppState(APP_STATE.Hub);
   };
 
   useEffect(() => {

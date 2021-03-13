@@ -6,8 +6,7 @@ import { hexToRgb, isDarkColor } from "../../utils/color";
 export const showDialogStyle = css`
   opacity: 1;
   z-index: 1;
-  backdrop-filter: blur(2px);
-  transition: opacity 0.2s, backdrop-filter 0.2s;
+  transition: opacity 0.2s;
 `;
 
 export const dialogStyle = css`

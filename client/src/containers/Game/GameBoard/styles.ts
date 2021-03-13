@@ -1,6 +1,6 @@
 import { css, keyframes } from "@emotion/react";
 
-export const gameBoard = css`
+export const gameBoardStyle = css`
   position: relative;
   flex-grow: 1;
 `;

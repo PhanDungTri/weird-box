@@ -7,7 +7,7 @@ import Card from "../Card";
 import { useGameContext } from "../context";
 import BoxOfCard from "./BoxOfCard";
 import ChargePointBar from "./ChargePointBar";
-import { cardPlayedAnimation, gameBoard } from "./styles";
+import { cardPlayedAnimation, gameBoardStyle } from "./styles";
 
 const GameBoard = (): JSX.Element => {
   const [playedCard, setPlayedCard] = useState<CardInfo>();
@@ -24,10 +24,10 @@ const GameBoard = (): JSX.Element => {
   }, []);
 
   return (
-    <div css={gameBoard}>
+    <div css={gameBoardStyle}>
       <BoxOfCard />
       <ChargePointBar />
-      {!!playedCard && (
+      {playedCard && (
         <div onAnimationEnd={() => setPlayedCard(undefined)} css={[cardPlayedAnimation, centerizeStyle]}>
           <Card card={playedCard} />
         </div>

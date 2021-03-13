@@ -9,7 +9,7 @@ const [GameContextProvider, useGameContext] = constate(() => {
   useEffect(() => {
     socket.on(SOCKET_EVENT.StartTurn, (id: string) => setCurrentPlayer(id));
 
-    return (): void => {
+    return () => {
       socket.off(SOCKET_EVENT.StartTurn);
     };
   }, []);

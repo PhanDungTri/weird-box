@@ -8,7 +8,7 @@ import { hubStyle } from "./styles";
 
 const Hub = (): JSX.Element => {
   const [name, setName] = useNameState();
-  const input = useRef("");
+  const input = useRef(name);
 
   const findGame = () =>
     void socket.emit(SOCKET_EVENT.Rename, input.current, (name: string) => {
