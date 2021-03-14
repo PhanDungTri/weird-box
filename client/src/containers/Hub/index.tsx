@@ -3,11 +3,11 @@ import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import socket from "../../services/socket";
-import useNameState from "../../state/nameState";
+import usePlayerName from "../../hooks/usePlayerName";
 import { hubStyle } from "./styles";
 
 const Hub = (): JSX.Element => {
-  const [name, setName] = useNameState();
+  const [name, setName] = usePlayerName();
   const input = useRef(name);
 
   const findGame = () =>

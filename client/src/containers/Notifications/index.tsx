@@ -4,11 +4,11 @@ import { Transition, TransitionGroup } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import COLOR from "../../constants/COLOR";
 import socket from "../../services/socket";
-import useNotificationState from "../../state/notificationState";
+import useNotification from "../../hooks/useNotification";
 import { notificationStyle } from "./styles";
 
 const Notifications = (): JSX.Element => {
-  const { notify, notifications } = useNotificationState();
+  const { notify, notifications } = useNotification();
 
   useEffect(() => {
     socket.on(SOCKET_EVENT.Error, notify("Danger"));

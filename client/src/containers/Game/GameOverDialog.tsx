@@ -4,10 +4,10 @@ import { PlayerInfo } from "../../@types";
 import Dialog from "../../components/Dialog";
 import APP_STATE from "../../constants/APP_STATE";
 import socket from "../../services/socket";
-import useAppState from "../../state/appState";
+import useAppStateTransition from "../../hooks/useAppStateTransition";
 
 const GameOverDialog = (): JSX.Element => {
-  const [, setAppState] = useAppState();
+  const [, setAppState] = useAppStateTransition();
   const [winner, setWinner] = useState<PlayerInfo>();
 
   const onGameOver = () => {

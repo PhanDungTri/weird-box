@@ -1,11 +1,7 @@
-import { useEffect } from "react";
-import { SOCKET_EVENT } from "../../../shared/src/@enums";
 import APP_STATE from "../constants/APP_STATE";
-import socket from "../services/socket";
-import useAppState from "../state/appState";
+import useAppStateTransition from "../hooks/useAppStateTransition";
 import Game from "./Game";
 import Hub from "./Hub";
-import Notifications from "./Notifications";
 import Test from "./Test";
 
 const pages = {
@@ -15,20 +11,9 @@ const pages = {
 };
 
 const App = (): JSX.Element => {
-  const [appState, setAppState] = useAppState();
+  const [appState] = useAppStateTransition();
 
-  useEffect(() => {
-    socket.on(SOCKET_EVENT.GameFound, () => setAppState(APP_STATE.InGame));
-
-    return () => void socket.off(SOCKET_EVENT.GameFound);
-  });
-
-  return (
-    <>
-      {pages[appState]}
-      <Notifications />
-    </>
-  );
+  return pages[appState];
 };
 
 export default App;

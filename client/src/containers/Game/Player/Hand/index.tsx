@@ -3,7 +3,7 @@ import { Transition, TransitionGroup } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../../shared/src/@types";
 import socket from "../../../../services/socket";
-import useNotificationState from "../../../../state/notificationState";
+import useNotification from "../../../../hooks/useNotification";
 import Card from "../../Card";
 import { useGameContext } from "../../context";
 import { cardTransition, handStyle } from "./styles";
@@ -15,7 +15,7 @@ type HandProps = {
 const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
   const { currentPlayer } = useGameContext();
   const ref = useRef<HTMLDivElement>(null);
-  const { notify } = useNotificationState();
+  const { notify } = useNotification();
   const [cards, setCards] = useState<CardInfo[]>([]);
   const [chosenCard, setChosenCard] = useState("");
 

@@ -1,9 +1,9 @@
 import Button from "../../components/Button";
-import useNotificationState from "../../state/notificationState";
+import useNotification from "../../hooks/useNotification";
 import { pageStyle } from "../../styles";
 
 const Test = (): JSX.Element => {
-  const { notify } = useNotificationState();
+  const { notify } = useNotification();
 
   return (
     <div css={pageStyle}>
