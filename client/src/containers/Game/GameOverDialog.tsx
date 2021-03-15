@@ -23,8 +23,8 @@ const GameOverDialog = (): JSX.Element => {
     <Dialog
       show={!!winner}
       title={winner?.id === socket.id ? "victory" : "defeated"}
-      onConfirm={onGameOver}
       confirmMessage="Back to Hub"
+      onConfirm={onGameOver}
       color={winner?.id === socket.id ? "#ece236" : "#122c4f"}
     >
       {winner?.id === socket.id ? <p>You are the Winner!</p> : <p>{winner?.name} is the winner!</p>}

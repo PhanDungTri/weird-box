@@ -5,6 +5,7 @@ import Input from "../../components/Input";
 import socket from "../../services/socket";
 import usePlayerName from "../../hooks/usePlayerName";
 import { hubStyle } from "./styles";
+import GameConfirmDialog from "./GameConfirmDialog";
 
 const Hub = (): JSX.Element => {
   const [name, setName] = usePlayerName();
@@ -23,6 +24,7 @@ const Hub = (): JSX.Element => {
       <Button onClick={findGame}>Find game</Button>
       <Button>How to play</Button>
       <Button>About</Button>
+      <GameConfirmDialog />
     </div>
   );
 };

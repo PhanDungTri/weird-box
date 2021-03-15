@@ -11,19 +11,24 @@ type DialogProps = {
   children?: ReactNode;
   show?: boolean;
   onConfirm?: () => void;
-  onCancel?: () => void;
   confirmMessage?: string;
 };
 
-const Dialog = ({
+type NoCancelButtonDialogProps = DialogProps & { cancelMessage?: string };
+type WithCancelButtonDialogProps = DialogProps & { cancelMessage: string; onCancel?: () => void };
+
+function Dialog(props: NoCancelButtonDialogProps): JSX.Element;
+function Dialog(props: WithCancelButtonDialogProps): JSX.Element;
+function Dialog({
   show = false,
   color = COLOR.Coal,
   title,
   children,
-  onConfirm,
-  onCancel,
   confirmMessage = "OK",
-}: DialogProps): JSX.Element => {
+  onConfirm,
+  cancelMessage,
+  onCancel,
+}: DialogProps & { cancelMessage?: string; onCancel?: () => void }): JSX.Element {
   return createPortal(
     <div css={[dialogStyle, show && showDialogStyle]}>
       <div css={dialogContentStyle(shadeColor(color, 70))}>
@@ -33,9 +38,9 @@ const Dialog = ({
           <Button variation="Safe" onClick={onConfirm}>
             {confirmMessage}
           </Button>
-          {onCancel && (
+          {cancelMessage && (
             <Button variation="Danger" onClick={onCancel}>
-              Cancel
+              {cancelMessage}
             </Button>
           )}
         </div>
@@ -43,6 +48,6 @@ const Dialog = ({
     </div>,
     document.getElementById("dialog") as HTMLDivElement
   );
-};
+}
 
 export default Dialog;

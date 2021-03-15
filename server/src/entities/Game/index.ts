@@ -40,7 +40,7 @@ class Game {
     this.players = [...this.alivePlayers];
     this.currentPlayerIndex = this.alivePlayers.length - 1;
 
-    this.sendToAll(SOCKET_EVENT.GameFound);
+    this.sendToAll(SOCKET_EVENT.NewGame);
   }
 
   public getMaxHP(): number {

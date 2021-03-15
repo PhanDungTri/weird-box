@@ -1,12 +1,12 @@
 import { Server as SocketServer, Socket } from "socket.io";
 import Client from "./Client";
 import Game from "./Game";
-import GameFinder from "./GameFinder";
+import GameMatcher from "./GameMatcher";
 
 class Server {
   private onlineClients: Client[] = [];
   private games: Game[] = [];
-  private gameFinder = new GameFinder(this);
+  private gameMatcher = new GameMatcher(this);
   private socketServer: SocketServer = new SocketServer(this.port, {
     cors: {
       origin: "*",
@@ -38,12 +38,12 @@ class Server {
   }
 
   public enqueueClient(client: Client): void {
-    this.gameFinder.addClient(client);
+    this.gameMatcher.addClient(client);
   }
 
   public disconnectClient(client: Client): void {
     this.onlineClients = this.onlineClients.filter((c) => c !== client);
-    this.gameFinder.removeClient(client);
+    this.gameMatcher.removeClient(client);
   }
 }
 

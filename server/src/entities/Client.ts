@@ -41,7 +41,7 @@ class Client {
     this.socket.removeAllListeners(event);
   }
 
-  public send(event: SOCKET_EVENT, data: unknown): void {
+  public send(event: SOCKET_EVENT, data?: unknown): void {
     this.socket.emit(event, data);
   }
 }

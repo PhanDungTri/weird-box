@@ -1,14 +1,14 @@
-import Client from "./Client";
-import Game from "./Game";
-import Server from "./Server";
+import Client from "../Client";
+import Server from "../Server";
+import Lobby from "./Lobby";
 
-class GameFinder {
+class GameMatcher {
   private queue: Client[] = [];
-  private timeout: NodeJS.Timeout | undefined;
+  private waitingTimeout: NodeJS.Timeout | undefined;
 
   constructor(private server: Server) {}
 
-  public createNewGame(): Game {
+  private createLobby() {
     const clients: Client[] = [];
     let client = this.queue.shift();
 
@@ -17,18 +17,18 @@ class GameFinder {
       client = this.queue.shift();
     }
 
-    return new Game(this.server, undefined, ...clients);
+    return new Lobby(clients, this.server, this);
   }
 
   private match(): void {
-    if (this.timeout) clearTimeout(this.timeout);
+    if (this.waitingTimeout) clearTimeout(this.waitingTimeout);
     if (this.queue.length === 1) return;
     if (this.queue.length >= 4) {
-      this.server.addGame(this.createNewGame());
+      this.createLobby();
       return;
     }
 
-    this.timeout = setTimeout(() => this.server.addGame(this.createNewGame()), 5000);
+    this.waitingTimeout = setTimeout(this.createLobby.bind(this), 5000);
   }
 
   public removeClient(client: Client): void {
@@ -42,4 +42,4 @@ class GameFinder {
   }
 }
 
-export default GameFinder;
+export default GameMatcher;
