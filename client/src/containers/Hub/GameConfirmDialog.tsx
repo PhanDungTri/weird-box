@@ -1,22 +1,34 @@
 import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Dialog from "../../components/Dialog";
-import APP_STATE from "../../constants/APP_STATE";
 import COLOR from "../../constants/COLOR";
-import useAppStateTransition from "../../hooks/useAppStateTransition";
 import socket from "../../services/socket";
 
 const GameConfirmDialog = (): JSX.Element => {
-  const [, setAppState] = useAppStateTransition();
   const [shouldBeShown, show] = useState(false);
+  const [isAccepted, accept] = useState(false);
 
-  const onRejectGame = () => {
+  const onReject = () => {
     socket.emit(SOCKET_EVENT.RejectGame);
     show(false);
   };
 
+  const onAccept = () => {
+    socket.emit(SOCKET_EVENT.AcceptGame);
+    accept(true);
+  };
+
   useEffect(() => {
-    socket.once(SOCKET_EVENT.GameFound, () => show(true));
+    socket.on(SOCKET_EVENT.GameFound, () => show(true));
+    socket.on(SOCKET_EVENT.GameCanceled, () => {
+      show(false);
+      accept(false);
+    });
+
+    return () => {
+      socket.off(SOCKET_EVENT.GameFound);
+      socket.off(SOCKET_EVENT.GameCanceled);
+    };
   }, []);
 
   return (
@@ -24,12 +36,12 @@ const GameConfirmDialog = (): JSX.Element => {
       show={!!shouldBeShown}
       title="Game found"
       confirmMessage="Accept"
-      onConfirm={() => setAppState(APP_STATE.InGame)}
+      onConfirm={onAccept}
       cancelMessage="Reject"
-      onCancel={onRejectGame}
+      onCancel={onReject}
       color={COLOR.Info}
     >
-      <p>We found a game for you! Please confirm to join!</p>
+      <p>{isAccepted ? "Waiting other players..." : "We found a game for you! Please confirm to join!"}</p>
     </Dialog>
   );
 };

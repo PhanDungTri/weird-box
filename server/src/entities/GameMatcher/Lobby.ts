@@ -13,8 +13,8 @@ class Lobby {
       c.once(SOCKET_EVENT.AcceptGame, () => this.accept(c));
       c.once(SOCKET_EVENT.RejectGame, () => c.off(SOCKET_EVENT.AcceptGame));
     });
-    this.confirmTimeout = setTimeout(this.cancel.bind(this), 30000);
     clients.forEach((c) => c.send(SOCKET_EVENT.GameFound));
+    this.confirmTimeout = setTimeout(this.cancel.bind(this), 30000);
   }
 
   private accept(client: Client) {
