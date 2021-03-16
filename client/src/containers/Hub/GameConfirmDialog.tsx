@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import Dialog from "../../components/Dialog";
+import Loading from "../../components/Loading";
 import COLOR from "../../constants/COLOR";
 import socket from "../../services/socket";
 
@@ -45,8 +46,13 @@ const GameConfirmDialog = ({ onClose }: GameConfirmDialogProps): JSX.Element => 
       cancelMessage="Reject"
       onCancel={onReject}
       color={COLOR.Info}
+      noFooter={isAccepted}
     >
-      <p>{isAccepted ? "Waiting other players..." : "We found a game for you! Please confirm to join!"}</p>
+      {isAccepted ? (
+        <Loading text="Waiting other players..." />
+      ) : (
+        <p>We found a game for you! Please confirm to join!</p>
+      )}
     </Dialog>
   );
 };

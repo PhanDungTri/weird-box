@@ -12,6 +12,7 @@ type DialogProps = {
   show?: boolean;
   onConfirm?: () => void;
   confirmMessage?: string;
+  noFooter?: boolean;
 };
 
 type NoCancelButtonDialogProps = DialogProps & { cancelMessage?: string };
@@ -20,10 +21,11 @@ type WithCancelButtonDialogProps = DialogProps & { cancelMessage: string; onCanc
 function Dialog(props: NoCancelButtonDialogProps): JSX.Element;
 function Dialog(props: WithCancelButtonDialogProps): JSX.Element;
 function Dialog({
-  show = false,
+  show,
   color = COLOR.Coal,
   title,
   children,
+  noFooter,
   confirmMessage = "OK",
   onConfirm,
   cancelMessage,
@@ -34,16 +36,18 @@ function Dialog({
       <div css={dialogContentStyle(shadeColor(color, 70))}>
         {title && <div css={dialogHeaderStyle(color)}>{title}</div>}
         {children}
-        <div css={dialogFooterStyle}>
-          <Button variation="Safe" onClick={onConfirm}>
-            {confirmMessage}
-          </Button>
-          {cancelMessage && (
-            <Button variation="Danger" onClick={onCancel}>
-              {cancelMessage}
+        {!noFooter && (
+          <div css={dialogFooterStyle}>
+            <Button variation="Safe" onClick={onConfirm}>
+              {confirmMessage}
             </Button>
-          )}
-        </div>
+            {cancelMessage && (
+              <Button variation="Danger" onClick={onCancel}>
+                {cancelMessage}
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>,
     document.getElementById("dialog") as HTMLDivElement
