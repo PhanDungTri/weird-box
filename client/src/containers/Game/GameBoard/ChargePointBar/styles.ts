@@ -1,17 +1,10 @@
-import { css, keyframes } from "@emotion/react";
+import { css, keyframes, SerializedStyles } from "@emotion/react";
 import styled from "@emotion/styled";
-import { TransitionStatus } from "react-transition-group/Transition";
 import COLOR from "../../../../constants/COLOR";
 import SIZE from "../../../../constants/SIZE";
 import { centerizeStyle, gridStyle, pixelBorderStyle } from "../../../../styles";
 import { shadeColor } from "../../../../utils/color";
 import { ChargePointBarState } from "./types";
-
-type ChargePointNodeProps = {
-  transitionState: TransitionStatus;
-  barState: ChargePointBarState;
-  delay: number;
-};
 
 const nodeBorderColor = "#2e1710";
 
@@ -37,46 +30,15 @@ const bouncingKeyframes = keyframes`
   }
 `;
 
-const emptyNode = css`
+export const emptyNodeStyle = css`
   background-color: ${nodeBorderColor};
   box-shadow: inset 0px 8px 0px 0px #a79995;
 `;
 
-const chargeNode = (barState: ChargePointBarState) => css`
+export const chargeNodeStyle = (barState: ChargePointBarState): SerializedStyles => css`
+  transition: background-color 0.2s, box-shadow 0.2s;
   background-color: ${COLOR[barState]};
   box-shadow: inset 0px -8px 0px 0px ${shadeColor(COLOR[barState], 30)};
-`;
-
-const chargePointNodeTransition = ({ transitionState, barState, delay }: ChargePointNodeProps) => {
-  switch (transitionState) {
-    case "entering":
-      return css`
-        ${chargeNode(barState)};
-        transition-delay: ${delay}s;
-      `;
-    case "entered":
-      return css`
-        ${chargeNode(barState)};
-        transition-delay: 0s;
-      `;
-    case "exiting":
-      return css`
-        ${emptyNode};
-        transition-delay: ${delay}s;
-      `;
-    default:
-      return css`
-        ${emptyNode};
-        transition-delay: 0s;
-      `;
-  }
-};
-
-export const ChargePointNode = styled.div<ChargePointNodeProps>`
-  transition: background-color 0.2s, box-shadow 0.2s;
-  background-color: ${nodeBorderColor};
-  box-shadow: inset 0px 8px 0px 0px #a79995;
-  ${chargePointNodeTransition}
 `;
 
 export const chargePointBarDealAnimation = css`

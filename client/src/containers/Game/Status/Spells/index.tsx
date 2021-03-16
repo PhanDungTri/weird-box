@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Transition, TransitionGroup } from "react-transition-group";
+import { animated, useTransition } from "react-spring";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import { PassiveAction, SpellInfo } from "../../../../../../shared/src/@types";
 import socket from "../../../../services/socket";
+import { fadeOut } from "../../../../styles/animations";
 import SpellIndicator from "./SpellIndicator";
-import { spellsStyle, spellTransition } from "./styles";
+import { spellsStyle } from "./styles";
 
 type SpellsProps = {
   id: string;
@@ -19,6 +20,11 @@ const cleanUpSpells = (spells: Record<string, SpellInfo>): typeof spells => {
 
 const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
   const [spells, setSpells] = useState<Record<string, SpellInfo>>({});
+  const transitions = useTransition(Object.values(spells), (s) => s.id, {
+    from: { opacity: 0, maxWidth: "0px" },
+    enter: [{ maxWidth: "100px" }, { opacity: 1 }],
+    leave: fadeOut,
+  });
 
   useEffect(() => {
     let cleanUpTimeout: number;
@@ -46,17 +52,13 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
   }, []);
 
   return (
-    <TransitionGroup css={spellsStyle(align)}>
-      {Object.values(spells).map((s) => (
-        <Transition timeout={400} key={s.id}>
-          {(state) => (
-            <div css={spellTransition(state)}>
-              <SpellIndicator {...s} />
-            </div>
-          )}
-        </Transition>
+    <div css={spellsStyle(align)}>
+      {transitions.map(({ item, props, key }) => (
+        <animated.div key={key} style={props}>
+          <SpellIndicator {...item} />
+        </animated.div>
       ))}
-    </TransitionGroup>
+    </div>
   );
 };
 

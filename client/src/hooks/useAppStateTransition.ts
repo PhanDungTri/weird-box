@@ -1,6 +1,6 @@
 import APP_STATE from "../constants/APP_STATE";
 import { createSharedStateHook } from "./createSharedStateHook";
 
-const useAppStateTransition = createSharedStateHook(APP_STATE.Hub);
+const useAppStateTransition = createSharedStateHook(APP_STATE.Test);
 
 export default useAppStateTransition;

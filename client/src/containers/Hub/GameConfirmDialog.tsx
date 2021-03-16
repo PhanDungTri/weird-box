@@ -4,12 +4,17 @@ import Dialog from "../../components/Dialog";
 import COLOR from "../../constants/COLOR";
 import socket from "../../services/socket";
 
-const GameConfirmDialog = (): JSX.Element => {
+type GameConfirmDialogProps = {
+  onClose?: () => void;
+};
+
+const GameConfirmDialog = ({ onClose }: GameConfirmDialogProps): JSX.Element => {
   const [shouldBeShown, show] = useState(false);
   const [isAccepted, accept] = useState(false);
 
   const onReject = () => {
     socket.emit(SOCKET_EVENT.RejectGame);
+    if (onClose) onClose();
     show(false);
   };
 

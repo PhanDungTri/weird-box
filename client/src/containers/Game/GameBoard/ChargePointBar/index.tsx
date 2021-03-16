@@ -1,8 +1,8 @@
+import { css } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
-import { Transition } from "react-transition-group";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import socket from "../../../../services/socket";
-import { chargePointBarDealAnimation, ChargePointNode, StyledChargePointBar } from "./styles";
+import { chargeNodeStyle, chargePointBarDealAnimation, emptyNodeStyle, StyledChargePointBar } from "./styles";
 import { ChargePointBarState } from "./types";
 
 const charge = (value: number): boolean[] => {
@@ -13,12 +13,13 @@ const charge = (value: number): boolean[] => {
 
 const ChargePointBar = (): JSX.Element => {
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(0));
-  const [barState, setBarState] = useState<ChargePointBarState>("Danger");
+  const [barState, setBarState] = useState<ChargePointBarState>("Safe");
   const [shouldAnimate, animate] = useState(false);
-  const [value, setValue] = useState(0);
-  const isIncreased = useRef(true);
+  const prevNodes = useRef<boolean[]>(nodes);
 
   const updateBarState = () => {
+    const value = nodes.filter(Boolean).length;
+
     if (value < 5) setBarState("Safe");
     else if (value >= 5 && value < 8) setBarState("Warning");
     else setBarState("Danger");
@@ -26,36 +27,36 @@ const ChargePointBar = (): JSX.Element => {
 
   const renderNodes = () =>
     nodes.map((isCharged, i, arr) => {
+      const isIncreased = arr.filter(Boolean).length > prevNodes.current.filter(Boolean).length;
       // Triggered on the final node in the transition chain
       const onTransitionEnd =
-        (isIncreased.current && (i === arr.length - 1 || !arr[i + 1])) ||
-        (!isIncreased.current && (i === 0 || arr[i - 1]))
+        (isIncreased && (i === arr.length - 1 || !arr[i + 1])) || (!isIncreased && (i === 0 || arr[i - 1]))
           ? updateBarState
           : undefined;
 
-      const delay = 0.1 * (isIncreased.current ? i : nodes.length - 1 - i);
+      const delay = isCharged === prevNodes.current[i] ? 0 : 0.1 * (isIncreased ? i : arr.length - 1 - i);
 
       return (
-        <Transition in={isCharged} key={i} timeout={200}>
-          {(state) => (
-            <ChargePointNode
-              barState={barState}
-              transitionState={state}
-              delay={delay}
-              onTransitionEnd={onTransitionEnd}
-            />
-          )}
-        </Transition>
+        <div
+          css={[
+            chargeNodeStyle(barState),
+            !isCharged && emptyNodeStyle,
+            css`
+              transition-delay: ${delay}s;
+            `,
+          ]}
+          key={i}
+          onTransitionEnd={onTransitionEnd}
+        />
       );
     });
 
-  useEffect(() => {
-    isIncreased.current = nodes.filter(Boolean).length <= value;
-    setNodeStatus(charge(value));
-  }, [value]);
+  const updateChargePoint = (value: number) => setNodeStatus(charge(value));
+
+  useEffect(() => void (prevNodes.current = nodes), [nodes]);
 
   useEffect(() => {
-    socket.on(SOCKET_EVENT.ChargePointChanged, setValue);
+    socket.on(SOCKET_EVENT.ChargePointChanged, updateChargePoint);
     socket.on(SOCKET_EVENT.TakeCard, () => animate(true));
 
     return () => {

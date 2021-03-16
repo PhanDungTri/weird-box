@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Transition, TransitionGroup } from "react-transition-group";
+import { animated, useTransition } from "react-spring";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../../shared/src/@types";
-import socket from "../../../../services/socket";
 import useNotification from "../../../../hooks/useNotification";
+import socket from "../../../../services/socket";
+import { fadeOut } from "../../../../styles/animations";
 import Card from "../../Card";
 import { useGameContext } from "../../context";
-import { cardTransition, handStyle } from "./styles";
+import { handStyle } from "./styles";
 
 type HandProps = {
   eliminated?: boolean;
@@ -18,6 +19,15 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
   const { notify } = useNotification();
   const [cards, setCards] = useState<CardInfo[]>([]);
   const [chosenCard, setChosenCard] = useState("");
+  const transitions = useTransition(cards, (c) => c.id, {
+    from: {
+      opacity: 0,
+      transform: "translateY(40px)",
+      maxWidth: "0px",
+    },
+    enter: [{ maxWidth: "100px" }, { opacity: 1, transform: "translateY(0px)" }],
+    leave: fadeOut,
+  });
 
   const handleClickOutside = (event: MouseEvent): void => {
     if (ref.current && !ref.current.contains(event.target as Node)) setChosenCard("");
@@ -43,18 +53,12 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
   }, []);
 
   return (
-    <div ref={ref}>
-      <TransitionGroup css={handStyle}>
-        {cards.map((c) => (
-          <Transition timeout={600} key={c.id}>
-            {(state) => (
-              <div css={cardTransition(state)}>
-                <Card disabled={eliminated} card={c} onClick={playCard} chosen={chosenCard === c.id} />
-              </div>
-            )}
-          </Transition>
-        ))}
-      </TransitionGroup>
+    <div ref={ref} css={handStyle}>
+      {transitions.map(({ item, props, key }) => (
+        <animated.div key={key} style={props}>
+          <Card disabled={eliminated} card={item} onClick={playCard} chosen={chosenCard === item.id} />
+        </animated.div>
+      ))}
     </div>
   );
 };

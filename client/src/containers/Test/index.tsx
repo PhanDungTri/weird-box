@@ -7,7 +7,7 @@ const Test = (): JSX.Element => {
 
   return (
     <div css={pageStyle}>
-      <Button onClick={() => notify("Info", 3000)("Test")}>Notify!</Button>
+      <Button onClick={() => notify("Info", 30000)("Test")}>Notify!</Button>
     </div>
   );
 };
