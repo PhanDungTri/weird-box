@@ -40,3 +40,5 @@ appState.subscribe(
 socket.on(SOCKET_EVENT.NewGame, () => appState.setState({ route: ROUTE.InGame }));
 socket.on(SOCKET_EVENT.Error, appState.getState().notify("Danger"));
 socket.on(SOCKET_EVENT.Info, appState.getState().notify("Info"));
+
+export default appState;
