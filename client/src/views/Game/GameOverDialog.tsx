@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
 import { PlayerInfo } from "../../@types";
 import Dialog from "../../components/Dialog";
-import APP_STATE from "../../constants/APP_STATE";
+import ROUTE from "../../constants/ROUTE";
 import socket from "../../services/socket";
 import useAppStateTransition from "../../hooks/useAppStateTransition";
 
@@ -12,7 +12,7 @@ const GameOverDialog = (): JSX.Element => {
 
   const onGameOver = () => {
     socket.emit(SOCKET_EVENT.LeaveGame);
-    setAppState(APP_STATE.Hub);
+    setAppState(ROUTE.Hub);
   };
 
   useEffect(() => {
