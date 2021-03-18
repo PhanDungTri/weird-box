@@ -33,21 +33,24 @@ const appState = create<AppState>((set, get) => ({
     });
 
     set({ notifications });
-    setTimeout(
-      () =>
-        set({
-          notifications: produce(get().notifications, (draft) => {
-            draft.filter((n) => n.id !== id);
-          }),
-        }),
-      2000
-    );
   },
   findingStatus: "canceled",
   setFindingStatus: (findingStatus) => set({ findingStatus }),
 }));
 
-const { setState, getState } = appState;
+const { setState, getState, subscribe } = appState;
+
+subscribe(
+  () =>
+    setTimeout(
+      () =>
+        setState({
+          notifications: getState().notifications.slice(0, -1),
+        }),
+      2000
+    ),
+  (state) => state.notifications
+);
 
 socket.on(SOCKET_EVENT.UpdateFindGameStatus, (findingStatus: FindingStatus) => setState({ findingStatus }));
 socket.on(SOCKET_EVENT.NewGame, () => setState({ route: ROUTE.InGame, findingStatus: "canceled" }));
