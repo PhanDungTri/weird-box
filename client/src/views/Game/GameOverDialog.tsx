@@ -1,23 +1,19 @@
-import { useEffect, useState } from "react";
 import { SOCKET_EVENT } from "../../../../shared/src/@enums";
-import { PlayerInfo } from "../../@types";
 import Dialog from "../../components/Dialog";
 import ROUTE from "../../constants/ROUTE";
+import { useAppState, useGameState } from "../../hooks/useStore";
 import socket from "../../services/socket";
-import useAppStateTransition from "../../hooks/useAppStateTransition";
 
 const GameOverDialog = (): JSX.Element => {
-  const [, setAppState] = useAppStateTransition();
-  const [winner, setWinner] = useState<PlayerInfo>();
+  const changeRoute = useAppState((state) => state.changeRoute);
+  const winner = useGameState((state) => state.winner);
+  const resetGameState = useGameState((state) => state.reset);
 
   const onGameOver = () => {
     socket.emit(SOCKET_EVENT.LeaveGame);
-    setAppState(ROUTE.Hub);
+    resetGameState();
+    changeRoute(ROUTE.Hub);
   };
-
-  useEffect(() => {
-    socket.once(SOCKET_EVENT.GameOver, (winner: PlayerInfo) => setWinner(winner));
-  }, []);
 
   return (
     <Dialog

@@ -38,12 +38,13 @@ class Player {
     await this.spellManager.triggerPendingDebuffs();
   }
 
-  private playCard(id: string): void {
+  private playCard(id: string, ack: (id: string) => void): void {
     const card = this.getCardById(id);
 
     if (this.shouldPlayCard && this.game.getCurrentPlayer() === this && card) {
-      this.game.consumeCard(card);
       this.shouldPlayCard = false;
+      ack(id);
+      this.game.consumeCard(card);
     } else {
       this.getClient().send(SOCKET_EVENT.Error, "Not your turn");
     }

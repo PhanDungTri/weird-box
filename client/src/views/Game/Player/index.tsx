@@ -1,25 +1,21 @@
-import { useEffect, useState } from "react";
-import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
-import Status from "../Status";
+import { useGameState } from "../../../hooks/useStore";
 import socket from "../../../services/socket";
+import SpellAnimation from "../SpellAnimation";
+import Status from "../Status";
 import Hand from "./Hand";
 
 const Player = (): JSX.Element => {
-  const [isEliminated, shouldBeEliminated] = useState(false);
-
-  useEffect(() => {
-    socket.on(SOCKET_EVENT.PlayerEliminated, (id: string) => {
-      if (id === socket.id) shouldBeEliminated(true);
-    });
-
-    return () => void socket.off(SOCKET_EVENT.PlayerEliminated);
-  }, []);
+  const isEliminated = useGameState((state) => state.players[socket.id].isEliminated);
+  const triggeredSpell = useGameState((state) => state.players[socket.id].triggeredSpell);
 
   return (
-    <div className="player">
-      <Status id={socket.id} horizontal />
-      <Hand eliminated={isEliminated} />
-    </div>
+    <>
+      <div>
+        <Status id={socket.id} horizontal />
+        <Hand eliminated={isEliminated} />
+      </div>
+      <SpellAnimation spell={triggeredSpell} scale={4} />
+    </>
   );
 };
 

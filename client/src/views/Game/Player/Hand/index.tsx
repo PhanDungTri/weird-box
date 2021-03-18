@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
-import { CardInfo } from "../../../../../../shared/src/@types";
-import useNotification from "../../../../hooks/useNotification";
+import { useAppState, useGameState, useHandState } from "../../../../hooks/useStore";
 import socket from "../../../../services/socket";
 import { fadeOut } from "../../../../styles/animations";
 import Card from "../../Card";
-import { useGameContext } from "../../context";
 import { handStyle } from "./styles";
 
 type HandProps = {
@@ -14,10 +12,11 @@ type HandProps = {
 };
 
 const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
-  const { currentPlayer } = useGameContext();
+  const currentPlayer = useGameState((state) => state.currentPlayer);
+  const notify = useAppState((state) => state.notify);
+  const cards = useHandState((state) => state.cards);
+  const removeCard = useHandState((state) => state.removeCard);
   const ref = useRef<HTMLDivElement>(null);
-  const { notify } = useNotification();
-  const [cards, setCards] = useState<CardInfo[]>([]);
   const [chosenCard, setChosenCard] = useState("");
   const transitions = useTransition(cards, (c) => c.id, {
     from: {
@@ -29,27 +28,21 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
     leave: fadeOut,
   });
 
-  const handleClickOutside = (event: MouseEvent): void => {
+  const handleClickOutside = (event: MouseEvent) => {
     if (ref.current && !ref.current.contains(event.target as Node)) setChosenCard("");
   };
 
-  const playCard = (id: string): void => {
+  const playCard = (id: string) => {
     // TODO check if in-turn
     if (chosenCard !== id) setChosenCard(id);
-    else if (currentPlayer === socket.id) {
-      socket.emit(SOCKET_EVENT.PlayCard, id);
-      socket.once(SOCKET_EVENT.CardPlayed, () => setCards(cards.filter((c) => c.id !== id)));
-    } else notify("Danger")("Not your turn!");
+    else if (currentPlayer === socket.id)
+      socket.emit(SOCKET_EVENT.PlayCard, id, (recentCard: string) => removeCard(recentCard));
+    else notify("Danger")("Not your turn!");
   };
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
-    socket.on(SOCKET_EVENT.TakeCard, (cards: CardInfo[]) => setCards((list) => [...list, ...cards]));
-
-    return (): void => {
-      socket.off(SOCKET_EVENT.TakeCard);
-      document.removeEventListener("click", handleClickOutside, true);
-    };
+    return () => document.removeEventListener("click", handleClickOutside, true);
   }, []);
 
   return (

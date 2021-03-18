@@ -13,7 +13,7 @@ class Lobby {
       c.once(SOCKET_EVENT.AcceptGame, () => this.accept(c));
       c.once(SOCKET_EVENT.RejectGame, () => c.off(SOCKET_EVENT.AcceptGame));
     });
-    clients.forEach((c) => c.send(SOCKET_EVENT.GameFound));
+    clients.forEach((c) => c.send(SOCKET_EVENT.UpdateFindGameStatus, "found"));
     this.confirmTimeout = setTimeout(this.cancel.bind(this), 30000);
   }
 
@@ -32,7 +32,7 @@ class Lobby {
     this.clients
       .filter((c) => this.acceptance.includes(c))
       .forEach((c) => {
-        c.send(SOCKET_EVENT.GameCanceled, undefined);
+        c.send(SOCKET_EVENT.UpdateFindGameStatus, "canceled");
         this.matcher.addClient(c);
       });
 

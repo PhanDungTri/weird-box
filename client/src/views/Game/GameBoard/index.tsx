@@ -1,35 +1,21 @@
-import { useEffect, useState } from "react";
-import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
-import { CardInfo } from "../../../../../shared/src/@types";
-import socket from "../../../services/socket";
+import { useGameState } from "../../../hooks/useStore";
 import { centerizeStyle } from "../../../styles";
 import Card from "../Card";
-import { useGameContext } from "../context";
 import BoxOfCard from "./BoxOfCard";
 import ChargePointBar from "./ChargePointBar";
 import { cardPlayedAnimation, gameBoardStyle } from "./styles";
 
 const GameBoard = (): JSX.Element => {
-  const [playedCard, setPlayedCard] = useState<CardInfo>();
-  const { finishTurn } = useGameContext();
-
-  const showPlayedCard = (card: CardInfo) => {
-    finishTurn();
-    setPlayedCard(card);
-  };
-
-  useEffect(() => {
-    socket.on(SOCKET_EVENT.CardPlayed, showPlayedCard);
-    return () => void socket.off(SOCKET_EVENT.CardPlayed);
-  }, []);
+  const recentPlayedCard = useGameState((state) => state.recentPlayedCard);
+  const resetRecentPlayedCard = useGameState((state) => state.resetRecentPlayedCard);
 
   return (
     <div css={gameBoardStyle}>
       <BoxOfCard />
       <ChargePointBar />
-      {playedCard && (
-        <div onAnimationEnd={() => setPlayedCard(undefined)} css={[cardPlayedAnimation, centerizeStyle]}>
-          <Card card={playedCard} />
+      {recentPlayedCard && (
+        <div onTransitionEnd={resetRecentPlayedCard} css={[cardPlayedAnimation, centerizeStyle]}>
+          <Card card={recentPlayedCard} />
         </div>
       )}
     </div>

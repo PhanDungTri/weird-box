@@ -1,25 +1,24 @@
-import { useEffect, useState } from "react";
-import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
-import { PlayerInfo } from "../../../@types";
-import socket from "../../../services/socket";
+import { SPELL_NAME } from "../../../../../shared/src/@enums";
+import { useGameState } from "../../../hooks/useStore";
 import { disabledStyle } from "../../../styles";
 import SpellAnimation from "../SpellAnimation";
 import Status from "../Status";
 import { opponentNameStyle, opponentStyle } from "./styles";
 
-const Opponent = ({ id, name }: PlayerInfo): JSX.Element => {
-  const [isEliminated, shouldBeEliminated] = useState(false);
+type OpponentProps = {
+  id: string;
+};
 
-  useEffect(() => {
-    socket.on(SOCKET_EVENT.PlayerEliminated, (eliminatedId: string) => shouldBeEliminated(eliminatedId === id));
-    return () => void socket.off(SOCKET_EVENT.PlayerEliminated);
-  }, []);
+const Opponent = ({ id }: OpponentProps): JSX.Element => {
+  const name = useGameState((state) => state.players[id].name);
+  const isEliminated = useGameState((state) => state.players[id].isEliminated);
+  const triggeredSpell = useGameState((state) => state.players[id].triggeredSpell);
 
   return (
     <div css={[opponentStyle, isEliminated && disabledStyle]}>
       <Status id={id} />
       <div css={opponentNameStyle}>{name}</div>
-      <SpellAnimation id={id} />
+      {triggeredSpell !== SPELL_NAME.Void && <SpellAnimation spell={triggeredSpell} />}
     </div>
   );
 };

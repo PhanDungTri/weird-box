@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
-import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
-import socket from "../../../../services/socket";
+import { useBoxOfCardState } from "../../../../hooks/useStore";
 import { chargeNodeStyle, chargePointBarDealAnimation, emptyNodeStyle, StyledChargePointBar } from "./styles";
 import { ChargePointBarState } from "./types";
 
@@ -12,22 +11,21 @@ const charge = (value: number): boolean[] => {
 };
 
 const ChargePointBar = (): JSX.Element => {
+  const chargePoint = useBoxOfCardState((state) => state.chargePoint);
+  const boxOfCardStatus = useBoxOfCardState((state) => state.status);
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(0));
   const [barState, setBarState] = useState<ChargePointBarState>("Safe");
-  const [shouldAnimate, animate] = useState(false);
   const prevNodes = useRef<boolean[]>(nodes);
 
   const updateBarState = () => {
-    const value = nodes.filter(Boolean).length;
-
-    if (value < 5) setBarState("Safe");
-    else if (value >= 5 && value < 8) setBarState("Warning");
+    if (chargePoint < 5) setBarState("Safe");
+    else if (chargePoint >= 5 && chargePoint < 8) setBarState("Warning");
     else setBarState("Danger");
   };
 
   const renderNodes = () =>
     nodes.map((isCharged, i, arr) => {
-      const isIncreased = arr.filter(Boolean).length > prevNodes.current.filter(Boolean).length;
+      const isIncreased = chargePoint > prevNodes.current.filter(Boolean).length;
       // Triggered on the final node in the transition chain
       const onTransitionEnd =
         (isIncreased && (i === arr.length - 1 || !arr[i + 1])) || (!isIncreased && (i === 0 || arr[i - 1]))
@@ -51,22 +49,11 @@ const ChargePointBar = (): JSX.Element => {
       );
     });
 
-  const updateChargePoint = (value: number) => setNodeStatus(charge(value));
-
+  useEffect(() => setNodeStatus(charge(chargePoint)), [chargePoint]);
   useEffect(() => void (prevNodes.current = nodes), [nodes]);
 
-  useEffect(() => {
-    socket.on(SOCKET_EVENT.ChargePointChanged, updateChargePoint);
-    socket.on(SOCKET_EVENT.TakeCard, () => animate(true));
-
-    return () => {
-      socket.off(SOCKET_EVENT.ChargePointChanged);
-      socket.off(SOCKET_EVENT.TakeCard);
-    };
-  }, []);
-
   return (
-    <StyledChargePointBar onAnimationEnd={() => animate(false)} css={shouldAnimate && chargePointBarDealAnimation}>
+    <StyledChargePointBar css={boxOfCardStatus === "deal" && chargePointBarDealAnimation}>
       {renderNodes()}
     </StyledChargePointBar>
   );

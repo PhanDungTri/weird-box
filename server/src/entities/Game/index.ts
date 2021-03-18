@@ -76,19 +76,19 @@ class Game {
      */
     const startingHands: Card[][] = [];
 
-    this.sendToAll(
-      SOCKET_EVENT.GetPlayerList,
-      this.players.map((p) => ({
-        id: p.getClient().id,
-        name: p.getClient().name,
-        isEliminated: false,
-      })),
-      100
-    ).then(() =>
-      this.sendToAll(SOCKET_EVENT.GetGameSettings, {
-        maxHP: this.maxHP,
-        timePerTurn: this.timePerTurn,
-      })
+    this.sendToAll(SOCKET_EVENT.GetGameSettings, {
+      maxHP: this.maxHP,
+      timePerTurn: this.timePerTurn,
+    }).then(() =>
+      this.sendToAll(
+        SOCKET_EVENT.GetPlayerList,
+        this.players.map((p) => ({
+          id: p.getClient().id,
+          name: p.getClient().name,
+          isEliminated: false,
+        })),
+        100
+      )
     );
 
     for (let i = 0; i < STARTING_HAND; i++) {
@@ -183,7 +183,7 @@ class Game {
 
     if (this.chargePoint < 0 || this.chargePoint > 10) {
       this.chargePoint = 0;
-      this.sendToAll(SOCKET_EVENT.ChargePointBarOvercharged);
+      this.sendToAll(SOCKET_EVENT.Overcharged);
       await this.getCurrentPlayer().changeHitPoint(-10);
     } else if (oldChargePoint > 0)
       await SpellFactory.create(card.getSpell(), oldChargePoint, this.alivePlayers, this.getCurrentPlayer());

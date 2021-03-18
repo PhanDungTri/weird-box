@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
-import { SOCKET_EVENT } from "../../../../../../shared/src/@enums";
 import IdleSprite from "../../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../../assets/sprites/box_of_cards_overcharged.png";
 import SpriteSheet from "../../../../components/SpriteSheet";
-import socket from "../../../../services/socket";
+import { useBoxOfCardState } from "../../../../hooks/useStore";
 import { centerizeStyle } from "../../../../styles";
-
-type State = "idle" | "deal";
 
 const boxOfCardAnimationState = {
   idle: {
@@ -27,30 +23,15 @@ const commonProps = {
 };
 
 const BoxOfCard = (): JSX.Element => {
-  const [state, setState] = useState<State>("idle");
-  const [isOvercharged, overcharge] = useState(false);
-
-  useEffect(() => {
-    socket.on(SOCKET_EVENT.TakeCard, () => setState("deal"));
-    socket.on(SOCKET_EVENT.ChargePointBarOvercharged, () => overcharge(true));
-
-    return () => {
-      socket.off(SOCKET_EVENT.TakeCard);
-      socket.off(SOCKET_EVENT.ChargePointBarOvercharged);
-    };
-  }, []);
+  const status = useBoxOfCardState((state) => state.status);
+  const idle = useBoxOfCardState((state) => state.idle);
+  const stabilize = useBoxOfCardState((state) => state.stabilize);
+  const overcharged = useBoxOfCardState((state) => state.overcharged);
 
   return (
     <>
-      <SpriteSheet
-        key={state}
-        onAnimationEnd={() => setState("idle")}
-        {...boxOfCardAnimationState[state]}
-        {...commonProps}
-      />
-      {isOvercharged && (
-        <SpriteSheet src={OverChargedSprite} steps={9} {...commonProps} onAnimationEnd={() => overcharge(false)} />
-      )}
+      <SpriteSheet key={status} onAnimationEnd={idle} {...boxOfCardAnimationState[status]} {...commonProps} />
+      {overcharged && <SpriteSheet src={OverChargedSprite} steps={9} {...commonProps} onAnimationEnd={stabilize} />}
     </>
   );
 };

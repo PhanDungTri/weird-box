@@ -1,27 +1,23 @@
-import { useEffect, useState } from "react";
-import { SOCKET_EVENT } from "../../../../../shared/src/@enums";
-import { PlayerInfo } from "../../../@types";
-import socket from "../../../services/socket";
+import shallow from "zustand/shallow";
+import { useGameState } from "../../../hooks/useStore";
 import EmptySlot from "./EmptySlot";
 import Opponent from "./Opponent";
 import { opponentsStyle } from "./styles";
 
 const Opponents = (): JSX.Element => {
-  const [opponents, setOpponents] = useState<Array<PlayerInfo | null>>([]);
+  const opponents = useGameState((state) => Object.keys(state.players), shallow);
 
-  useEffect(() => {
-    socket.once(SOCKET_EVENT.GetPlayerList, (players: PlayerInfo[]) => {
-      const opponents: Array<PlayerInfo | null> = players.filter((p) => p.id !== socket.id);
-      for (let i = 0; i < 3; i++) if (!opponents[i]) opponents[i] = null;
-      setOpponents(opponents);
-    });
-  }, []);
+  const showOpponents = () => {
+    const elm: JSX.Element[] = [];
 
-  return (
-    <div css={opponentsStyle}>
-      {opponents.map((o, i) => (o ? <Opponent {...o} key={o.id} /> : <EmptySlot key={i} />))}
-    </div>
-  );
+    for (let i = 0; i < 3; i++)
+      if (opponents[i]) elm.push(<Opponent id={opponents[i]} key={opponents[i]} />);
+      else elm.push(<EmptySlot key={i} />);
+
+    return elm;
+  };
+
+  return <div css={opponentsStyle}>{showOpponents()}</div>;
 };
 
 export default Opponents;

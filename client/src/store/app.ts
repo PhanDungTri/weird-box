@@ -1,4 +1,4 @@
-import shallow from "zustand/shallow";
+import produce from "immer";
 import create from "zustand/vanilla";
 import { SOCKET_EVENT } from "../../../shared/src/@enums";
 import generateUniqueId from "../../../shared/src/utils/generateUniqueId";
@@ -6,11 +6,17 @@ import { NotificationProps, StyleVariant } from "../@types";
 import ROUTE from "../constants/ROUTE";
 import socket from "../services/socket";
 
+type FindingStatus = "finding" | "found" | "canceled";
+
 type AppState = {
   route: ROUTE;
+  changeRoute: (route: ROUTE) => void;
   playerName: string;
+  changeName: (playerName: string) => void;
   notifications: NotificationProps[];
   notify: (variant: StyleVariant) => (message: string) => void;
+  findingStatus: FindingStatus;
+  setFindingStatus: (status: FindingStatus) => void;
 };
 
 const appState = create<AppState>((set, get) => ({
@@ -20,25 +26,32 @@ const appState = create<AppState>((set, get) => ({
   changeName: (playerName: string) => set({ playerName }),
   notifications: [],
   notify: (variant: StyleVariant) => (message: string) => {
-    const { notifications } = get();
-    const newNoti: NotificationProps = { id: generateUniqueId(), variant, message };
+    const id = generateUniqueId();
+    const notifications = produce(get().notifications, (draft) => {
+      if (draft.length >= 3) draft.shift();
+      draft.push({ id, message, variant });
+    });
 
-    if (notifications.length >= 3) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [oldestNoti, ...remains] = notifications;
-      set({ notifications: [...remains, newNoti] });
-    } else set({ notifications: [...notifications, newNoti] });
+    set({ notifications });
+    setTimeout(
+      () =>
+        set({
+          notifications: produce(get().notifications, (draft) => {
+            draft.filter((n) => n.id !== id);
+          }),
+        }),
+      2000
+    );
   },
+  findingStatus: "canceled",
+  setFindingStatus: (findingStatus) => set({ findingStatus }),
 }));
 
-appState.subscribe(
-  () => setTimeout(() => appState.setState((state) => ({ notifications: state.notifications.slice(0, 1) })), 2000),
-  (state) => state.notifications,
-  shallow
-);
+const { setState, getState } = appState;
 
-socket.on(SOCKET_EVENT.NewGame, () => appState.setState({ route: ROUTE.InGame }));
-socket.on(SOCKET_EVENT.Error, appState.getState().notify("Danger"));
-socket.on(SOCKET_EVENT.Info, appState.getState().notify("Info"));
+socket.on(SOCKET_EVENT.UpdateFindGameStatus, (findingStatus: FindingStatus) => setState({ findingStatus }));
+socket.on(SOCKET_EVENT.NewGame, () => setState({ route: ROUTE.InGame, findingStatus: "canceled" }));
+socket.on(SOCKET_EVENT.Error, getState().notify("Danger"));
+socket.on(SOCKET_EVENT.Info, getState().notify("Info"));
 
 export default appState;
