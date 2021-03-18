@@ -1,12 +1,12 @@
-import { useGameState } from "../../../hooks/useStore";
+import { memo } from "react";
+import useCommonPlayerState from "../../../hooks/useCommonPlayerState";
 import socket from "../../../services/socket";
 import SpellAnimation from "../SpellAnimation";
 import Status from "../Status";
 import Hand from "./Hand";
 
 const Player = (): JSX.Element => {
-  const isEliminated = useGameState((state) => state.players[socket.id].isEliminated);
-  const triggeredSpell = useGameState((state) => state.players[socket.id].triggeredSpell);
+  const { isEliminated, triggeredSpell, resetTriggeredSpell } = useCommonPlayerState(socket.id);
 
   return (
     <>
@@ -14,9 +14,9 @@ const Player = (): JSX.Element => {
         <Status id={socket.id} horizontal />
         <Hand eliminated={isEliminated} />
       </div>
-      <SpellAnimation spell={triggeredSpell} scale={4} />
+      <SpellAnimation spell={triggeredSpell} scale={4} onAnimationEnd={resetTriggeredSpell} />
     </>
   );
 };
 
-export default Player;
+export default memo(Player);

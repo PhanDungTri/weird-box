@@ -1,4 +1,5 @@
-import { SPELL_NAME } from "../../../../../shared/src/@enums";
+import { memo, useCallback } from "react";
+import useCommonPlayerState from "../../../hooks/useCommonPlayerState";
 import { useGameState } from "../../../hooks/useStore";
 import { disabledStyle } from "../../../styles";
 import SpellAnimation from "../SpellAnimation";
@@ -10,17 +11,16 @@ type OpponentProps = {
 };
 
 const Opponent = ({ id }: OpponentProps): JSX.Element => {
-  const name = useGameState((state) => state.players[id].name);
-  const isEliminated = useGameState((state) => state.players[id].isEliminated);
-  const triggeredSpell = useGameState((state) => state.players[id].triggeredSpell);
+  const name = useGameState(useCallback((state) => state.players[id].name, [id]));
+  const { isEliminated, triggeredSpell, resetTriggeredSpell } = useCommonPlayerState(id);
 
   return (
     <div css={[opponentStyle, isEliminated && disabledStyle]}>
       <Status id={id} />
       <div css={opponentNameStyle}>{name}</div>
-      {triggeredSpell !== SPELL_NAME.Void && <SpellAnimation spell={triggeredSpell} />}
+      <SpellAnimation spell={triggeredSpell} onAnimationEnd={resetTriggeredSpell} />
     </div>
   );
 };
 
-export default Opponent;
+export default memo(Opponent);

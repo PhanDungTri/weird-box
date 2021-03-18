@@ -2,10 +2,13 @@ import { createPortal } from "react-dom";
 import { animated, useTransition } from "react-spring";
 import COLOR from "../../constants/COLOR";
 import { useAppState } from "../../hooks/useStore";
+import { AppState } from "../../store/app";
 import { notificationStyle } from "./styles";
 
+const selectNotifications = (state: AppState) => state.notifications;
+
 const Notifications = (): JSX.Element => {
-  const notifications = useAppState((state) => state.notifications);
+  const notifications = useAppState(selectNotifications);
 
   const transitions = useTransition(notifications, (n) => n.id, {
     from: { transform: "translate(-50%, 0%)", opacity: 0 },

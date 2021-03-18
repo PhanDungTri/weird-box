@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Sprite, { SpriteProps } from "../Sprite";
 import { spriteSheetStyle } from "./styles";
 
@@ -16,4 +17,4 @@ const SpriteSheet = ({ steps, fps = 12, loop = false, ...spriteProps }: SpriteSh
   );
 };
 
-export default SpriteSheet;
+export default memo(SpriteSheet);

@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { memo } from "react";
 import { centerizeStyle } from "../../../../styles";
 import { hitPointBarStyle, hitPointCapacityStyle, hitPointCapacityUnderlayStyle } from "./styles";
 
@@ -26,4 +27,4 @@ const HitPointBar = ({ hp, maxHP }: HitPointBarProps): JSX.Element => {
   );
 };
 
-export default HitPointBar;
+export default memo(HitPointBar);

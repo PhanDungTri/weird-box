@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { SPELL_NAME } from "../../../../../shared/src/@enums";
 import { CardInfo } from "../../../../../shared/src/@types";
 import Sprite from "../../../components/Sprite";
@@ -40,4 +41,4 @@ const Card = ({ onClick, chosen = false, card, disabled = false, className }: Ca
   );
 };
 
-export default Card;
+export default memo(Card);

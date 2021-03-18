@@ -1,5 +1,7 @@
+import { memo, useCallback } from "react";
 import shallow from "zustand/shallow";
 import { useGameState } from "../../../hooks/useStore";
+import { GameState, selectCurrentPlayer } from "../../../store";
 import HitPointBar from "./HitPointBar";
 import Spells from "./Spells";
 import { horizontalStatusStyle, statusStyle } from "./styles";
@@ -10,11 +12,16 @@ type StatusProps = {
   horizontal?: boolean;
 };
 
+const selectGameSettings = (state: GameState) => state.settings;
+
 const Status = ({ id, horizontal = false }: StatusProps): JSX.Element => {
-  const { maxHP, timePerTurn } = useGameState((state) => state.settings);
-  const currentPlayer = useGameState((state) => state.currentPlayer);
-  const hp = useGameState((state) => state.players[id].hp);
-  const spells = useGameState((state) => Object.values(state.spells).filter((s) => s.target === id), shallow);
+  const { maxHP, timePerTurn } = useGameState(selectGameSettings);
+  const currentPlayer = useGameState(selectCurrentPlayer);
+  const hp = useGameState(useCallback((state) => state.players[id].hp, [id]));
+  const spells = useGameState(
+    useCallback((state) => Object.values(state.spells).filter((s) => s.target === id), [id]),
+    shallow
+  );
 
   return (
     <div css={[statusStyle, horizontal && horizontalStatusStyle]}>
@@ -25,4 +32,4 @@ const Status = ({ id, horizontal = false }: StatusProps): JSX.Element => {
   );
 };
 
-export default Status;
+export default memo(Status);

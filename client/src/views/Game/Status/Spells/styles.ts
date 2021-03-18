@@ -12,7 +12,6 @@ export const spellsStyle = (align: "center" | "left"): SerializedStyles => css`
 `;
 
 export const spellTriggerAnimation = css`
-  transition: transform 150ms ease;
   transform: scale(1.5);
 `;
 

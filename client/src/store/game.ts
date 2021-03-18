@@ -1,4 +1,5 @@
 import produce from "immer";
+import { devtools } from "zustand/middleware";
 import create from "zustand/vanilla";
 import { PASSIVE_ACTION, SOCKET_EVENT, SPELL_NAME } from "../../../shared/src/@enums";
 import { CardInfo, HitPointChange, PassiveAction, SpellInfo } from "../../../shared/src/@types";
@@ -16,9 +17,10 @@ type GameSettings = {
   timePerTurn: number;
 };
 
-type GameState = {
+export type GameState = {
   currentPlayer: string;
   players: Record<string, PlayerState>;
+  resetTriggeredSpell: (id: string) => void;
   spells: Record<string, SpellInfo>;
   settings: GameSettings;
   recentPlayedCard: CardInfo | null;
@@ -39,11 +41,19 @@ const initialState = {
   winner: null,
 };
 
-const gameState = create<GameState>((set) => ({
-  ...initialState,
-  resetRecentPlayedCard: () => set({ recentPlayedCard: null }),
-  reset: () => set(initialState),
-}));
+const gameState = create<GameState>(
+  devtools((set, get) => ({
+    ...initialState,
+    resetRecentPlayedCard: () => set({ recentPlayedCard: null }),
+    resetTriggeredSpell: (id) =>
+      set({
+        players: produce(get().players, (draft) => {
+          draft[id].triggeredSpell = SPELL_NAME.Void;
+        }),
+      }),
+    reset: () => set(initialState),
+  }))
+);
 
 const { setState, getState } = gameState;
 
@@ -63,16 +73,15 @@ const cleanupSpells = (() => {
       () =>
         setState({
           spells: produce(getState().spells, (draft) => {
-            for (const id in draft) if (draft[id].duration === 0 || draft[id].power) delete draft[id];
-          }),
-          players: produce(getState().players, (draft) => {
-            for (const id in draft) draft[id].triggeredSpell = SPELL_NAME.Void;
+            for (const id in draft) if (draft[id].duration === 0 || draft[id].power === 0) delete draft[id];
           }),
         }),
       400
     );
   };
 })();
+
+export const selectCurrentPlayer = (state: GameState): string => state.currentPlayer;
 
 socket.on(SOCKET_EVENT.GetGameSettings, (settings: GameSettings) => setState({ settings }));
 socket.on(SOCKET_EVENT.StartTurn, (currentPlayer: string) => setState({ currentPlayer }));
@@ -119,8 +128,6 @@ socket.on(SOCKET_EVENT.ActivatePassive, (passive: PassiveAction) => {
   const { id, action, target } = passive;
   const spells = getState().spells;
 
-  triggerSpell(action, target);
-
   if (spells[id]) {
     setState({
       spells: produce(spells, (draft) => {
@@ -128,6 +135,9 @@ socket.on(SOCKET_EVENT.ActivatePassive, (passive: PassiveAction) => {
       }),
     });
   }
+
+  triggerSpell(action, target);
+  cleanupSpells();
 });
 
 socket.on(SOCKET_EVENT.PlayerEliminated, (id: string) =>
@@ -135,6 +145,7 @@ socket.on(SOCKET_EVENT.PlayerEliminated, (id: string) =>
     players: produce(getState().players, (draft) => {
       draft[id].isEliminated = true;
     }),
+    currentPlayer: "",
   })
 );
 

@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { memo } from "react";
 import { spriteStyle } from "./styles";
 
 type SpriteProps = {
@@ -25,5 +26,5 @@ const Sprite = ({ size: [width, height], src, scale = 1, ...props }: SpriteProps
   );
 };
 
-export default Sprite;
+export default memo(Sprite);
 export type { SpriteProps };

@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { SpellInfo } from "../../../../../../shared/src/@types";
 import spriteLookup from "../../../../utils/spriteLookup";
 import { spellIndicatorBadge, spellTriggerAnimation } from "./styles";
@@ -22,7 +22,12 @@ const SpellIndicator = ({ duration, name, power }: SpellInfo): JSX.Element => {
       <img
         onTransitionEnd={() => setTriggered(false)}
         src={spriteLookup[name]}
-        css={triggered && spellTriggerAnimation}
+        css={[
+          css`
+            transition: transform 0.2s ease;
+          `,
+          triggered && spellTriggerAnimation,
+        ]}
       />
 
       <div css={spellIndicatorBadge}>{power}</div>
@@ -30,4 +35,4 @@ const SpellIndicator = ({ duration, name, power }: SpellInfo): JSX.Element => {
   );
 };
 
-export default SpellIndicator;
+export default memo(SpellIndicator);

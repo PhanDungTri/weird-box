@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { animated, useTransition } from "react-spring";
 import { SpellInfo } from "../../../../../../shared/src/@types";
 import { fadeOut } from "../../../../styles/animations";
@@ -27,4 +28,4 @@ const Spells = ({ spells, align = "center" }: SpellsProps): JSX.Element => {
   );
 };
 
-export default Spells;
+export default memo(Spells);

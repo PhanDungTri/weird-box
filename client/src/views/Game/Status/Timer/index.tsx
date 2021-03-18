@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { countdownBarStyle, countdownTransition } from "./styles";
+import { countdownBarStyle } from "./styles";
 
 type TimerProps = {
   timePerTurn: number;
@@ -11,7 +11,6 @@ const Timer = ({ timePerTurn, fluid = false }: TimerProps): JSX.Element => {
     <div
       css={[
         countdownBarStyle(timePerTurn),
-        countdownTransition,
         fluid &&
           css`
             grid-column: 1/3;
