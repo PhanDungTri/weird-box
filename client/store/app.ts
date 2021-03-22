@@ -22,7 +22,7 @@ export type AppState = {
 
 const appState = create<AppState>(
   devtools((set, get) => ({
-    route: ROUTE.Hub,
+    route: ROUTE.Test,
     changeRoute: (route: ROUTE) => set({ route }),
     playerName: "player",
     changeName: (playerName: string) => set({ playerName }),

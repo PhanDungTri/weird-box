@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev-client": "parcel ./client/index.html",
-    "dev-server": "ts-node-dev --respawn --transpile-only ./server/index.ts"
+    "dev-server": "ts-node-dev --respawn --transpile-only ./server/index.ts",
+    "dev-reactive-server": "ts-node-dev --respawn --transpile-only ./reactive-server/index.ts"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-spring": "^8.0.27",
+    "rxjs": "^6.6.6",
     "socket.io": "^4.0.0",
     "socket.io-client": "^4.0.0",
     "zustand": "^3.3.3"
