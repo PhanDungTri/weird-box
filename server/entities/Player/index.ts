@@ -46,7 +46,7 @@ class Player {
       ack(id);
       this.game.consumeCard(card);
     } else {
-      this.getClient().send(SOCKET_EVENT.Error, "Not your turn");
+      this.getClient().emit(SOCKET_EVENT.Error, "Not your turn");
     }
 
     // TODO validate card and check if player is in any game.
@@ -60,12 +60,12 @@ class Player {
 
   public startTurn(): void {
     this.shouldPlayCard = true;
-    this.getClient().send(SOCKET_EVENT.Info, "It's your turn!");
+    this.getClient().emit(SOCKET_EVENT.Info, "It's your turn!");
   }
 
   public async receiveCards(...cards: Card[]): Promise<void> {
     this.cards.push(...cards);
-    this.getClient().send(SOCKET_EVENT.TakeCard, cards);
+    this.getClient().emit(SOCKET_EVENT.TakeCard, cards);
     await waitFor(600);
   }
 

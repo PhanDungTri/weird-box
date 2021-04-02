@@ -1,5 +1,4 @@
 import Server from "./entities/Server";
 
-const server = new Server(3000);
-
-server.run();
+Server.port = 3000;
+Server.getInstance().run();

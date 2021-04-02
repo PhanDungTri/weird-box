@@ -1,13 +1,16 @@
-import { Server as SocketServer, Socket } from "socket.io";
+import { Server as SocketServer } from "socket.io";
+import { GameSocket } from "../../shared/@types";
 import Client from "./Client";
 import Game from "./Game";
 import GameMatcher from "./GameMatcher";
 
 class Server {
+  public static port = 3000;
+  private static instance: Server;
   private onlineClients: Client[] = [];
   private games: Game[] = [];
-  private gameMatcher = new GameMatcher(this);
-  private socketServer: SocketServer = new SocketServer(this.port, {
+  private gameMatcher = new GameMatcher();
+  private socketServer: GameSocket = new SocketServer(Server.port, {
     cors: {
       origin: "*",
       methods: ["GET", "POST"],
@@ -15,13 +18,22 @@ class Server {
     },
   });
 
-  constructor(private port = 3000) {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {}
+
+  public static getInstance(): Server {
+    if (!Server.instance) {
+      Server.instance = new Server();
+    }
+
+    return Server.instance;
+  }
 
   public run(): void {
-    console.info("Server started on port " + this.port);
+    console.info("Server started on port " + Server.port);
 
-    this.socketServer.on("connection", (socket: Socket) => {
-      const client = new Client(socket, this);
+    this.socketServer.on("connect", (socket) => {
+      const client = new Client(socket);
 
       console.log("Client connected: " + client.id);
       this.onlineClients.push(client);

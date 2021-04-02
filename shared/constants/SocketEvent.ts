@@ -1,4 +1,4 @@
-enum SOCKET_EVENT {
+export enum SOCKET_EVENT {
   Error = "error",
   Info = "info",
   GetGameSettings = "get game settings",
@@ -13,7 +13,6 @@ enum SOCKET_EVENT {
   StartTurn = "start turn",
   TakeSpell = "take spell",
   FindGame = "find game",
-  Connected = "connected",
   PlayerEliminated = "player eliminated",
   RejectGame = "reject game",
   AcceptGame = "accept game",
@@ -27,5 +26,3 @@ enum SOCKET_EVENT {
   Disconnect = "disconnect",
   Rename = "rename",
 }
-
-export default SOCKET_EVENT;

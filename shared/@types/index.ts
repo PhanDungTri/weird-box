@@ -1,4 +1,16 @@
+import { Server, Socket } from "socket.io";
 import { PASSIVE_ACTION, SPELL_NAME } from "../constants";
+
+export interface EventsFromServer {
+  "find game": (name: string, cb: (name: string) => void) => void;
+}
+
+export interface EventsFromClient {
+  "find game": (name: string, cb: (name: string) => void) => void;
+}
+
+export type ClientSocket = Socket<EventsFromServer, EventsFromClient>;
+export type GameSocket = Server<EventsFromServer, EventsFromClient>;
 
 export type GameSettings = {
   maxHP: number;

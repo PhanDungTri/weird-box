@@ -22,7 +22,7 @@ class SpellManager {
 
   private addTalisman(talisman: PassiveSpell): void {
     this.talismans.push(talisman);
-    this.player.getClient().send(SOCKET_EVENT.TakeSpell, talisman.toJsonData());
+    this.player.getClient().emit(SOCKET_EVENT.TakeSpell, talisman.toJsonData());
   }
 
   private async activateTalisman(spell: Spell): Promise<boolean> {

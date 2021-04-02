@@ -194,7 +194,7 @@ class Game {
   }
 
   public async sendToAll(event: SOCKET_EVENT, data?: unknown, wait = 0): Promise<void> {
-    this.players.forEach((p) => p.getClient().send(event, data));
+    this.players.forEach((p) => p.getClient().emit(event, data));
     await waitFor(wait);
   }
 }
