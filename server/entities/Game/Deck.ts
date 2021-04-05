@@ -1,34 +1,17 @@
 import { SPELL_NAME } from "../../../shared/constants";
 import Card from "../Card";
 
-type DeckOptions = {
-  isEmpty: boolean;
-};
-
-const generateCards = (): Card[] => {
-  const cards: Card[] = [];
-
-  // power point is from 0 - 9
-  for (let i = 0; i < 10; i++) {
-    Object.values(SPELL_NAME).forEach((eff) => {
-      cards.push(new Card(i, eff));
-      cards.push(new Card(-i, eff));
-    });
-  }
-
-  return cards;
-};
-
 class Deck {
-  private cards: Card[];
+  private cards: Card[] = [];
 
-  constructor(options?: DeckOptions) {
-    options = options || { isEmpty: false };
-
-    if (options.isEmpty) {
-      this.cards = [];
-    } else {
-      this.cards = generateCards();
+  constructor(empty = false) {
+    if (!empty) {
+      for (let i = 0; i < 10; i++) {
+        Object.values(SPELL_NAME).forEach((eff) => {
+          this.cards.push(new Card(i, eff));
+          this.cards.push(new Card(-i, eff));
+        });
+      }
       this.shuffle();
     }
   }
@@ -41,10 +24,8 @@ class Deck {
     }
   }
 
-  public static copy(source: Deck): Deck {
-    const deck = new Deck({ isEmpty: true });
-    deck.cards = source.cards;
-    return deck;
+  public copy(source: Deck): void {
+    this.cards = [...source.cards];
   }
 
   public pop(): Card | undefined {

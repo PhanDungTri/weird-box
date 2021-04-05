@@ -1,43 +1,30 @@
-import GameMatcher from ".";
-import { SOCKET_EVENT } from "../../../shared/constants";
 import Client from "../Client";
-import Game from "../Game";
-import Server from "../Server";
+import ResponseChecker from "../ResponseChecker";
 
-class Lobby {
-  private acceptance: Client[] = [];
-  private confirmTimeout: NodeJS.Timeout | undefined;
-
-  constructor(private clients: Client[], private server: Server, private matcher: GameMatcher) {
-    clients.forEach((c) => {
-      c.once(SOCKET_EVENT.AcceptGame, () => this.accept(c));
-      c.once(SOCKET_EVENT.RejectGame, () => c.off(SOCKET_EVENT.AcceptGame));
+class Lobby extends ResponseChecker {
+  constructor(clients: Client[]) {
+    super(clients);
+    this.clients.forEach((c) => {
+      c.once("reject game", () => c.removeAllListener("ready"));
+      c.emit("update game matcher status", "found");
     });
-    clients.forEach((c) => c.emit(SOCKET_EVENT.UpdateFindGameStatus, "found"));
-    this.confirmTimeout = setTimeout(this.cancel.bind(this), 30000);
   }
 
-  private accept(client: Client) {
-    client.off(SOCKET_EVENT.RejectGame);
-    this.acceptance.push(client);
-
-    if (this.clients.filter((c) => !this.acceptance.includes(c)).length === 0) {
-      if (this.confirmTimeout) clearTimeout(this.confirmTimeout);
-      this.server.addGame(new Game(this.server, undefined, ...this.clients));
-      return;
-    }
+  protected onPass(): void {
+    // TODO new game
   }
 
-  private cancel() {
-    this.clients
-      .filter((c) => this.acceptance.includes(c))
-      .forEach((c) => {
-        c.emit(SOCKET_EVENT.UpdateFindGameStatus, "canceled");
-        this.matcher.addClient(c);
-      });
+  protected ready(client: Client): void {
+    client.removeAllListener("reject game");
+    super.ready(client);
+  }
 
-    this.clients = [];
-    this.acceptance = [];
+  protected timeout(): void {
+    this.clients.forEach((c) => {
+      c.removeAllListener("reject game");
+    });
+
+    super.timeout();
   }
 }
 

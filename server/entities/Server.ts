@@ -7,7 +7,6 @@ import GameMatcher from "./GameMatcher";
 class Server {
   public static port = 3000;
   private static instance: Server;
-  private onlineClients: Client[] = [];
   private games: Game[] = [];
   private gameMatcher = new GameMatcher();
   private socketServer: GameSocket = new SocketServer(Server.port, {
@@ -22,10 +21,7 @@ class Server {
   private constructor() {}
 
   public static getInstance(): Server {
-    if (!Server.instance) {
-      Server.instance = new Server();
-    }
-
+    if (!Server.instance) Server.instance = new Server();
     return Server.instance;
   }
 
@@ -36,7 +32,6 @@ class Server {
       const client = new Client(socket);
 
       console.log("Client connected: " + client.id);
-      this.onlineClients.push(client);
       client.run();
     });
   }
@@ -50,12 +45,11 @@ class Server {
   }
 
   public enqueueClient(client: Client): void {
-    this.gameMatcher.addClient(client);
+    this.gameMatcher.enqueue(client);
   }
 
   public disconnectClient(client: Client): void {
-    this.onlineClients = this.onlineClients.filter((c) => c !== client);
-    this.gameMatcher.removeClient(client);
+    this.gameMatcher.dequeue(client);
   }
 }
 

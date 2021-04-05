@@ -13,7 +13,7 @@ class Player {
   private shouldPlayCard = false;
 
   constructor(private client: Client, private game: Game) {
-    this.hitPoint = game.getMaxHP();
+    this.hitPoint = this.game.getMaxHP();
     this.spellManager = new SpellManager(this, this.game.sendToAll.bind(this.game));
 
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
@@ -65,7 +65,7 @@ class Player {
 
   public async receiveCards(...cards: Card[]): Promise<void> {
     this.cards.push(...cards);
-    this.getClient().emit(SOCKET_EVENT.TakeCard, cards);
+    this.client.emit(SOCKET_EVENT.TakeCard, cards);
     await waitFor(600);
   }
 
