@@ -154,7 +154,21 @@ class Game {
 
   private changeChargePoint() {}
 
+  private async sendRecentPlayedCard(card: Card) {
+    // TODO emit recent played card to all players
+    // TODO wait for 600ms
+  }
+
+  private calculateChargePoint(power: number) {
+    return this.chargePoint + power;
+  }
+
+  private onOvercharged() {
+    // TODO handle overcharged
+  }
+
   public async consumeCard(card: Card): Promise<void> {
+    this.sendRecentPlayedCard(card);
     if (this.turnTimer) clearTimeout(this.turnTimer);
 
     const oldChargePoint = this.chargePoint;

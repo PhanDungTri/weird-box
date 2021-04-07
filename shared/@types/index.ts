@@ -5,6 +5,7 @@ export enum SERVER_EVENT_NAME {
   UpdateGameMatcherStatus = "update game matcher status",
   GetGameSettings = "get game settings",
   GetPlayerList = "get player list",
+  CardPlayed = "card played",
 }
 
 export enum CLIENT_EVENT_NAME {
@@ -25,6 +26,7 @@ export interface EventsFromServer {
   [SERVER_EVENT_NAME.UpdateGameMatcherStatus]: (status: GameMatcherStatus) => void;
   [SERVER_EVENT_NAME.GetGameSettings]: (maxHP: number, timePerTurn: number) => void;
   [SERVER_EVENT_NAME.GetPlayerList]: (list: PlayerInfo[]) => void;
+  [SERVER_EVENT_NAME.CardPlayed]: (card: )
 }
 
 export interface EventsFromClient {
