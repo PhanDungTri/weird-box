@@ -14,7 +14,7 @@ class Player {
 
   constructor(private client: Client, private game: Game) {
     this.hitPoint = this.game.getMaxHP();
-    this.spellManager = new SpellManager(this, this.game.sendToAll.bind(this.game));
+    this.spellManager = new SpellManager(this, this.game.broadcast.bind(this.game));
 
     client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
     client.on(SOCKET_EVENT.Ready, this.ready.bind(this));
@@ -77,7 +77,7 @@ class Player {
       this.cards = [];
     } else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    await this.game.sendToAll(SOCKET_EVENT.HitPointChanged, {
+    await this.game.broadcast(SOCKET_EVENT.HitPointChanged, {
       target: this.getClient().id,
       hp: this.hitPoint,
     });

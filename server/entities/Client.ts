@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClientSocket } from "../../shared/@types";
+import { ClientSocket, CLIENT_EVENT_NAME } from "../../shared/@types";
 import Server from "./Server";
 
 class Client {
@@ -22,7 +22,7 @@ class Client {
   }
 
   public run(): void {
-    this.on("find game", (name, cb) => {
+    this.on(CLIENT_EVENT_NAME.FindGame, (name, cb) => {
       this.name = name;
       this.server.enqueueClient(this);
       cb(name);

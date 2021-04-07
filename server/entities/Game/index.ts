@@ -1,5 +1,6 @@
 import { of, timer } from "rxjs";
 import { delay, map, mapTo } from "rxjs/operators";
+import { EventsFromServer, SERVER_EVENT_NAME } from "../../../shared/@types";
 import { SOCKET_EVENT } from "../../../shared/constants";
 import generateUniqueId from "../../../shared/utils/generateUniqueId";
 import waitFor from "../../utilities/waitFor";
@@ -36,7 +37,7 @@ class Game {
     this.currentPlayerIndex = this.alivePlayers.length - 1;
     new GameReadyChecker(clients, this);
 
-    this.sendToAll(SOCKET_EVENT.NewGame);
+    this.broadcast(SOCKET_EVENT.NewGame);
   }
 
   public getMaxHP(): number {
@@ -85,8 +86,8 @@ class Game {
 
     this.players.forEach((p, i) => {
       const client = p.getClient();
-      client.emit("get game settings", this.maxHP, this.timePerTurn);
-      client.emit("get player list", playerList);
+      client.emit(SERVER_EVENT_NAME.GetGameSettings, this.maxHP, this.timePerTurn);
+      client.emit(SERVER_EVENT_NAME.GetPlayerList, playerList);
       // TODO send starting hand to client
     });
 
@@ -96,7 +97,7 @@ class Game {
   private eliminatePlayer(player: Player): void {
     if (this.alivePlayers.includes(player)) {
       this.alivePlayers = this.alivePlayers.filter((p) => p !== player);
-      this.sendToAll(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
+      this.broadcast(SOCKET_EVENT.PlayerEliminated, player.getClient().id);
       if (this.getCurrentPlayer() === player) this.newTurn();
     }
   }
@@ -104,7 +105,7 @@ class Game {
   public removePlayer(player: Player): void {
     if (!this.players.includes(player)) return;
     this.eliminatePlayer(player);
-    this.sendToAll(SOCKET_EVENT.PlayerLeftGame, player.getClient().id);
+    this.broadcast(SOCKET_EVENT.PlayerLeftGame, player.getClient().id);
     this.shouldEnd();
   }
 
@@ -115,7 +116,7 @@ class Game {
 
       if (this.turnTimer) clearTimeout(this.turnTimer);
 
-      this.sendToAll(SOCKET_EVENT.GameOver, {
+      this.broadcast(SOCKET_EVENT.GameOver, {
         id: winner.id,
         name: winner.name,
       });
@@ -148,43 +149,33 @@ class Game {
     if (this.turnTimer) clearTimeout(this.turnTimer);
     this.turnTimer = setTimeout(this.eliminatePlayer.bind(this), this.timePerTurn, this.getCurrentPlayer());
 
-    this.sendToAll(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
+    this.broadcast(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
 
+  private changeChargePoint() {}
+
   public async consumeCard(card: Card): Promise<void> {
-    const obs = of(this.chargePoint).pipe(
-      delay(0),
-      map((v) => v + card.getPower())
-    );
-
-    obs.subscribe((cp) => {
-      const pass = of(cp);
-      const pen = of(cp).pipe(mapTo(0));
-
-      if (this.chargePoint < 0 || this.chargePoint > 10) pen.subscribe();
-    });
     if (this.turnTimer) clearTimeout(this.turnTimer);
 
     const oldChargePoint = this.chargePoint;
     this.chargePoint += card.getPower();
 
-    await this.sendToAll(SOCKET_EVENT.CardPlayed, card.toJsonData(), 600);
+    await this.broadcast(SOCKET_EVENT.CardPlayed, card.toJsonData(), 600);
 
     if (this.chargePoint < 0 || this.chargePoint > 10) {
       this.chargePoint = 0;
-      this.sendToAll(SOCKET_EVENT.Overcharged);
+      this.broadcast(SOCKET_EVENT.Overcharged);
       await this.getCurrentPlayer().changeHitPoint(-10);
     } else if (oldChargePoint > 0)
       await SpellFactory.create(card.getSpell(), oldChargePoint, this.alivePlayers, this.getCurrentPlayer());
 
-    await this.sendToAll(SOCKET_EVENT.ChargePointChanged, this.chargePoint, 600);
+    await this.broadcast(SOCKET_EVENT.ChargePointChanged, this.chargePoint, 600);
     this.discardDeck.push(card);
     this.newTurn();
   }
 
-  public async sendToAll(event: SOCKET_EVENT, data?: unknown, wait = 0): Promise<void> {
-    this.players.forEach((p) => p.getClient().emit(event, data));
-    await waitFor(wait);
+  public broadcast(event: SERVER_EVENT_NAME, ...data: Parameters<EventsFromServer[SERVER_EVENT_NAME]>): void {
+    this.players.forEach((p) => p.getClient().emit(event, ...data));
   }
 }
 
