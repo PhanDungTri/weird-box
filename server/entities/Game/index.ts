@@ -1,13 +1,14 @@
 import { of, timer } from "rxjs";
 import { delay, map, mapTo } from "rxjs/operators";
 import { EventsFromServer, SERVER_EVENT_NAME } from "../../../shared/@types";
-import { SOCKET_EVENT } from "../../../shared/constants";
+import { SOCKET_EVENT, SPELL_NAME } from "../../../shared/constants";
 import generateUniqueId from "../../../shared/utils/generateUniqueId";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Client from "../Client";
 import Player from "../Player";
 import Server from "../Server";
+import Spell from "../Spell";
 import SpellFactory from "../Spell/SpellFactory";
 import Deck from "./Deck";
 import GameReadyChecker from "./GameReadyChecker";
@@ -152,23 +153,39 @@ class Game {
     this.broadcast(SOCKET_EVENT.StartTurn, currentPlayer.getClient().id);
   }
 
-  private changeChargePoint() {}
+  private async changeChargePoint(point: number) {
+    // TODO change charge point
+  }
 
   private async sendRecentPlayedCard(card: Card) {
     // TODO emit recent played card to all players
     // TODO wait for 600ms
   }
 
-  private calculateChargePoint(power: number) {
-    return this.chargePoint + power;
-  }
-
   private onOvercharged() {
     // TODO handle overcharged
   }
 
+  private distributeSpell(spell: SPELL_NAME) {
+    // TODO distribute spell to the others
+  }
+
   public async consumeCard(card: Card): Promise<void> {
+    if (this.turnTimer) clearTimeout(this.turnTimer);
+
     this.sendRecentPlayedCard(card);
+    this.discardDeck.push(card);
+
+    const newChargePoint = this.chargePoint + card.getPower();
+
+    if (newChargePoint < 0 || newChargePoint > 10) this.onOvercharged();
+    else {
+      if (this.chargePoint > 0) this.distributeSpell(card.getSpell());
+      this.changeChargePoint(newChargePoint);
+    }
+
+    this.newTurn();
+    //----------------------------------------------
     if (this.turnTimer) clearTimeout(this.turnTimer);
 
     const oldChargePoint = this.chargePoint;
