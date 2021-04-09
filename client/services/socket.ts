@@ -1,6 +1,8 @@
-import { Manager } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
+import { EventsFromClient, EventsFromServer } from "../../shared/@types";
 
-const manager = new Manager(`ws://${process.env.HOST_ADDRESS}:${process.env.HOST_PORT}`);
-const socket = manager.socket("/");
+const socket: Socket<EventsFromServer, EventsFromClient> = io(
+  `http://${process.env.HOST_ADDRESS}:${process.env.HOST_PORT}/`
+);
 
 export default socket;

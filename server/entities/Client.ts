@@ -22,10 +22,9 @@ class Client {
   }
 
   public run(): void {
-    this.on(CLIENT_EVENT_NAME.FindGame, (name, cb) => {
+    this.on(CLIENT_EVENT_NAME.FindGame, (name) => {
       this.name = name;
       this.server.enqueueClient(this);
-      cb(name);
     });
 
     this.on("disconnect", () => {

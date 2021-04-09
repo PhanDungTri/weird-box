@@ -60,7 +60,7 @@ export interface EventsFromServer {
 }
 
 export interface EventsFromClient {
-  [CLIENT_EVENT_NAME.FindGame]: (name: string, cb: (name: string) => void) => void;
+  [CLIENT_EVENT_NAME.FindGame]: (name: string) => void;
   [CLIENT_EVENT_NAME.Ready]: () => void;
   [CLIENT_EVENT_NAME.RejectGame]: () => void;
   [CLIENT_EVENT_NAME.PlayCard]: (id: string, cb: (err: boolean, msg?: string) => void) => void;
