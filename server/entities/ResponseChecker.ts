@@ -29,7 +29,7 @@ class ResponseChecker {
   protected onTimeout(): void {
     this.clients.forEach((c) => {
       if (this.responses.includes(c)) Server.getInstance().enqueueClient(c);
-      c.removeAllListener("ready");
+      c.removeAllListener(CLIENT_EVENT_NAME.Ready);
       c.emit(SERVER_EVENT_NAME.UpdateGameMatcherStatus, "canceled");
     });
   }

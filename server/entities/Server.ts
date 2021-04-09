@@ -1,13 +1,11 @@
 import { Server as SocketServer } from "socket.io";
 import { GameSocket } from "../../shared/@types";
 import Client from "./Client";
-import Game from "./Game";
 import GameMatcher from "./GameMatcher";
 
 class Server {
   public static port = 3000;
   private static instance: Server;
-  private games: Game[] = [];
   private gameMatcher = new GameMatcher();
   private socketServer: GameSocket = new SocketServer(Server.port, {
     cors: {
@@ -34,14 +32,6 @@ class Server {
       console.log("Client connected: " + client.id);
       client.run();
     });
-  }
-
-  public addGame(game: Game): void {
-    this.games.push(game);
-  }
-
-  public removeGame(game: Game): void {
-    this.games = this.games.filter((g) => g !== game);
   }
 
   public enqueueClient(client: Client): void {

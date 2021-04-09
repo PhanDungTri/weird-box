@@ -9,7 +9,7 @@ class PunchSpell extends Spell {
   }
 
   public async trigger(): Promise<void> {
-    await this.target.changeHitPoint(-this.power);
+    this.target.changeHitPoint(-this.power);
   }
 }
 

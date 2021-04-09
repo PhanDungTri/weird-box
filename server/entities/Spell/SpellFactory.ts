@@ -11,7 +11,6 @@ class SpellFactory {
     switch (name) {
       case SPELL_NAME.Punch: {
         for (const p of players) if (p !== caster) await p.takeSpell(new PunchSpell(chargePoint, p, caster));
-
         break;
       }
       case SPELL_NAME.Heal: {

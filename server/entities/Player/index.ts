@@ -1,5 +1,4 @@
-import { SOCKET_EVENT } from "../../../shared/constants";
-import waitFor from "../../utilities/waitFor";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/@types";
 import Card from "../Card";
 import Client from "../Client";
 import Game from "../Game";
@@ -7,19 +6,16 @@ import Spell from "../Spell";
 import SpellManager from "./SpellManager";
 
 class Player {
+  public isEliminated = false;
   private cards: Card[] = [];
   private spellManager;
   private hitPoint: number;
-  private shouldPlayCard = false;
 
   constructor(private client: Client, private game: Game) {
-    this.hitPoint = this.game.getMaxHP();
+    this.hitPoint = this.game.maxHP;
     this.spellManager = new SpellManager(this, this.game.broadcast.bind(this.game));
-
-    client.on(SOCKET_EVENT.PlayCard, this.playCard.bind(this));
-    client.on(SOCKET_EVENT.Ready, this.ready.bind(this));
-    client.on(SOCKET_EVENT.Disconnect, this.leaveGame.bind(this));
-    client.once(SOCKET_EVENT.LeaveGame, this.leaveGame.bind(this));
+    this.client.once("disconnect", this.leaveGame.bind(this));
+    this.client.once(CLIENT_EVENT_NAME.LeaveGame, this.leaveGame.bind(this));
   }
 
   public getCardById(id: string): Card | undefined {
@@ -38,49 +34,25 @@ class Player {
     await this.spellManager.triggerPendingDebuffs();
   }
 
-  private playCard(id: string, ack: (id: string) => void): void {
-    const card = this.getCardById(id);
-
-    if (this.shouldPlayCard && this.game.getCurrentPlayer() === this && card) {
-      this.shouldPlayCard = false;
-      ack(id);
-      this.game.consumeCard(card);
-    } else {
-      this.getClient().emit(SOCKET_EVENT.Error, "Not your turn");
-    }
-
-    // TODO validate card and check if player is in any game.
-    // TODO check if player is eliminated
+  public discardCard(id: string): void {
+    this.cards = this.cards.filter((c) => c.id !== id);
   }
 
-  private ready(): void {
-    this.game.checkReady();
-    this.client.off(SOCKET_EVENT.Ready);
-  }
-
-  public startTurn(): void {
-    this.shouldPlayCard = true;
-    this.getClient().emit(SOCKET_EVENT.Info, "It's your turn!");
-  }
-
-  public async receiveCards(...cards: Card[]): Promise<void> {
+  public takeCards(...cards: Card[]): void {
     this.cards.push(...cards);
-    this.client.emit(SOCKET_EVENT.TakeCard, cards);
-    await waitFor(600);
+    this.client.emit(
+      SERVER_EVENT_NAME.GetCards,
+      cards.map((c) => ({ id: c.id, power: c.getPower(), spell: c.getSpell() }))
+    );
   }
 
-  public async changeHitPoint(difference: number): Promise<void> {
+  public changeHitPoint(difference: number): void {
     this.hitPoint += difference;
 
-    if (this.hitPoint <= 0) {
-      this.hitPoint = 0;
-      this.cards = [];
-    } else if (this.hitPoint > 100) this.hitPoint = 100;
+    if (this.hitPoint <= 0) this.hitPoint = 0;
+    else if (this.hitPoint > 100) this.hitPoint = 100;
 
-    await this.game.broadcast(SOCKET_EVENT.HitPointChanged, {
-      target: this.getClient().id,
-      hp: this.hitPoint,
-    });
+    this.game.broadcast(SERVER_EVENT_NAME.HitPointChanged, this.client.id, this.hitPoint);
   }
 
   public async takeSpell(spell: Spell): Promise<void> {
@@ -88,8 +60,8 @@ class Player {
   }
 
   public leaveGame(): void {
-    this.client.off(SOCKET_EVENT.PlayCard);
-    this.game.removePlayer(this);
+    this.client.removeAllListener(CLIENT_EVENT_NAME.PlayCard);
+    this.game.eliminatePlayer(this);
   }
 }
 

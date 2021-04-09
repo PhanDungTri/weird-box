@@ -10,7 +10,7 @@ class GameReadyChecker extends ResponseChecker {
   }
 
   protected onPass(): void {
-    // TODO start game
+    this.game.start();
   }
 }
 
