@@ -20,14 +20,23 @@ const Spells = ({ align = "center" }: SpellsProps): JSX.Element => {
   });
 
   useEffect(() => {
+    const updateSpell = (spell: SpellInfo) =>
+      setSpells((list) =>
+        produce(list, (draft) => {
+          draft[spell.id] = spell;
+        })
+      );
+
     const onTakeSpell = (spell: SpellInfo) => {
       const { id, duration } = spell;
-      if (duration > 0 || duration === -1 || spells[id])
+      if (duration === 0 && spells[id]) {
+        updateSpells(spell);
         setSpells((list) =>
           produce(list, (draft) => {
-            draft[id] = spell;
+            delete draft[id];
           })
         );
+      } else if (duration > 0 || duration === -1) updateSpell(spell);
     };
 
     socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
