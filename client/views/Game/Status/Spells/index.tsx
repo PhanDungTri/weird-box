@@ -30,7 +30,7 @@ const Spells = ({ align = "center" }: SpellsProps): JSX.Element => {
     const onTakeSpell = (spell: SpellInfo) => {
       const { id, duration } = spell;
       if (duration === 0 && spells[id]) {
-        updateSpells(spell);
+        updateSpell(spell);
         setSpells((list) =>
           produce(list, (draft) => {
             delete draft[id];
