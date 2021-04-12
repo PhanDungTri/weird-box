@@ -30,7 +30,7 @@ class ResponseChecker {
     this.clients.forEach((c) => {
       if (this.responses.includes(c)) Server.getInstance().enqueueClient(c);
       c.removeAllListener(CLIENT_EVENT_NAME.Ready);
-      c.emit(SERVER_EVENT_NAME.UpdateGameMatcherStatus, "canceled");
+      c.emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "canceled");
     });
   }
 }

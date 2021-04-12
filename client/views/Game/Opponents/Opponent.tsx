@@ -1,4 +1,5 @@
 import { memo, useCallback } from "react";
+import { PlayerInfo } from "../../../../shared/@types";
 import useCommonPlayerState from "../../../hooks/useCommonPlayerState";
 import { useGameState } from "../../../hooks/useStore";
 import { disabledStyle } from "../../../styles";
@@ -6,12 +7,7 @@ import SpellAnimation from "../SpellAnimation";
 import Status from "../Status";
 import { opponentNameStyle, opponentStyle } from "./styles";
 
-type OpponentProps = {
-  id: string;
-};
-
-const Opponent = ({ id }: OpponentProps): JSX.Element => {
-  const name = useGameState(useCallback((state) => state.players[id].name, [id]));
+const Opponent = ({ id, name }: PlayerInfo): JSX.Element => {
   const { isEliminated, triggeredSpell, resetTriggeredSpell } = useCommonPlayerState(id);
 
   return (

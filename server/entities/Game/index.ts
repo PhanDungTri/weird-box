@@ -1,4 +1,5 @@
 import { EventsFromServer, SERVER_EVENT_NAME } from "../../../shared/@types";
+import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN } from "../../../shared/constants";
 import generateUniqueId from "../../../shared/utils/generateUniqueId";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
@@ -9,8 +10,6 @@ import GameReadyChecker from "./GameReadyChecker";
 import Turn from "./Turn";
 
 const NUM_OF_STARTING_CARDS = 5;
-const DEFAULT_MAX_HP = 100;
-const DEFAULT_TIME_PER_TURN = 15000;
 
 class Game {
   public readonly id = generateUniqueId();

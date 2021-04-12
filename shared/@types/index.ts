@@ -3,7 +3,7 @@ import { PASSIVE_ACTION, SPELL_NAME } from "../constants";
 
 export enum SERVER_EVENT_NAME {
   Info = "info",
-  UpdateGameMatcherStatus = "update game matcher status",
+  UpdateGameMatchingStatus = "update game matcher status",
   GetGameSettings = "get game settings",
   GetPlayerList = "get player list",
   NewGame = "new game",
@@ -27,7 +27,7 @@ export enum CLIENT_EVENT_NAME {
   LeaveGame = "leave game",
 }
 
-export type GameMatcherStatus = "finding" | "found" | "canceled";
+export type GameMatchingStatus = "finding" | "found" | "canceled";
 
 export type PlayerInfo = {
   id: string;
@@ -43,7 +43,7 @@ export type CardInfo = {
 
 export interface EventsFromServer {
   [SERVER_EVENT_NAME.Info]: (msg: string) => void;
-  [SERVER_EVENT_NAME.UpdateGameMatcherStatus]: (status: GameMatcherStatus) => void;
+  [SERVER_EVENT_NAME.UpdateGameMatchingStatus]: (status: GameMatchingStatus) => void;
   [SERVER_EVENT_NAME.GetGameSettings]: (maxHP: number, timePerTurn: number) => void;
   [SERVER_EVENT_NAME.GetPlayerList]: (list: PlayerInfo[]) => void;
   [SERVER_EVENT_NAME.NewGame]: () => void;

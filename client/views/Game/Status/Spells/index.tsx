@@ -1,21 +1,37 @@
-import { memo } from "react";
+import produce from "immer";
+import { memo, useEffect, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import { SpellInfo } from "../../../../../shared/@types";
+import { SERVER_EVENT_NAME, SpellInfo } from "../../../../../shared/@types";
+import socket from "../../../../services/socket";
 import { fadeOut } from "../../../../styles/animations";
 import SpellIndicator from "./SpellIndicator";
 import { spellsStyle } from "./styles";
 
 type SpellsProps = {
-  spells: SpellInfo[];
   align?: "center" | "left";
 };
 
-const Spells = ({ spells, align = "center" }: SpellsProps): JSX.Element => {
-  const transitions = useTransition(spells, (s) => s.id, {
+const Spells = ({ align = "center" }: SpellsProps): JSX.Element => {
+  const [spells, setSpells] = useState<Record<string, SpellInfo>>({});
+  const transitions = useTransition(Object.values(spells), (s) => s.id, {
     from: { opacity: 0, maxWidth: "0px" },
     enter: [{ maxWidth: "100px" }, { opacity: 1 }],
     leave: fadeOut,
   });
+
+  useEffect(() => {
+    const onTakeSpell = (spell: SpellInfo) => {
+      const { id, duration } = spell;
+      if (duration > 0 || duration === -1 || spells[id])
+        setSpells((list) =>
+          produce(list, (draft) => {
+            draft[id] = spell;
+          })
+        );
+    };
+
+    socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
+  }, []);
 
   return (
     <div css={spellsStyle(align)}>

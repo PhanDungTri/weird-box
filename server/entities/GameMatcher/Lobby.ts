@@ -1,5 +1,6 @@
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/@types";
 import Client from "../Client";
+import Game from "../Game";
 import ResponseChecker from "../ResponseChecker";
 
 class Lobby extends ResponseChecker {
@@ -7,12 +8,12 @@ class Lobby extends ResponseChecker {
     super(clients);
     this.clients.forEach((c) => {
       c.once(CLIENT_EVENT_NAME.RejectGame, () => c.removeAllListener("ready"));
-      c.emit(SERVER_EVENT_NAME.UpdateGameMatcherStatus, "found");
+      c.emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "found");
     });
   }
 
   protected onPass(): void {
-    // TODO new game
+    new Game(this.clients);
   }
 
   protected ready(client: Client): void {

@@ -1,47 +1,41 @@
-import { useEffect, useState } from "react";
-import { SOCKET_EVENT } from "../../../shared/constants";
+import { useCallback, useEffect, useState } from "react";
+import { CLIENT_EVENT_NAME, GameMatchingStatus, SERVER_EVENT_NAME } from "../../../shared/@types";
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
 import COLOR from "../../constants/COLOR";
-import { useAppState } from "../../hooks/useStore";
 import socket from "../../services/socket";
 
-type GameConfirmDialogProps = {
-  onClose?: () => void;
-};
+const GameConfirmDialog = (): JSX.Element => {
+  const [shouldShow, show] = useState(false);
+  const [hasAccepted, accept] = useState(false);
 
-const GameConfirmDialog = ({ onClose }: GameConfirmDialogProps): JSX.Element => {
-  const shouldShow = useAppState((state) => state.findingStatus === "found");
-  const setFindingStatus = useAppState((state) => state.setFindingStatus);
-  const [isAccepted, accept] = useState(false);
-
-  const onReject = () => {
-    socket.emit(SOCKET_EVENT.RejectGame);
-    if (onClose) onClose();
-    setFindingStatus("canceled");
-  };
-
-  const onAccept = () => {
-    socket.emit(SOCKET_EVENT.AcceptGame);
-    accept(true);
-  };
+  const onConfirm = useCallback((isAccepted: boolean) => {
+    socket.emit(isAccepted ? CLIENT_EVENT_NAME.Ready : CLIENT_EVENT_NAME.RejectGame);
+    accept(isAccepted);
+  }, []);
 
   useEffect(() => {
     if (!shouldShow) accept(false);
   }, [shouldShow]);
+
+  useEffect(() => {
+    const onUpdateGameMatchingStatus = (status: GameMatchingStatus) => show(status === "found");
+    socket.on(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onUpdateGameMatchingStatus);
+    return () => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onUpdateGameMatchingStatus);
+  }, []);
 
   return (
     <Dialog
       show={shouldShow}
       title="Game found"
       confirmMessage="Accept"
-      onConfirm={onAccept}
+      onConfirm={() => onConfirm(true)}
       cancelMessage="Reject"
-      onCancel={onReject}
+      onCancel={() => onConfirm(false)}
       color={COLOR.Info}
-      noFooter={isAccepted}
+      noFooter={hasAccepted}
     >
-      {isAccepted ? (
+      {hasAccepted ? (
         <Loading text="Waiting other players..." />
       ) : (
         <p>We found a game for you! Please confirm to join!</p>

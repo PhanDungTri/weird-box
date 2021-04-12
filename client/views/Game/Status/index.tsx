@@ -1,7 +1,7 @@
-import { memo, useCallback } from "react";
-import shallow from "zustand/shallow";
-import { useGameState } from "../../../hooks/useStore";
-import { GameState, selectCurrentPlayer } from "../../../store";
+import { memo, useEffect, useState } from "react";
+import { SERVER_EVENT_NAME } from "../../../../shared/@types";
+import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN } from "../../../../shared/constants";
+import socket from "../../../services/socket";
 import HitPointBar from "./HitPointBar";
 import Spells from "./Spells";
 import { horizontalStatusStyle, statusStyle } from "./styles";
@@ -12,22 +12,24 @@ type StatusProps = {
   horizontal?: boolean;
 };
 
-const selectGameSettings = (state: GameState) => state.settings;
-
 const Status = ({ id, horizontal = false }: StatusProps): JSX.Element => {
-  const { maxHP, timePerTurn } = useGameState(selectGameSettings);
-  const currentPlayer = useGameState(selectCurrentPlayer);
-  const hp = useGameState(useCallback((state) => state.players[id].hp, [id]));
-  const spells = useGameState(
-    useCallback((state) => Object.values(state.spells).filter((s) => s.target === id), [id]),
-    shallow
+  const [maxHP, setMaxHP] = useState(DEFAULT_MAX_HP);
+  const [timePerTurn, setTimePerTurn] = useState(DEFAULT_TIME_PER_TURN);
+
+  useEffect(
+    () =>
+      void socket.once(SERVER_EVENT_NAME.GetGameSettings, (maxHP, timePerTurn) => {
+        setMaxHP(maxHP);
+        setTimePerTurn(timePerTurn);
+      }),
+    []
   );
 
   return (
     <div css={[statusStyle, horizontal && horizontalStatusStyle]}>
-      <HitPointBar hp={hp} maxHP={maxHP} />
-      <Spells spells={spells} align={horizontal ? "left" : "center"} />
-      {currentPlayer === id && <Timer timePerTurn={timePerTurn} fluid={horizontal} />}
+      <HitPointBar id={id} maxHP={maxHP} />
+      <Spells align={horizontal ? "left" : "center"} />
+      <Timer id={id} timePerTurn={timePerTurn} fluid={horizontal} />
     </div>
   );
 };
