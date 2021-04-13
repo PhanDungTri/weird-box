@@ -1,5 +1,3 @@
-import { Subject, timer } from "rxjs";
-import { debounce, filter, map } from "rxjs/operators";
 import Client from "../Client";
 import Lobby from "./Lobby";
 
@@ -10,31 +8,30 @@ const limit = (value: number, limit: number): number => (value < limit ? value :
 
 class GameMatcher {
   private queue: Client[] = [];
-  private queueWatcher = new Subject<Client[]>();
+  private timeout: NodeJS.Timeout | undefined;
 
-  constructor() {
-    const queueFlow = this.queueWatcher.pipe(
-      filter((q) => q.length > 1),
-      debounce((q) => (q.length < 4 ? timer(WAIT_FOR_FULL_LOBBY) : timer(0))),
-      map((q) => q.splice(limit(q.length, MAX_PLAYERS_PER_GAME)))
-    );
+  private newLobby() {
+    new Lobby(this.queue.slice(-limit(this.queue.length, MAX_PLAYERS_PER_GAME)));
+  }
 
-    queueFlow.subscribe((clients) => {
-      new Lobby(clients);
-    });
+  private match() {
+    if (this.timeout) clearTimeout(this.timeout);
+    if (this.queue.length <= 1) return;
+    else if (this.queue.length >= 4) this.newLobby();
+    else this.timeout = setTimeout(this.newLobby.bind(this), WAIT_FOR_FULL_LOBBY);
   }
 
   public enqueue(client: Client): void {
     if (!this.queue.includes(client)) {
       this.queue.push(client);
-      this.queueWatcher.next(this.queue);
+      this.match();
     }
   }
 
   public dequeue(client: Client): void {
     if (this.queue.includes(client)) {
       this.queue = this.queue.filter((c) => c !== client);
-      this.queueWatcher.next(this.queue);
+      this.match();
     }
   }
 }

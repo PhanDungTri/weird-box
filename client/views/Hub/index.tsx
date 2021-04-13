@@ -1,9 +1,23 @@
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import { SERVER_EVENT_NAME } from "../../../shared/@types";
+import { routeAtom } from "../../atoms";
+import ROUTE from "../../constants/ROUTE";
+import socket from "../../services/socket";
 import { centerizeContainerStyle, gridStyle, pageStyle } from "../../styles";
 import GameConfirmDialog from "./GameConfirmDialog";
 import Menu from "./Menu";
 import PlayerNameInput from "./PlayerNameInput";
 
 const Hub = (): JSX.Element => {
+  const [, changeRoute] = useAtom(routeAtom);
+
+  useEffect(() => {
+    const onNewGame = () => changeRoute(ROUTE.InGame);
+    socket.on(SERVER_EVENT_NAME.NewGame, onNewGame);
+    return () => void socket.off(SERVER_EVENT_NAME.NewGame, onNewGame);
+  }, []);
+
   return (
     <div css={[pageStyle, gridStyle, centerizeContainerStyle]}>
       <div>UNTITLED CARD GAME</div>

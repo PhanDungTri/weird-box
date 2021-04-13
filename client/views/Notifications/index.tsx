@@ -1,20 +1,27 @@
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { animated, useTransition } from "react-spring";
+import { NotificationVariant, SERVER_EVENT_NAME } from "../../../shared/@types";
+import { notificationsAtom } from "../../atoms";
 import COLOR from "../../constants/COLOR";
-import { useAppState } from "../../hooks/useStore";
-import { AppState } from "../../store/app";
+import socket from "../../services/socket";
 import { notificationStyle } from "./styles";
 
-const selectNotifications = (state: AppState) => state.notifications;
-
 const Notifications = (): JSX.Element => {
-  const notifications = useAppState(selectNotifications);
+  const [notifications, notify] = useAtom(notificationsAtom);
 
   const transitions = useTransition(notifications, (n) => n.id, {
     from: { transform: "translate(-50%, 0%)", opacity: 0 },
     leave: { transform: "translate(-50%, 0%)", opacity: 0 },
     enter: { transform: "translate(-50%, -100%)", opacity: 1 },
   });
+
+  useEffect(() => {
+    const onNotify = (message: string, variant: NotificationVariant) => notify({ message, variant });
+    socket.on(SERVER_EVENT_NAME.Notify, onNotify);
+    return () => void socket.off(SERVER_EVENT_NAME.Notify, onNotify);
+  }, []);
 
   return createPortal(
     transitions.map(({ item, props, key }, i, arr) => (

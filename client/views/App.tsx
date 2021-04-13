@@ -1,6 +1,6 @@
+import { useAtom } from "jotai";
+import { routeAtom } from "../atoms";
 import ROUTE from "../constants/ROUTE";
-import { useAppState } from "../hooks/useStore";
-import { AppState } from "../store";
 import Game from "./Game";
 import Hub from "./Hub";
 import Test from "./Test";
@@ -11,10 +11,8 @@ const pages = {
   [ROUTE.Test]: <Test />,
 };
 
-const selectRoute = (state: AppState) => state.route;
-
 const App = (): JSX.Element => {
-  const route = useAppState(selectRoute);
+  const [route] = useAtom(routeAtom);
   return pages[route];
 };
 

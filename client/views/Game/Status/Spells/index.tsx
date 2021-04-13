@@ -20,6 +20,8 @@ const Spells = ({ align = "center" }: SpellsProps): JSX.Element => {
   });
 
   useEffect(() => {
+    let cleanup: number;
+
     const updateSpell = (spell: SpellInfo) =>
       setSpells((list) =>
         produce(list, (draft) => {
@@ -31,15 +33,24 @@ const Spells = ({ align = "center" }: SpellsProps): JSX.Element => {
       const { id, duration } = spell;
       if (duration === 0 && spells[id]) {
         updateSpell(spell);
-        setSpells((list) =>
-          produce(list, (draft) => {
-            delete draft[id];
-          })
+        cleanup = window.setTimeout(
+          () =>
+            void setSpells((list) =>
+              produce(list, (draft) => {
+                delete draft[id];
+              })
+            ),
+          400
         );
       } else if (duration > 0 || duration === -1) updateSpell(spell);
     };
 
     socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
+
+    return () => {
+      socket.off(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
+      clearTimeout(cleanup);
+    };
   }, []);
 
   return (

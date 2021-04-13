@@ -14,8 +14,8 @@ class Player {
   constructor(private client: Client, private game: Game) {
     this.hitPoint = this.game.maxHP;
     this.spellManager = new SpellManager(this, this.game.broadcast.bind(this.game));
-    this.client.once("disconnect", this.leaveGame.bind(this));
-    this.client.once(CLIENT_EVENT_NAME.LeaveGame, this.leaveGame.bind(this));
+    this.client.getSocket().once("disconnect", this.leaveGame.bind(this));
+    this.client.getSocket().once(CLIENT_EVENT_NAME.LeaveGame, this.leaveGame.bind(this));
   }
 
   public getCardById(id: string): Card | undefined {
@@ -40,7 +40,7 @@ class Player {
 
   public takeCards(...cards: Card[]): void {
     this.cards.push(...cards);
-    this.client.emit(
+    this.client.getSocket().emit(
       SERVER_EVENT_NAME.GetCards,
       cards.map((c) => ({ id: c.id, power: c.getPower(), spell: c.getSpell() }))
     );
@@ -60,7 +60,7 @@ class Player {
   }
 
   public leaveGame(): void {
-    this.client.removeAllListener(CLIENT_EVENT_NAME.PlayCard);
+    this.client.getSocket().removeAllListeners(CLIENT_EVENT_NAME.PlayCard);
     this.game.eliminatePlayer(this);
   }
 }

@@ -9,8 +9,6 @@ import { centerizeContainerStyle, gridStyle } from "../../../styles";
 import { playerNameAtom } from "../atom";
 import { optionMenuStyle } from "./styles";
 
-const findGame = (name: string) => socket.emit(CLIENT_EVENT_NAME.FindGame, name);
-
 const Menu = (): JSX.Element => {
   const [name] = useAtom(playerNameAtom);
   const [isMatching, matching] = useState(false);
@@ -19,6 +17,11 @@ const Menu = (): JSX.Element => {
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   });
+
+  const findGame = () => {
+    socket.emit(CLIENT_EVENT_NAME.FindGame, name);
+    matching(true);
+  };
 
   useEffect(() => {
     const onUpdateGameMatchingStatus = (status: GameMatchingStatus) => matching(status !== "canceled");
@@ -35,7 +38,7 @@ const Menu = (): JSX.Element => {
           </animated.div>
         ) : (
           <animated.div style={props} css={[gridStyle, centerizeContainerStyle]} key="menu">
-            <Button onClick={() => findGame(name)}>Find game</Button>
+            <Button onClick={findGame}>Find game</Button>
             <Button>How to play</Button>
             <Button>About</Button>
           </animated.div>

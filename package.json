@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev-client": "parcel ./client/index.html",
-    "dev-server": "ts-node-dev --respawn --transpile-only ./server/index.ts",
-    "dev-reactive-server": "ts-node-dev --respawn --transpile-only ./reactive-server/index.ts"
+    "dev-server": "ts-node-dev --respawn --transpile-only ./server/index.ts"
   },
   "repository": {
     "type": "git",

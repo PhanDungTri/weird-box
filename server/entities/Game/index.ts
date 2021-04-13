@@ -74,7 +74,7 @@ class Game {
     }));
 
     this.players.forEach((p, i) => {
-      const client = p.getClient();
+      const client = p.getClient().getSocket();
 
       client.emit(SERVER_EVENT_NAME.GetGameSettings, this.maxHP, this.timePerTurn);
       client.emit(SERVER_EVENT_NAME.GetPlayerList, playerList);
@@ -108,7 +108,12 @@ class Game {
   }
 
   public broadcast(event: SERVER_EVENT_NAME, ...data: Parameters<EventsFromServer[SERVER_EVENT_NAME]>): void {
-    this.players.forEach((p) => p.getClient().emit(event, ...data));
+    this.players.forEach((p) =>
+      p
+        .getClient()
+        .getSocket()
+        .emit(event, ...data)
+    );
   }
 }
 

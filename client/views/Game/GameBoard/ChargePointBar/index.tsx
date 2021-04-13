@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useBoxOfCardState } from "../../../../hooks/useStore";
-import { BoxOfCardState, selectStatus } from "../../../../store";
+import { CardInfo, SERVER_EVENT_NAME } from "../../../../../shared/@types";
+import socket from "../../../../services/socket";
 import { chargeNodeStyle, chargePointBarDealAnimation, emptyNodeStyle, StyledChargePointBar } from "./styles";
 import { ChargePointBarState } from "./types";
 
@@ -11,11 +11,9 @@ const charge = (value: number): boolean[] => {
   return arr;
 };
 
-const selectChargePoint = (state: BoxOfCardState) => state.chargePoint;
-
 const ChargePointBar = (): JSX.Element => {
-  const chargePoint = useBoxOfCardState(selectChargePoint);
-  const boxOfCardStatus = useBoxOfCardState(selectStatus);
+  const [chargePoint, setChargePoint] = useState(0);
+  const [shouldAnimate, animate] = useState(false);
   const [nodes, setNodeStatus] = useState<boolean[]>(charge(0));
   const [barState, setBarState] = useState<ChargePointBarState>("Safe");
   const prevNodes = useRef<boolean[]>(nodes);
@@ -55,8 +53,22 @@ const ChargePointBar = (): JSX.Element => {
   useEffect(() => setNodeStatus(charge(chargePoint)), [chargePoint]);
   useEffect(() => void (prevNodes.current = nodes), [nodes]);
 
+  useEffect(() => {
+    const onChangeChargePoint = (point: number) => setChargePoint(point);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onGetCards = (_: CardInfo[]) => animate(true);
+
+    socket.on(SERVER_EVENT_NAME.ChargePointChanged, onChangeChargePoint);
+    socket.on(SERVER_EVENT_NAME.GetCards, onGetCards);
+
+    return () => {
+      socket.off(SERVER_EVENT_NAME.ChargePointChanged, onChangeChargePoint);
+      socket.off(SERVER_EVENT_NAME.GetCards, onGetCards);
+    };
+  }, []);
+
   return (
-    <StyledChargePointBar css={boxOfCardStatus === "deal" && chargePointBarDealAnimation}>
+    <StyledChargePointBar css={shouldAnimate && chargePointBarDealAnimation} onAnimationEnd={() => animate(false)}>
       {renderNodes()}
     </StyledChargePointBar>
   );

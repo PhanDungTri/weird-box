@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { PASSIVE_ACTION, SPELL_NAME } from "../constants";
 
 export enum SERVER_EVENT_NAME {
-  Info = "info",
+  Notify = "notify",
   UpdateGameMatchingStatus = "update game matcher status",
   GetGameSettings = "get game settings",
   GetPlayerList = "get player list",
@@ -41,8 +41,24 @@ export type CardInfo = {
   spell: SPELL_NAME;
 };
 
+export type SpellInfo = {
+  id: string;
+  name: SPELL_NAME;
+  power: number;
+  duration: number;
+  target: string;
+};
+
+export type PassiveAction = {
+  id: string;
+  action: PASSIVE_ACTION;
+  target: string;
+};
+
+export type NotificationVariant = "Danger" | "Safe" | "Info" | "Warning";
+
 export interface EventsFromServer {
-  [SERVER_EVENT_NAME.Info]: (msg: string) => void;
+  [SERVER_EVENT_NAME.Notify]: (msg: string, variant: NotificationVariant) => void;
   [SERVER_EVENT_NAME.UpdateGameMatchingStatus]: (status: GameMatchingStatus) => void;
   [SERVER_EVENT_NAME.GetGameSettings]: (maxHP: number, timePerTurn: number) => void;
   [SERVER_EVENT_NAME.GetPlayerList]: (list: PlayerInfo[]) => void;
@@ -69,27 +85,3 @@ export interface EventsFromClient {
 
 export type ClientSocket = Socket<EventsFromClient, EventsFromServer>;
 export type GameSocket = Server<EventsFromClient, EventsFromServer>;
-
-export type GameSettings = {
-  maxHP: number;
-  timePerTurn: number;
-};
-
-export type HitPointChange = {
-  target: string;
-  hp: number;
-};
-
-export type SpellInfo = {
-  id: string;
-  name: SPELL_NAME;
-  power: number;
-  duration: number;
-  target: string;
-};
-
-export type PassiveAction = {
-  id: string;
-  action: PASSIVE_ACTION;
-  target: string;
-};

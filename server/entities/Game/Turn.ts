@@ -13,9 +13,9 @@ class Turn {
   }, this.game.timePerTurn);
 
   constructor(private currentPlayer: Player, private alivePlayers: Player[], private game: Game) {
-    this.currentPlayer.getClient().on(CLIENT_EVENT_NAME.PlayCard, this.onPlayCard.bind(this));
+    this.currentPlayer.getClient().getSocket().on(CLIENT_EVENT_NAME.PlayCard, this.onPlayCard.bind(this));
     this.currentPlayer.takeCards(game.drawCard());
-    this.currentPlayer.getClient().emit(SERVER_EVENT_NAME.Info, "It's your turn");
+    this.currentPlayer.getClient().getSocket().emit(SERVER_EVENT_NAME.Notify, "It's your turn", "Info");
     this.game.broadcast(SERVER_EVENT_NAME.NewTurn, currentPlayer.getClient().id);
   }
 
@@ -54,7 +54,7 @@ class Turn {
 
     if (card) {
       clearTimeout(this.timeout);
-      this.currentPlayer.getClient().removeAllListener(CLIENT_EVENT_NAME.PlayCard);
+      this.currentPlayer.getClient().getSocket().removeAllListeners(CLIENT_EVENT_NAME.PlayCard);
       cb(false);
       this.currentPlayer.discardCard(id);
       this.game.discardCard(card);

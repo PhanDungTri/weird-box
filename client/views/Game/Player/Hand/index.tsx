@@ -1,27 +1,22 @@
+import { useAtom } from "jotai";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import { SOCKET_EVENT } from "../../../../../shared/constants";
-import { useAppState, useGameState, useHandState } from "../../../../hooks/useStore";
+import { CardInfo, CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/@types";
+import { notificationsAtom } from "../../../../atoms";
+import { useInTurn, useOnEliminate } from "../../../../hooks";
 import socket from "../../../../services/socket";
-import { AppState, HandState, selectCurrentPlayer } from "../../../../store";
 import { fadeOut } from "../../../../styles/animations";
 import Card from "../../Card";
 import { handStyle } from "./styles";
 
-type HandProps = {
-  eliminated?: boolean;
-};
-const selectNotify = (state: AppState) => state.notify;
-const selectCards = (state: HandState) => state.cards;
-const selectRemoveCard = (state: HandState) => state.removeCard;
-
-const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
-  const currentPlayer = useGameState(selectCurrentPlayer);
-  const notify = useAppState(selectNotify);
-  const cards = useHandState(selectCards);
-  const removeCard = useHandState(selectRemoveCard);
-  const ref = useRef<HTMLDivElement>(null);
+const Hand = (): JSX.Element => {
+  const isInTurn = useInTurn(socket.id);
+  const isEliminated = useOnEliminate(socket.id);
+  const [cards, setCards] = useState<CardInfo[]>([]);
   const [chosenCard, setChosenCard] = useState("");
+  const [, notify] = useAtom(notificationsAtom);
+  const ref = useRef<HTMLDivElement>(null);
+
   const transitions = useTransition(cards, (c) => c.id, {
     from: {
       opacity: 0,
@@ -32,31 +27,40 @@ const Hand = ({ eliminated = false }: HandProps): JSX.Element => {
     leave: fadeOut,
   });
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (ref.current && !ref.current.contains(event.target as Node)) setChosenCard("");
-  };
-
   const playCard = useCallback(
     (id: string) => {
-      // TODO check if in-turn
       if (chosenCard !== id) setChosenCard(id);
-      else if (currentPlayer === socket.id)
-        socket.emit(SOCKET_EVENT.PlayCard, id, (recentCard: string) => removeCard(recentCard));
-      else notify("Danger")("Not your turn!");
+      else if (isInTurn)
+        socket.emit(CLIENT_EVENT_NAME.PlayCard, chosenCard, (err, message = "") => {
+          if (err) notify({ message, variant: "Danger" });
+          else setCards((list) => list.filter((c) => c.id !== chosenCard));
+        });
+      else notify({ message: "Not your turn!", variant: "Danger" });
     },
-    [currentPlayer, chosenCard]
+    [isInTurn, chosenCard]
   );
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) setChosenCard("");
+    };
+
+    const onGetCards = (cards: CardInfo[]) => setCards((list) => [...list, ...cards]);
+
     document.addEventListener("click", handleClickOutside, true);
-    return () => document.removeEventListener("click", handleClickOutside, true);
+    socket.on(SERVER_EVENT_NAME.GetCards, onGetCards);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+      socket.off(SERVER_EVENT_NAME.GetCards, onGetCards);
+    };
   }, []);
 
   return (
     <div ref={ref} css={handStyle}>
       {transitions.map(({ item, props, key }) => (
         <animated.div key={key} style={props}>
-          <Card disabled={eliminated} card={item} onClick={playCard} chosen={chosenCard === item.id} />
+          <Card disabled={isEliminated} card={item} onClick={playCard} chosen={chosenCard === item.id} />
         </animated.div>
       ))}
     </div>

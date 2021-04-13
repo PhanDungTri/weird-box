@@ -9,7 +9,7 @@ class ResponseChecker {
   private timeout: NodeJS.Timeout;
 
   constructor(protected clients: Client[], waitTime = DEFAULT_WAIT_TIME) {
-    this.clients.forEach((c) => c.once(CLIENT_EVENT_NAME.Ready, () => this.ready(c)));
+    this.clients.forEach((c) => c.getSocket().once(CLIENT_EVENT_NAME.Ready, () => this.ready(c)));
     this.timeout = setTimeout(this.onTimeout.bind(this), waitTime);
   }
 
@@ -29,8 +29,8 @@ class ResponseChecker {
   protected onTimeout(): void {
     this.clients.forEach((c) => {
       if (this.responses.includes(c)) Server.getInstance().enqueueClient(c);
-      c.removeAllListener(CLIENT_EVENT_NAME.Ready);
-      c.emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "canceled");
+      c.getSocket().removeAllListeners(CLIENT_EVENT_NAME.Ready);
+      c.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "canceled");
     });
   }
 }
