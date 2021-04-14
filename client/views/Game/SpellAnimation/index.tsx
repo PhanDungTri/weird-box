@@ -23,7 +23,6 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
 
     socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
     socket.on(SERVER_EVENT_NAME.ActivatePassive, onActivePassive);
-
     return () => {
       socket.off(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
       socket.off(SERVER_EVENT_NAME.ActivatePassive, onActivePassive);
