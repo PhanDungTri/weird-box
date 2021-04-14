@@ -5,19 +5,19 @@ import Loading from "../../components/Loading";
 import COLOR from "../../constants/COLOR";
 import socket from "../../services/socket";
 
+type ConfirmStatus = "pending" | "accepted" | "rejected";
+
 const GameConfirmDialog = (): JSX.Element => {
   const [shouldShow, show] = useState(false);
-  const [shouldAccept, accept] = useState<boolean>();
-  const [shouldConfirm, confirm] = useState(false);
+  const [confirm, setConfirm] = useState<ConfirmStatus>("pending");
 
   const onConfirm = useCallback((isAccepted: boolean) => {
     socket.emit(isAccepted ? CLIENT_EVENT_NAME.Ready : CLIENT_EVENT_NAME.RejectGame);
-    accept(isAccepted);
-    confirm(true);
+    setConfirm(isAccepted ? "accepted" : "rejected");
   }, []);
 
   useEffect(() => {
-    if (!shouldShow) confirm(false);
+    if (!shouldShow) setConfirm("pending");
   }, [shouldShow]);
 
   useEffect(() => {
@@ -34,10 +34,10 @@ const GameConfirmDialog = (): JSX.Element => {
       onConfirm={() => onConfirm(true)}
       cancelMessage="Reject"
       onCancel={() => onConfirm(false)}
-      color={shouldAccept === undefined ? COLOR.Info : shouldAccept ? COLOR.Safe : COLOR.Danger}
-      noFooter={shouldConfirm}
+      color={confirm === "pending" ? COLOR.Info : confirm === "accepted" ? COLOR.Safe : COLOR.Danger}
+      noFooter={confirm !== "pending"}
     >
-      {shouldConfirm ? (
+      {confirm !== "pending" ? (
         <Loading text="Waiting other players..." />
       ) : (
         <p>We found a game for you! Please confirm to join!</p>

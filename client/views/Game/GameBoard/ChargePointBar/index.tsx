@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CardInfo, SERVER_EVENT_NAME } from "../../../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../../../shared/@types";
 import socket from "../../../../services/socket";
 import { chargeNodeStyle, chargePointBarDealAnimation, emptyNodeStyle, StyledChargePointBar } from "./styles";
 import { ChargePointBarState } from "./types";
@@ -55,8 +55,7 @@ const ChargePointBar = (): JSX.Element => {
 
   useEffect(() => {
     const onChangeChargePoint = (point: number) => setChargePoint(point);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const onGetCards = (_: CardInfo[]) => animate(true);
+    const onGetCards = () => animate(true);
 
     socket.on(SERVER_EVENT_NAME.ChargePointChanged, onChangeChargePoint);
     socket.on(SERVER_EVENT_NAME.GetCards, onGetCards);

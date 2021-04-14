@@ -14,12 +14,8 @@ const Game = (): JSX.Element => {
   const [, changeRoute] = useAtom(routeAtom);
 
   useEffect(() => {
-    const onCanceled = (status: GameMatchingStatus) => {
-      if (status === "canceled") changeRoute(ROUTE.Hub);
-    };
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const onNewTurn = (_: string) => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);
+    const onCanceled = (status: GameMatchingStatus) => status === "canceled" && changeRoute(ROUTE.Hub);
+    const onNewTurn = () => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);
 
     socket.emit(CLIENT_EVENT_NAME.Ready);
     socket.once(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);

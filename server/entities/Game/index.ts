@@ -18,6 +18,7 @@ class Game {
   private chargePoint = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck(true);
+  private turn!: Turn;
 
   constructor(
     clients: Client[],
@@ -51,6 +52,10 @@ class Game {
     return startingHands;
   }
 
+  public newTurn(alivePlayers: Player[]): void {
+    this.turn = new Turn(this.nextPlayer(), alivePlayers, this);
+  }
+
   public drawCard(): Card {
     if (this.drawDeck.getSize() === 0) {
       this.drawDeck.copy(this.discardDeck);
@@ -81,11 +86,11 @@ class Game {
       p.takeCards(...startingHands[i]);
     });
 
-    new Turn(this.nextPlayer(), this.players, this);
+    this.newTurn(this.players);
   }
 
   public shouldEnd(): boolean {
-    return this.players.reduce((count, p) => (p.isEliminated ? count : count + 1), 0) < 1;
+    return this.players.reduce((count, p) => (p.isEliminated ? count : count + 1), 0) <= 1;
   }
 
   public nextPlayer(): Player {
@@ -105,6 +110,9 @@ class Game {
   public eliminatePlayer(player: Player): void {
     player.isEliminated = true;
     this.broadcast(SERVER_EVENT_NAME.PlayerEliminated, player.getClient().id);
+
+    if (this.getCurrentPlayer() === player) this.turn.endTurn();
+    else this.turn.onEndGame();
   }
 
   public broadcast(event: SERVER_EVENT_NAME, ...data: Parameters<EventsFromServer[SERVER_EVENT_NAME]>): void {

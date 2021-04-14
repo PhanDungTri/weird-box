@@ -18,13 +18,8 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
   const onAnimationEnd = useCallback(() => setSpell(SPELL_NAME.Void), []);
 
   useEffect(() => {
-    const onTakeSpell = (spell: SpellInfo) => {
-      if (spell.target === id) setSpell(spell.name);
-    };
-
-    const onActivePassive = (passive: PassiveAction) => {
-      if (passive.target === id) setSpell(passive.action);
-    };
+    const onTakeSpell = (spell: SpellInfo) => spell.target === id && setSpell(spell.name);
+    const onActivePassive = (passive: PassiveAction) => passive.target === id && setSpell(passive.action);
 
     socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
     socket.on(SERVER_EVENT_NAME.ActivatePassive, onActivePassive);

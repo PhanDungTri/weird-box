@@ -8,10 +8,13 @@ import SpellIndicator from "./SpellIndicator";
 import { spellsStyle } from "./styles";
 
 type SpellsProps = {
+  id: string;
   align?: "center" | "left";
 };
 
-const Spells = ({ align = "center" }: SpellsProps): JSX.Element => {
+const CLEAN_UP_TIMEOUT = 400;
+
+const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
   const [spells, setSpells] = useState<Record<string, SpellInfo>>({});
   const transitions = useTransition(Object.values(spells), (s) => s.id, {
     from: { opacity: 0, maxWidth: "0px" },
@@ -20,37 +23,33 @@ const Spells = ({ align = "center" }: SpellsProps): JSX.Element => {
   });
 
   useEffect(() => {
-    let cleanup: number;
+    const cleanup = setTimeout(
+      () =>
+        setSpells(
+          produce(spells, (draft) => {
+            for (const id in draft) if (draft[id].duration === 0 || draft[id].power === 0) delete draft[id];
+          })
+        ),
+      CLEAN_UP_TIMEOUT
+    );
 
-    const updateSpell = (spell: SpellInfo) =>
+    return () => clearTimeout(cleanup);
+  }, [spells]);
+
+  useEffect(() => {
+    const onTakeSpell = (spell: SpellInfo) => {
+      const { duration, target } = spell;
+
       setSpells((list) =>
         produce(list, (draft) => {
-          draft[spell.id] = spell;
+          if (target === id && (duration > 0 || duration === -1 || draft[spell.id])) draft[spell.id] = spell;
         })
       );
-
-    const onTakeSpell = (spell: SpellInfo) => {
-      const { id, duration } = spell;
-      if (duration === 0 && spells[id]) {
-        updateSpell(spell);
-        cleanup = window.setTimeout(
-          () =>
-            void setSpells((list) =>
-              produce(list, (draft) => {
-                delete draft[id];
-              })
-            ),
-          400
-        );
-      } else if (duration > 0 || duration === -1) updateSpell(spell);
     };
 
     socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
 
-    return () => {
-      socket.off(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
-      clearTimeout(cleanup);
-    };
+    return () => void socket.off(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
   }, []);
 
   return (

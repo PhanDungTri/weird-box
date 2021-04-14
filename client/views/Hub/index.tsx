@@ -12,11 +12,7 @@ import PlayerNameInput from "./PlayerNameInput";
 const Hub = (): JSX.Element => {
   const [, changeRoute] = useAtom(routeAtom);
 
-  useEffect(() => {
-    const onNewGame = () => changeRoute(ROUTE.InGame);
-    socket.on(SERVER_EVENT_NAME.NewGame, onNewGame);
-    return () => void socket.off(SERVER_EVENT_NAME.NewGame, onNewGame);
-  }, []);
+  useEffect(() => void socket.once(SERVER_EVENT_NAME.NewGame, () => changeRoute(ROUTE.InGame)), []);
 
   return (
     <div css={[pageStyle, gridStyle, centerizeContainerStyle]}>

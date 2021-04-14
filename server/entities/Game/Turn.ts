@@ -75,21 +75,23 @@ class Turn {
     this.endTurn();
   }
 
-  public async endTurn(): Promise<void> {
-    await this.updatePlayerStatus();
-
+  public onEndGame(): boolean {
     if (this.game.shouldEnd()) {
       clearTimeout(this.timeout);
       this.game.broadcast(
         SERVER_EVENT_NAME.GameOver,
         this.alivePlayers.find((p) => !p.isEliminated)?.getClient().id || ""
       );
-    } else
-      new Turn(
-        this.game.nextPlayer(),
-        this.alivePlayers.filter((p) => !p.isEliminated),
-        this.game
-      );
+
+      return true;
+    }
+
+    return false;
+  }
+
+  public async endTurn(): Promise<void> {
+    await this.updatePlayerStatus();
+    if (!this.onEndGame()) this.game.newTurn(this.alivePlayers.filter((p) => !p.isEliminated));
   }
 }
 

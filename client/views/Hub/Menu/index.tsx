@@ -20,7 +20,6 @@ const Menu = (): JSX.Element => {
 
   const findGame = () => {
     socket.emit(CLIENT_EVENT_NAME.FindGame, name);
-    matching(true);
   };
 
   useEffect(() => {

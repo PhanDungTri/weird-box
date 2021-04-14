@@ -6,10 +6,7 @@ export const useOnEliminate = (id: string): boolean => {
   const [isEliminated, eliminate] = useState(false);
 
   useEffect(() => {
-    const onEliminatePlayer = (target: string) => {
-      if (target === id) eliminate(true);
-    };
-
+    const onEliminatePlayer = (target: string) => target === id && eliminate(true);
     socket.on(SERVER_EVENT_NAME.PlayerEliminated, onEliminatePlayer);
     return () => void socket.off(SERVER_EVENT_NAME.PlayerEliminated, onEliminatePlayer);
   }, []);

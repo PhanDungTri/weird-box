@@ -1,15 +1,15 @@
 import Game from ".";
 import Client from "../Client";
-import ResponseChecker from "../ResponseChecker";
+import Qualifier from "../Qualifier";
 
 const WAIT_FOR_ALL_LOADED = 60000;
 
-class GameReadyChecker extends ResponseChecker {
+class GameReadyChecker extends Qualifier {
   constructor(clients: Client[], private game: Game) {
     super(clients, WAIT_FOR_ALL_LOADED);
   }
 
-  protected onPass(): void {
+  protected onQualified(): void {
     this.game.start();
   }
 }

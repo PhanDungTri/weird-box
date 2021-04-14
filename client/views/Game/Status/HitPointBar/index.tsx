@@ -11,12 +11,10 @@ type HitPointBarProps = {
 };
 
 const HitPointBar = ({ id, maxHP }: HitPointBarProps): JSX.Element => {
-  const [hp, setHP] = useState(0);
+  const [hp, setHP] = useState(maxHP);
 
   useEffect(() => {
-    const onChangeHP = (target: string, hp: number) => {
-      if (target === id) setHP(hp);
-    };
+    const onChangeHP = (target: string, hp: number) => target === id && setHP(hp);
     socket.on(SERVER_EVENT_NAME.HitPointChanged, onChangeHP);
     return () => void socket.off(SERVER_EVENT_NAME.HitPointChanged, onChangeHP);
   }, []);

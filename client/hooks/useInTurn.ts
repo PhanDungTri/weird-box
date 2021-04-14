@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CardInfo, SERVER_EVENT_NAME } from "../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../shared/@types";
 import socket from "../services/socket";
 
 export const useInTurn = (id: string): boolean => {
@@ -7,8 +7,7 @@ export const useInTurn = (id: string): boolean => {
 
   useEffect(() => {
     const onNewTurn = (target: string) => inTurn(target === id);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const onPlayCard = (_: CardInfo) => inTurn(false);
+    const onPlayCard = () => inTurn(false);
 
     socket.on(SERVER_EVENT_NAME.NewTurn, onNewTurn);
     socket.on(SERVER_EVENT_NAME.CardPlayed, onPlayCard);
