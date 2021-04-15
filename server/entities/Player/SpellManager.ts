@@ -33,18 +33,14 @@ class SpellManager {
       const talisman = this.talismans[0];
       this.talismans = this.talismans.filter((t) => t !== talisman);
 
-      const talismanActivator = talisman.activate(spell);
-      let res = await talismanActivator.next();
-
-      while (!res.done) {
+      for await (const action of talisman.activate(spell)) {
         this.broadcast(SERVER_EVENT_NAME.ActivatePassive, {
           id: talisman.id,
           target: this.player.getClient().id,
-          action: res.value,
+          action,
         });
 
         await waitFor(1000);
-        res = await talismanActivator.next();
       }
 
       return true;
