@@ -1,9 +1,9 @@
 import { css } from "@emotion/react";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { PassiveAction, SERVER_EVENT_NAME, SpellInfo } from "../../../../shared/@types";
 import { PASSIVE_ACTION, SPELL_NAME } from "../../../../shared/constants";
 import SpriteSheet from "../../../components/SpriteSheet";
-import socket from "../../../services/socket";
+import { useListenServerEvent } from "../../../hooks";
 import { centerizeStyle } from "../../../styles";
 import spellAnimationLookup, { AnimationProps } from "./spellAnimationLookup";
 
@@ -17,17 +17,11 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
 
   const onAnimationEnd = useCallback(() => setSpell(SPELL_NAME.Void), []);
 
-  useEffect(() => {
-    const onTakeSpell = (spell: SpellInfo) => spell.target === id && setSpell(spell.name);
-    const onActivePassive = (passive: PassiveAction) => passive.target === id && setSpell(passive.action);
-
-    socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
-    socket.on(SERVER_EVENT_NAME.ActivatePassive, onActivePassive);
-    return () => {
-      socket.off(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
-      socket.off(SERVER_EVENT_NAME.ActivatePassive, onActivePassive);
-    };
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.TakeSpell, (spell: SpellInfo) => spell.target === id && setSpell(spell.name));
+  useListenServerEvent(
+    SERVER_EVENT_NAME.ActivatePassive,
+    (passive: PassiveAction) => passive.target === id && setSpell(passive.action)
+  );
 
   return (
     <SpriteSheet

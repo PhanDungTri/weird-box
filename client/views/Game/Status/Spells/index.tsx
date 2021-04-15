@@ -2,7 +2,7 @@ import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { SERVER_EVENT_NAME, SpellInfo } from "../../../../../shared/@types";
-import socket from "../../../../services/socket";
+import { useListenServerEvent } from "../../../../hooks";
 import { fadeOut } from "../../../../styles/animations";
 import SpellIndicator from "./SpellIndicator";
 import { spellsStyle } from "./styles";
@@ -22,6 +22,16 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
     leave: fadeOut,
   });
 
+  useListenServerEvent(SERVER_EVENT_NAME.TakeSpell, (spell: SpellInfo) => {
+    const { duration, target } = spell;
+
+    setSpells((list) =>
+      produce(list, (draft) => {
+        if (target === id && (duration > 0 || duration === -1 || draft[spell.id])) draft[spell.id] = spell;
+      })
+    );
+  });
+
   useEffect(() => {
     const cleanup = setTimeout(
       () =>
@@ -35,22 +45,6 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
 
     return () => clearTimeout(cleanup);
   }, [spells]);
-
-  useEffect(() => {
-    const onTakeSpell = (spell: SpellInfo) => {
-      const { duration, target } = spell;
-
-      setSpells((list) =>
-        produce(list, (draft) => {
-          if (target === id && (duration > 0 || duration === -1 || draft[spell.id])) draft[spell.id] = spell;
-        })
-      );
-    };
-
-    socket.on(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
-
-    return () => void socket.off(SERVER_EVENT_NAME.TakeSpell, onTakeSpell);
-  }, []);
 
   return (
     <div css={spellsStyle(align)}>

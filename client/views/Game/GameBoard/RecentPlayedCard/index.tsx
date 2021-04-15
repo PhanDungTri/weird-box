@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CardInfo, SERVER_EVENT_NAME } from "../../../../../shared/@types";
-import socket from "../../../../services/socket";
+import { useListenServerEvent } from "../../../../hooks";
 import { centerizeStyle } from "../../../../styles";
 import Card from "../../Card";
 import { cardPlayedAnimation } from "./styles";
@@ -8,11 +8,7 @@ import { cardPlayedAnimation } from "./styles";
 const RecentPlayedCard = (): JSX.Element => {
   const [card, setCard] = useState<CardInfo>();
 
-  useEffect(() => {
-    const onPlayCard = (card: CardInfo) => setCard(card);
-    socket.on(SERVER_EVENT_NAME.CardPlayed, onPlayCard);
-    return () => void socket.off(SERVER_EVENT_NAME.CardPlayed, onPlayCard);
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.CardPlayed, (card: CardInfo) => setCard(card));
 
   return (
     <>

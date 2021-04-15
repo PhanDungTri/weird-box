@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { SERVER_EVENT_NAME } from "../../../../../shared/@types";
-import socket from "../../../../services/socket";
+import { useListenServerEvent } from "../../../../hooks";
 import { centerizeStyle } from "../../../../styles";
 import { hitPointBarStyle, hitPointCapacityStyle, hitPointCapacityUnderlayStyle } from "./styles";
 
@@ -13,11 +13,7 @@ type HitPointBarProps = {
 const HitPointBar = ({ id, maxHP }: HitPointBarProps): JSX.Element => {
   const [hp, setHP] = useState(maxHP);
 
-  useEffect(() => {
-    const onChangeHP = (target: string, hp: number) => target === id && setHP(hp);
-    socket.on(SERVER_EVENT_NAME.HitPointChanged, onChangeHP);
-    return () => void socket.off(SERVER_EVENT_NAME.HitPointChanged, onChangeHP);
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.HitPointChanged, (target: string, hp: number) => target === id && setHP(hp));
 
   return (
     <div css={hitPointBarStyle}>

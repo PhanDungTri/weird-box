@@ -1,11 +1,10 @@
 import { useAtom } from "jotai";
-import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { animated, useTransition } from "react-spring";
 import { NotificationVariant, SERVER_EVENT_NAME } from "../../../shared/@types";
 import { notificationsAtom } from "../../atoms";
 import COLOR from "../../constants/COLOR";
-import socket from "../../services/socket";
+import { useListenServerEvent } from "../../hooks";
 import { notificationStyle } from "./styles";
 
 const Notifications = (): JSX.Element => {
@@ -17,11 +16,9 @@ const Notifications = (): JSX.Element => {
     enter: { transform: "translate(-50%, -100%)", opacity: 1 },
   });
 
-  useEffect(() => {
-    const onNotify = (message: string, variant: NotificationVariant) => notify({ message, variant });
-    socket.on(SERVER_EVENT_NAME.Notify, onNotify);
-    return () => void socket.off(SERVER_EVENT_NAME.Notify, onNotify);
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.Notify, (message: string, variant: NotificationVariant) =>
+    notify({ message, variant })
+  );
 
   return createPortal(
     transitions.map(({ item, props, key }, i, arr) => (

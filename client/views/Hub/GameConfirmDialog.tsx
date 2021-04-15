@@ -3,6 +3,7 @@ import { CLIENT_EVENT_NAME, GameMatchingStatus, SERVER_EVENT_NAME } from "../../
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
 import COLOR from "../../constants/COLOR";
+import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
 
 type ConfirmStatus = "pending" | "accepted" | "rejected";
@@ -20,11 +21,9 @@ const GameConfirmDialog = (): JSX.Element => {
     if (!shouldShow) setConfirm("pending");
   }, [shouldShow]);
 
-  useEffect(() => {
-    const onUpdateGameMatchingStatus = (status: GameMatchingStatus) => show(status === "found");
-    socket.on(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onUpdateGameMatchingStatus);
-    return () => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onUpdateGameMatchingStatus);
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>
+    show(status === "found")
+  );
 
   return (
     <Dialog

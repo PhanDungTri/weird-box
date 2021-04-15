@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { CardInfo, CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/@types";
 import { notificationsAtom } from "../../../../atoms";
-import { useInTurn, useOnEliminate } from "../../../../hooks";
+import { useInTurn, useListenServerEvent, useOnEliminate } from "../../../../hooks";
 import socket from "../../../../services/socket";
 import { fadeOut } from "../../../../styles/animations";
 import Card from "../../Card";
@@ -40,20 +40,16 @@ const Hand = (): JSX.Element => {
     [isInTurn, chosenCard]
   );
 
+  useListenServerEvent(SERVER_EVENT_NAME.GetCards, (cards: CardInfo[]) => setCards((list) => [...list, ...cards]));
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) setChosenCard("");
     };
 
-    const onGetCards = (cards: CardInfo[]) => setCards((list) => [...list, ...cards]);
-
     document.addEventListener("click", handleClickOutside, true);
-    socket.on(SERVER_EVENT_NAME.GetCards, onGetCards);
 
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-      socket.off(SERVER_EVENT_NAME.GetCards, onGetCards);
-    };
+    return () => document.removeEventListener("click", handleClickOutside, true);
   }, []);
 
   return (

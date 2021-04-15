@@ -1,9 +1,10 @@
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { CLIENT_EVENT_NAME, GameMatchingStatus, SERVER_EVENT_NAME } from "../../../../shared/@types";
 import Button from "../../../components/Button";
 import Loading from "../../../components/Loading";
+import { useListenServerEvent } from "../../../hooks";
 import socket from "../../../services/socket";
 import { centerizeContainerStyle, gridStyle } from "../../../styles";
 import { playerNameAtom } from "../atom";
@@ -22,11 +23,9 @@ const Menu = (): JSX.Element => {
     socket.emit(CLIENT_EVENT_NAME.FindGame, name);
   };
 
-  useEffect(() => {
-    const onUpdateGameMatchingStatus = (status: GameMatchingStatus) => matching(status !== "canceled");
-    socket.on(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onUpdateGameMatchingStatus);
-    return () => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onUpdateGameMatchingStatus);
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>
+    matching(status !== "canceled")
+  );
 
   return (
     <div css={optionMenuStyle}>

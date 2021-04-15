@@ -1,9 +1,10 @@
 import { useAtom } from "jotai";
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/@types";
 import { routeAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import ROUTE from "../../constants/ROUTE";
+import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
 
 const GameOverDialog = (): JSX.Element => {
@@ -16,16 +17,10 @@ const GameOverDialog = (): JSX.Element => {
     changeRoute(ROUTE.Hub);
   };
 
-  useEffect(() => {
-    const onGameOver = (id: string) => {
-      show(true);
-      victory(id === socket.id);
-    };
-
-    socket.on(SERVER_EVENT_NAME.GameOver, onGameOver);
-
-    return () => void socket.off(SERVER_EVENT_NAME.GameOver, onGameOver);
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.GameOver, (id: string) => {
+    show(true);
+    victory(id === socket.id);
+  });
 
   return (
     <Dialog

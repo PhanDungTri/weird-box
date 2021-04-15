@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SERVER_EVENT_NAME } from "../../../../../shared/@types";
-import socket from "../../../../services/socket";
+import { useListenServerEvent } from "../../../../hooks";
 import { chargeNodeStyle, chargePointBarDealAnimation, emptyNodeStyle, StyledChargePointBar } from "./styles";
 import { ChargePointBarState } from "./types";
 
@@ -52,19 +52,8 @@ const ChargePointBar = (): JSX.Element => {
 
   useEffect(() => setNodeStatus(charge(chargePoint)), [chargePoint]);
   useEffect(() => void (prevNodes.current = nodes), [nodes]);
-
-  useEffect(() => {
-    const onChangeChargePoint = (point: number) => setChargePoint(point);
-    const onGetCards = () => animate(true);
-
-    socket.on(SERVER_EVENT_NAME.ChargePointChanged, onChangeChargePoint);
-    socket.on(SERVER_EVENT_NAME.GetCards, onGetCards);
-
-    return () => {
-      socket.off(SERVER_EVENT_NAME.ChargePointChanged, onChangeChargePoint);
-      socket.off(SERVER_EVENT_NAME.GetCards, onGetCards);
-    };
-  }, []);
+  useListenServerEvent(SERVER_EVENT_NAME.ChargePointChanged, (point: number) => setChargePoint(point));
+  useListenServerEvent(SERVER_EVENT_NAME.GetCards, () => animate(true));
 
   return (
     <StyledChargePointBar css={shouldAnimate && chargePointBarDealAnimation} onAnimationEnd={() => animate(false)}>
