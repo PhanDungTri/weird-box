@@ -1,6 +1,5 @@
 import Game from ".";
-import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/@types";
-import { SPELL_NAME } from "../../../shared/constants";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";
 import Player from "../Player";

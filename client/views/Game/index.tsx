@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { CLIENT_EVENT_NAME, GameMatchingStatus, SERVER_EVENT_NAME } from "../../../shared/@types";
+import { GameMatchingStatus } from "../../../shared/@types";
+import { SERVER_EVENT_NAME, CLIENT_EVENT_NAME } from "../../../shared/constants";
 import { routeAtom } from "../../atoms";
 import ROUTE from "../../constants/ROUTE";
 import socket from "../../services/socket";

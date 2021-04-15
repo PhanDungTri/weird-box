@@ -1,4 +1,4 @@
-import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/@types";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
 import Card from "../Card";
 import Client from "../Client";
 import Game from "../Game";

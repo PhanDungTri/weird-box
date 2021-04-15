@@ -1,4 +1,4 @@
-import { SERVER_EVENT_NAME } from "../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../shared/constants";
 import Client from "../Client";
 import Lobby from "./Lobby";
 

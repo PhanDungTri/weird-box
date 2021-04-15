@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { memo, useCallback, useState } from "react";
-import { PassiveAction, SERVER_EVENT_NAME, SpellInfo } from "../../../../shared/@types";
-import { PASSIVE_ACTION, SPELL_NAME } from "../../../../shared/constants";
+import { PassiveAction, SpellInfo } from "../../../../shared/@types";
+import { PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "../../../../shared/constants";
 import SpriteSheet from "../../../components/SpriteSheet";
 import { useListenServerEvent } from "../../../hooks";
 import { centerizeStyle } from "../../../styles";

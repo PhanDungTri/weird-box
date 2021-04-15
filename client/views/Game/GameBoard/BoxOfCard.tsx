@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SERVER_EVENT_NAME } from "../../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../../shared/constants";
 import IdleSprite from "../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../assets/sprites/box_of_cards_overcharged.png";

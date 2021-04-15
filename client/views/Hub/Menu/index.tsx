@@ -1,7 +1,8 @@
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { animated, useTransition } from "react-spring";
-import { CLIENT_EVENT_NAME, GameMatchingStatus, SERVER_EVENT_NAME } from "../../../../shared/@types";
+import { GameMatchingStatus } from "../../../../shared/@types";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../shared/constants";
 import Button from "../../../components/Button";
 import Loading from "../../../components/Loading";
 import { useListenServerEvent } from "../../../hooks";

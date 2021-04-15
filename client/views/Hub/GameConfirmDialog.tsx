@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { CLIENT_EVENT_NAME, GameMatchingStatus, SERVER_EVENT_NAME } from "../../../shared/@types";
+import { GameMatchingStatus } from "../../../shared/@types";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
 import COLOR from "../../constants/COLOR";

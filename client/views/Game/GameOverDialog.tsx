@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { memo, useState } from "react";
-import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/@types";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
 import { routeAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import ROUTE from "../../constants/ROUTE";

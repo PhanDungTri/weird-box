@@ -1,5 +1,5 @@
-import { EventsFromServer, SERVER_EVENT_NAME } from "../../../shared/@types";
-import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN } from "../../../shared/constants";
+import { EventsFromServer } from "../../../shared/@types";
+import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN, SERVER_EVENT_NAME } from "../../../shared/constants";
 import generateUniqueId from "../../../shared/utils/generateUniqueId";
 import waitFor from "../../utilities/waitFor";
 import Card from "../Card";

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClientSocket, CLIENT_EVENT_NAME } from "../../shared/@types";
+import { ClientSocket } from "../../shared/@types";
+import { CLIENT_EVENT_NAME } from "../../shared/constants";
 import Server from "./Server";
 
 class Client {

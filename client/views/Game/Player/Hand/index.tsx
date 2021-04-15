@@ -1,7 +1,8 @@
 import { useAtom } from "jotai";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import { CardInfo, CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/@types";
+import { CardInfo } from "../../../../../shared/@types";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { notificationsAtom } from "../../../../atoms";
 import { useInTurn, useListenServerEvent, useOnEliminate } from "../../../../hooks";
 import socket from "../../../../services/socket";

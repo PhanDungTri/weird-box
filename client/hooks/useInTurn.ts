@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SERVER_EVENT_NAME } from "../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../shared/constants";
 import { useListenServerEvent } from "./useListenServerEvent";
 
 export const useInTurn = (id: string): boolean => {

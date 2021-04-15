@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SERVER_EVENT_NAME } from "../../../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { useListenServerEvent } from "../../../../hooks";
 import { chargeNodeStyle, chargePointBarDealAnimation, emptyNodeStyle, StyledChargePointBar } from "./styles";
 import { ChargePointBarState } from "./types";

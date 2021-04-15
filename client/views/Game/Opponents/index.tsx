@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { PlayerInfo, SERVER_EVENT_NAME } from "../../../../shared/@types";
+import { PlayerInfo } from "../../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../../shared/constants";
 import socket from "../../../services/socket";
 import EmptySlot from "./EmptySlot";
 import Opponent from "./Opponent";

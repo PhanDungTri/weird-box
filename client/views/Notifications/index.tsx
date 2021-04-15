@@ -1,7 +1,8 @@
 import { useAtom } from "jotai";
 import { createPortal } from "react-dom";
 import { animated, useTransition } from "react-spring";
-import { NotificationVariant, SERVER_EVENT_NAME } from "../../../shared/@types";
+import { NotificationVariant } from "../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../shared/constants";
 import { notificationsAtom } from "../../atoms";
 import COLOR from "../../constants/COLOR";
 import { useListenServerEvent } from "../../hooks";

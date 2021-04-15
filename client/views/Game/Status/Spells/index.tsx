@@ -1,7 +1,8 @@
 import produce from "immer";
 import { memo, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import { PassiveAction, SERVER_EVENT_NAME, SpellInfo } from "../../../../../shared/@types";
+import { PassiveAction, SpellInfo } from "../../../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { useListenServerEvent } from "../../../../hooks";
 import { fadeOut } from "../../../../styles/animations";
 import SpellIndicator from "./SpellIndicator";

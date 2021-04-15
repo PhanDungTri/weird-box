@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { memo, useState } from "react";
-import { SERVER_EVENT_NAME } from "../../../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { useListenServerEvent } from "../../../../hooks";
 import { centerizeStyle } from "../../../../styles";
 import { hitPointBarStyle, hitPointCapacityStyle, hitPointCapacityUnderlayStyle } from "./styles";

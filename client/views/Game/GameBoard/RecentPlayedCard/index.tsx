@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { CardInfo, SERVER_EVENT_NAME } from "../../../../../shared/@types";
+import { CardInfo } from "../../../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { useListenServerEvent } from "../../../../hooks";
 import { centerizeStyle } from "../../../../styles";
 import Card from "../../Card";
