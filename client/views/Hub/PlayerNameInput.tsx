@@ -11,7 +11,7 @@ const PlayerNameInput = (): JSX.Element => {
       let timeout: number;
       return (name: string) => {
         clearTimeout(timeout);
-        timeout = window.setTimeout(() => setName(name), 100);
+        timeout = window.setTimeout(() => setName(name), 200);
       };
     })(),
     []

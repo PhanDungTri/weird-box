@@ -18,7 +18,7 @@ class SpellManager {
       await debuff.trigger();
       if (debuff.getDuration() === 0) this.debuffs = this.debuffs.filter((d) => d !== debuff);
       this.broadcast(SERVER_EVENT_NAME.TakeSpell, debuff.toJsonData());
-      await waitFor(600);
+      await waitFor(1000);
     }
   }
 
@@ -32,14 +32,18 @@ class SpellManager {
       const talisman = this.talismans[0];
       this.talismans = this.talismans.filter((t) => t !== talisman);
 
-      for await (const action of talisman.activate(spell)) {
+      const talismanActivator = talisman.activate(spell);
+      let res = await talismanActivator.next();
+
+      while (!res.done) {
         this.broadcast(SERVER_EVENT_NAME.ActivatePassive, {
           id: talisman.id,
           target: this.player.getClient().id,
-          action,
+          action: res.value,
         });
 
-        await waitFor(600);
+        await waitFor(1000);
+        res = await talismanActivator.next();
       }
 
       return true;
@@ -55,7 +59,7 @@ class SpellManager {
       else return this.addTalisman(spell as PassiveSpell);
 
       this.broadcast(SERVER_EVENT_NAME.TakeSpell, spell.toJsonData());
-      await waitFor(600);
+      await waitFor(1000);
     }
   }
 }

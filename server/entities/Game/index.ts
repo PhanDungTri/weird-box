@@ -104,7 +104,7 @@ class Game {
   public async changeChargePoint(point: number): Promise<void> {
     this.chargePoint = point;
     this.broadcast(SERVER_EVENT_NAME.ChargePointChanged, this.chargePoint);
-    await waitFor(600);
+    await waitFor(1000);
   }
 
   public eliminatePlayer(player: Player): void {

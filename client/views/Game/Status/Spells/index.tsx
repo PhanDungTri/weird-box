@@ -1,7 +1,7 @@
 import produce from "immer";
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { animated, useTransition } from "react-spring";
-import { SERVER_EVENT_NAME, SpellInfo } from "../../../../../shared/@types";
+import { PassiveAction, SERVER_EVENT_NAME, SpellInfo } from "../../../../../shared/@types";
 import { useListenServerEvent } from "../../../../hooks";
 import { fadeOut } from "../../../../styles/animations";
 import SpellIndicator from "./SpellIndicator";
@@ -11,8 +11,6 @@ type SpellsProps = {
   id: string;
   align?: "center" | "left";
 };
-
-const CLEAN_UP_TIMEOUT = 400;
 
 const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
   const [spells, setSpells] = useState<Record<string, SpellInfo>>({});
@@ -32,19 +30,22 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
     );
   });
 
-  useEffect(() => {
-    const cleanup = setTimeout(
-      () =>
-        setSpells(
-          produce(spells, (draft) => {
-            for (const id in draft) if (draft[id].duration === 0 || draft[id].power === 0) delete draft[id];
-          })
-        ),
-      CLEAN_UP_TIMEOUT
+  useListenServerEvent(SERVER_EVENT_NAME.ActivatePassive, (passive: PassiveAction) => {
+    const { target } = passive;
+    setSpells((list) =>
+      produce(list, (draft) => {
+        if (target === id && draft[passive.id]) draft[passive.id].power = 0;
+      })
     );
+  });
 
-    return () => clearTimeout(cleanup);
-  }, [spells]);
+  useListenServerEvent(SERVER_EVENT_NAME.NewTurn, () =>
+    setSpells((list) =>
+      produce(list, (draft) => {
+        for (const id in draft) if (draft[id].duration === 0 || draft[id].power === 0) delete draft[id];
+      })
+    )
+  );
 
   return (
     <div css={spellsStyle(align)}>

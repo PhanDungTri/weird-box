@@ -35,7 +35,7 @@ class Turn {
       spell: [SPELL_NAME.Shield, SPELL_NAME.Mirror].includes(card.getSpell()) ? SPELL_NAME.Void : card.getSpell(),
     });
 
-    await waitFor(600);
+    await waitFor(1000);
   }
 
   private async onOvercharged() {
@@ -66,7 +66,7 @@ class Turn {
   public async consumeCard(card: Card): Promise<void> {
     const newChargePoint = this.game.getChargePoint() + card.getPower();
 
-    if (newChargePoint < 0 || newChargePoint > 10) this.onOvercharged();
+    if (newChargePoint < 0 || newChargePoint > 10) await this.onOvercharged();
     else {
       await this.distributeSpell(card.getSpell());
       await this.game.changeChargePoint(newChargePoint);

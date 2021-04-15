@@ -7,6 +7,7 @@ export const useInTurn = (id: string): boolean => {
 
   useListenServerEvent(SERVER_EVENT_NAME.NewTurn, (target: string) => inTurn(target === id));
   useListenServerEvent(SERVER_EVENT_NAME.CardPlayed, () => inTurn(false));
+  useListenServerEvent(SERVER_EVENT_NAME.GameOver, () => inTurn(false));
 
   return isInturn;
 };
