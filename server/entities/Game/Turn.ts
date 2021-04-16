@@ -48,7 +48,7 @@ class Turn {
       await SpellFactory.create(spell, this.game.getChargePoint(), this.alivePlayers, this.currentPlayer);
   }
 
-  private onPlayCard(id: string, cb: (err: boolean, msg?: string) => void) {
+  private async onPlayCard(id: string, cb: (err: boolean, msg?: string) => void) {
     const card = this.currentPlayer.getCardById(id);
 
     if (card) {
@@ -57,7 +57,7 @@ class Turn {
       cb(false);
       this.currentPlayer.discardCard(id);
       this.game.discardCard(card);
-      this.sendRecentPlayedCard(card);
+      await this.sendRecentPlayedCard(card);
       this.consumeCard(card);
     } else cb(true, "Invalid card!");
   }

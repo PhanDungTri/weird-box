@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { Howl } from "howler";
+import { useEffect, useState } from "react";
 import { SERVER_EVENT_NAME } from "../../../../shared/constants";
 import IdleSprite from "../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../assets/sprites/box_of_cards_deal_card.png";
@@ -6,6 +7,7 @@ import OverChargedSprite from "../../../assets/sprites/box_of_cards_overcharged.
 import SpriteSheet from "../../../components/SpriteSheet";
 import { useListenServerEvent } from "../../../hooks";
 import { centerizeStyle } from "../../../styles";
+import DealSound from "../../../assets/sounds/deal_pop.mp3";
 
 type BoxOfCardStatus = "idle" | "deal";
 
@@ -29,9 +31,14 @@ const commonProps = {
 const BoxOfCard = (): JSX.Element => {
   const [isOvercharged, overcharge] = useState(false);
   const [status, setStatus] = useState<BoxOfCardStatus>("idle");
+  const [dealSound] = useState(new Howl({ src: [DealSound], volume: 0.5 }));
 
   useListenServerEvent(SERVER_EVENT_NAME.Overcharged, () => overcharge(true));
   useListenServerEvent(SERVER_EVENT_NAME.GetCards, () => setStatus("deal"));
+
+  useEffect(() => {
+    if (status === "deal") dealSound.play();
+  }, [status]);
 
   return (
     <>
