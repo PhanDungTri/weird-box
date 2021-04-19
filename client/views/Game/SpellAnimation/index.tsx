@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { PassiveAction, SpellInfo } from "../../../../shared/@types";
 import { PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "../../../../shared/constants";
 import SpriteSheet from "../../../components/SpriteSheet";
@@ -24,15 +24,11 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
     (passive: PassiveAction) => passive.target === id && setSpell(passive.action)
   );
 
-  useEffect(() => {
-    const sound = spellSoundLookup[spell];
-    if (sound) sound.play();
-  }, [spell]);
-
   return (
     <SpriteSheet
       {...(spellAnimationLookup[spell] as AnimationProps)}
       onAnimationEnd={onAnimationEnd}
+      onReachFrame={spellSoundLookup[spell]}
       size={[62, 46]}
       scale={scale}
       css={[

@@ -10,7 +10,7 @@ import PlayCardSound from "../../../../assets/sounds/play_card.mp3";
 
 const RecentPlayedCard = (): JSX.Element => {
   const [card, setCard] = useState<CardInfo>();
-  const [playCardSound] = useState(new Howl({ src: [PlayCardSound], volume: 0.5 }));
+  const [playCardSound] = useState(new Howl({ src: [PlayCardSound] }));
 
   useListenServerEvent(SERVER_EVENT_NAME.CardPlayed, (card: CardInfo) => {
     setCard(card);

@@ -18,7 +18,7 @@ const SpriteSheet = ({
 }: SpriteSheetProps): JSX.Element => {
   useEffect(() => {
     const timeouts: number[] = [];
-    const frameTime = fps / steps;
+    const frameTime = (1 / fps) * 1000;
 
     for (const key in onReachFrame) {
       const frame = parseInt(key);
@@ -26,7 +26,7 @@ const SpriteSheet = ({
     }
 
     return () => timeouts.forEach((t) => clearTimeout(t));
-  }, []);
+  }, [steps, fps, onReachFrame]);
 
   return (
     <Sprite

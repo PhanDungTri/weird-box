@@ -4,21 +4,19 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { CardInfo } from "../../../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/constants";
+import ChooseSound from "../../../../assets/sounds/choose_card.mp3";
 import { notificationsAtom } from "../../../../atoms";
 import { useInTurn, useListenServerEvent, useOnEliminate } from "../../../../hooks";
 import socket from "../../../../services/socket";
 import { fadeOut } from "../../../../styles/animations";
 import Card from "../../Card";
 import { handStyle } from "./styles";
-import ChooseSound from "../../../../assets/sounds/choose_card.mp3";
-import TakeSound from "../../../../assets/sounds/take_card.mp3";
 
 const Hand = (): JSX.Element => {
   const isInTurn = useInTurn(socket.id);
   const isEliminated = useOnEliminate(socket.id);
   const [cards, setCards] = useState<CardInfo[]>([]);
-  const [chooseSound] = useState(new Howl({ src: [ChooseSound], volume: 0.5 }));
-  const [takeSound] = useState(new Howl({ src: [TakeSound] }));
+  const [chooseSound] = useState(new Howl({ src: [ChooseSound] }));
   const [chosenCard, setChosenCard] = useState("");
   const [, notify] = useAtom(notificationsAtom);
   const ref = useRef<HTMLDivElement>(null);
@@ -48,10 +46,7 @@ const Hand = (): JSX.Element => {
     [isInTurn, chosenCard]
   );
 
-  useListenServerEvent(SERVER_EVENT_NAME.GetCards, (cards: CardInfo[]) => {
-    setCards((list) => [...list, ...cards]);
-    takeSound.play();
-  });
+  useListenServerEvent(SERVER_EVENT_NAME.GetCards, (cards: CardInfo[]) => setCards((list) => [...list, ...cards]));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

@@ -10,7 +10,7 @@ class MirrorSpell extends PassiveSpell {
   }
 
   public async *activate(origin: Spell): AsyncGenerator<PASSIVE_ACTION, void, unknown> {
-    if (origin.getPower() < this.getPower()) {
+    if (origin.getPower() <= this.getPower()) {
       yield PASSIVE_ACTION.Reflect;
       const caster = origin.getCaster();
       origin.setTarget(caster);
