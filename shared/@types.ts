@@ -34,7 +34,7 @@ export type NotificationVariant = "Danger" | "Safe" | "Info" | "Warning";
 export interface EventsFromServer {
   [SERVER_EVENT_NAME.Notify]: (msg: string, variant: NotificationVariant) => void;
   [SERVER_EVENT_NAME.UpdateGameMatchingStatus]: (status: GameMatchingStatus) => void;
-  [SERVER_EVENT_NAME.GetGameSettings]: (maxHP: number, timePerTurn: number, numOfCards: number) => void;
+  [SERVER_EVENT_NAME.GetGameSettings]: (maxHP: number, timePerTurn: number) => void;
   [SERVER_EVENT_NAME.GetPlayerList]: (list: PlayerInfo[]) => void;
   [SERVER_EVENT_NAME.NewGame]: () => void;
   [SERVER_EVENT_NAME.GetCards]: (cards: CardInfo[]) => void;
@@ -44,7 +44,7 @@ export interface EventsFromServer {
   [SERVER_EVENT_NAME.HitPointChanged]: (target: string, hp: number) => void;
   [SERVER_EVENT_NAME.PlayerEliminated]: (id: string) => void;
   [SERVER_EVENT_NAME.GameOver]: (id: string) => void;
-  [SERVER_EVENT_NAME.NewTurn]: (id: string) => void;
+  [SERVER_EVENT_NAME.NewTurn]: (id: string, deck: number) => void;
   [SERVER_EVENT_NAME.TakeSpell]: (spell: SpellInfo) => void;
   [SERVER_EVENT_NAME.ActivatePassive]: (passive: PassiveAction) => void;
 }

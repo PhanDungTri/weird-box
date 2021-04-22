@@ -15,7 +15,7 @@ class Turn {
     this.currentPlayer.getClient().getSocket().on(CLIENT_EVENT_NAME.PlayCard, this.onPlayCard.bind(this));
     this.currentPlayer.takeCards(game.drawCard());
     this.currentPlayer.getClient().getSocket().emit(SERVER_EVENT_NAME.Notify, "It's your turn", "Info");
-    this.game.broadcast(SERVER_EVENT_NAME.NewTurn, currentPlayer.getClient().id);
+    this.game.broadcast(SERVER_EVENT_NAME.NewTurn, currentPlayer.getClient().id, this.game.getDeckSize());
   }
 
   private async updatePlayerStatus() {

@@ -39,6 +39,10 @@ class Game {
     return this.chargePoint;
   }
 
+  public getDeckSize(): number {
+    return this.drawDeck.getSize();
+  }
+
   private dealCards() {
     const startingHands: Card[][] = [];
 
@@ -81,7 +85,7 @@ class Game {
     this.players.forEach((p, i) => {
       const client = p.getClient().getSocket();
 
-      client.emit(SERVER_EVENT_NAME.GetGameSettings, this.maxHP, this.timePerTurn, this.drawDeck.getSize());
+      client.emit(SERVER_EVENT_NAME.GetGameSettings, this.maxHP, this.timePerTurn);
       client.emit(SERVER_EVENT_NAME.GetPlayerList, playerList);
       p.takeCards(...startingHands[i]);
     });
