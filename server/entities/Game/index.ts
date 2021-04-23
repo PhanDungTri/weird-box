@@ -112,6 +112,7 @@ class Game {
   }
 
   public eliminatePlayer(player: Player): void {
+    if (this.shouldEnd()) return;
     player.isEliminated = true;
     this.broadcast(SERVER_EVENT_NAME.PlayerEliminated, player.getClient().id);
 
