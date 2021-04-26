@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import COLOR from "../../../constants/COLOR";
-import { gridStyle, headingStyle, pixelBorderStyle } from "../../../styles";
+import { gridStyle, headingStyle, slotStyle } from "../../../styles";
 
 export const opponentsStyle = css`
   ${gridStyle};
@@ -9,15 +9,9 @@ export const opponentsStyle = css`
   grid-template-columns: repeat(3, 1fr);
 `;
 
-export const slotStyle = css`
-  ${pixelBorderStyle(4, [COLOR.Coal])};
-  position: relative;
-  margin: 4px;
-`;
-
 export const opponentStyle = css`
   ${gridStyle};
-  ${slotStyle};
+  ${slotStyle(2)};
   grid-template-rows: auto 24px;
 `;
 

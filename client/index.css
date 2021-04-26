@@ -21,3 +21,10 @@ html {
   bottom: 0;
   width: 100vw;
 }
+
+button,
+input {
+  border: none;
+  outline: none;
+  cursor: pointer;
+}

@@ -14,12 +14,19 @@ export enum SERVER_EVENT_NAME {
   HitPointChanged = "hit point changed",
   TakeSpell = "take spell",
   ActivatePassive = "activate passive",
+  GetRoomInfo = "get room info",
+  FriendJoined = "friend joined",
+  FriendLeft = "friend left",
 }
 
 export enum CLIENT_EVENT_NAME {
+  Rename = "rename",
   FindGame = "find game",
   Ready = "ready",
   RejectGame = "reject game",
   PlayCard = "play card",
   LeaveGame = "leave game",
+  CreateRoom = "create room",
+  JoinRoom = "join room",
+  LeaveRoom = "leave room",
 }

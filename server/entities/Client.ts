@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClientSocket } from "../../shared/@types";
-import { CLIENT_EVENT_NAME } from "../../shared/constants";
+import { ClientInfo, ClientSocket } from "../../shared/@types";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../shared/constants";
+import Room from "./Room";
 import Server from "./Server";
 
 class Client {
-  private server = Server.getInstance();
   public readonly id: string;
+  private room: Room | undefined;
+  private server = Server.getInstance();
 
   constructor(private socket: ClientSocket, public name = "player") {
     const { id } = this.socket;
@@ -16,9 +17,35 @@ class Client {
     return this.socket;
   }
 
+  public getInfo(): ClientInfo {
+    return { id: this.id, name: this.name };
+  }
+
   public run(): void {
-    this.socket.on(CLIENT_EVENT_NAME.FindGame, (name) => {
+    this.socket.on(CLIENT_EVENT_NAME.CreateRoom, () => {
+      if (!this.room) {
+        this.room = new Room(this);
+        Server.getInstance().addRoom(this.room);
+      }
+    });
+
+    this.socket.on(CLIENT_EVENT_NAME.JoinRoom, (id: string) => {
+      const room = Server.getInstance().getRoom(id);
+
+      if (room) {
+        try {
+          room.add(this);
+        } catch (e) {
+          this.socket.emit(SERVER_EVENT_NAME.Notify, e.message, "Danger");
+        }
+      } else this.socket.emit(SERVER_EVENT_NAME.Notify, "Not found room!", "Danger");
+    });
+
+    this.socket.on(CLIENT_EVENT_NAME.Rename, (name) => {
       this.name = name;
+    });
+
+    this.socket.on(CLIENT_EVENT_NAME.FindGame, () => {
       this.server.enqueueClient(this);
     });
 

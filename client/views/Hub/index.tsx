@@ -8,6 +8,7 @@ import { centerizeContainerStyle, gridStyle, pageStyle } from "../../styles";
 import GameConfirmDialog from "./GameConfirmDialog";
 import Menu from "./Menu";
 import PlayerNameInput from "./PlayerNameInput";
+import Room from "./Room";
 
 const Hub = (): JSX.Element => {
   const [, changeRoute] = useAtom(routeAtom);
@@ -19,6 +20,7 @@ const Hub = (): JSX.Element => {
       <div>UNTITLED CARD GAME</div>
       <PlayerNameInput />
       <Menu />
+      <Room />
       <GameConfirmDialog />
     </div>
   );

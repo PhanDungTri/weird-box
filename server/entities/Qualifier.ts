@@ -5,8 +5,8 @@ import Server from "./Server";
 const DEFAULT_WAIT_TIME = 30000;
 
 class Qualifier {
-  protected passes: Client[] = [];
-  protected failures: Client[] = [];
+  protected passes = new Set<Client>();
+  protected failures = new Set<Client>();
   private timeout: NodeJS.Timeout;
 
   constructor(protected clients: Client[], waitTime = DEFAULT_WAIT_TIME) {
@@ -28,10 +28,10 @@ class Qualifier {
   }
 
   private onResponse() {
-    if (this.passes.length === this.clients.length) {
+    if (this.passes.size === this.clients.length) {
       clearTimeout(this.timeout);
       this.onQualified();
-    } else if (this.passes.length + this.failures.length === this.clients.length) {
+    } else if (this.passes.size + this.failures.size === this.clients.length) {
       clearTimeout(this.timeout);
       this.onUnqualified();
     }
@@ -42,13 +42,13 @@ class Qualifier {
   }
 
   protected ready(client: Client): void {
-    this.passes.push(client);
+    this.passes.add(client);
     this.onResponse();
   }
 
   protected fail(client: Client): void {
-    this.passes.filter((c) => c !== client);
-    this.failures.push(client);
+    this.passes.delete(client);
+    this.failures.add(client);
     this.onResponse();
   }
 
@@ -56,7 +56,7 @@ class Qualifier {
     this.clients.forEach((c) => {
       c.getSocket().removeAllListeners(CLIENT_EVENT_NAME.Ready);
       c.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "canceled");
-      if (this.passes.includes(c)) Server.getInstance().enqueueClient(c);
+      if (this.passes.has(c)) Server.getInstance().enqueueClient(c);
     });
   }
 }

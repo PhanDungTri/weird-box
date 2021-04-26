@@ -2,10 +2,12 @@ import { Server as SocketServer } from "socket.io";
 import { GameSocket } from "../../shared/@types";
 import Client from "./Client";
 import GameMatcher from "./GameMatcher";
+import Room from "./Room";
 
 class Server {
   public static port = 3000;
   private static instance: Server;
+  private rooms: Room[] = [];
   private gameMatcher = new GameMatcher();
   private socketServer: GameSocket = new SocketServer(Server.port, {
     cors: {
@@ -40,6 +42,22 @@ class Server {
 
   public disconnectClient(client: Client): void {
     this.gameMatcher.dequeue(client);
+  }
+
+  public addRoom(room: Room): void {
+    this.rooms.push(room);
+  }
+
+  public removeRoom(room: Room): void {
+    this.rooms = this.rooms.filter((r) => r !== room);
+  }
+
+  public getRoom(id: string): Room | undefined {
+    return this.rooms.find((r) => r.id === id);
+  }
+
+  public getRoomHasClient(client: Client): Room | undefined {
+    return this.rooms.find((r) => r.has(client));
   }
 }
 

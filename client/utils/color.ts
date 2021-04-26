@@ -30,3 +30,5 @@ export const shadeColor = (color: string, percent: number): string =>
 
 export const tintColor = (color: string, percent: number): string =>
   rgbToHex(hexToRgb(color).map((c) => Math.round(c + ((255 - c) * percent) / 100)) as RGB);
+
+export const randomHexColor = (): string => "#" + Math.floor(Math.random() * 16777215).toString(16);

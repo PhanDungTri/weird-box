@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PlayerInfo } from "../../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../../shared/constants";
 import socket from "../../../services/socket";
-import EmptySlot from "./EmptySlot";
+import EmptySlot from "../../../components/EmptySlot";
 import Opponent from "./Opponent";
 import { opponentsStyle } from "./styles";
 
@@ -22,7 +22,7 @@ const Opponents = (): JSX.Element => {
 
     for (let i = 0; i < 3; i++)
       if (opponents[i]) elm.push(<Opponent {...opponents[i]} key={opponents[i].id} />);
-      else elm.push(<EmptySlot key={i} />);
+      else elm.push(<EmptySlot key={i} scale={2} />);
 
     return elm;
   };

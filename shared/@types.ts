@@ -3,9 +3,12 @@ import { CLIENT_EVENT_NAME, PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from
 
 export type GameMatchingStatus = "finding" | "found" | "canceled";
 
-export type PlayerInfo = {
+export type ClientInfo = {
   id: string;
   name: string;
+};
+
+export type PlayerInfo = ClientInfo & {
   isEliminated: boolean;
 };
 
@@ -29,6 +32,12 @@ export type PassiveAction = {
   target: string;
 };
 
+export type RoomInfo = {
+  id: string;
+  owner: string;
+  members: ClientInfo[];
+};
+
 export type NotificationVariant = "Danger" | "Safe" | "Info" | "Warning";
 
 export interface EventsFromServer {
@@ -47,14 +56,20 @@ export interface EventsFromServer {
   [SERVER_EVENT_NAME.NewTurn]: (id: string, deck: number) => void;
   [SERVER_EVENT_NAME.TakeSpell]: (spell: SpellInfo) => void;
   [SERVER_EVENT_NAME.ActivatePassive]: (passive: PassiveAction) => void;
+  [SERVER_EVENT_NAME.FriendJoined]: (friend: ClientInfo) => void;
+  [SERVER_EVENT_NAME.FriendLeft]: (id: string) => void;
+  [SERVER_EVENT_NAME.GetRoomInfo]: (info: RoomInfo) => void;
 }
 
 export interface EventsFromClient {
-  [CLIENT_EVENT_NAME.FindGame]: (name: string) => void;
+  [CLIENT_EVENT_NAME.Rename]: (name: string) => void;
+  [CLIENT_EVENT_NAME.FindGame]: () => void;
   [CLIENT_EVENT_NAME.Ready]: () => void;
   [CLIENT_EVENT_NAME.RejectGame]: () => void;
   [CLIENT_EVENT_NAME.PlayCard]: (id: string, cb: (err: boolean, msg?: string) => void) => void;
   [CLIENT_EVENT_NAME.LeaveGame]: () => void;
+  [CLIENT_EVENT_NAME.CreateRoom]: () => void;
+  [CLIENT_EVENT_NAME.JoinRoom]: (id: string) => void;
 }
 
 export type ClientSocket = Socket<EventsFromClient, EventsFromServer>;

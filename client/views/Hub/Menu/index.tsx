@@ -8,11 +8,11 @@ import Loading from "../../../components/Loading";
 import { useListenServerEvent } from "../../../hooks";
 import socket from "../../../services/socket";
 import { centerizeContainerStyle, gridStyle } from "../../../styles";
-import { playerNameAtom } from "../atom";
+import { roomAtom } from "../atom";
 import { optionMenuStyle } from "./styles";
 
 const Menu = (): JSX.Element => {
-  const [name] = useAtom(playerNameAtom);
+  const [room] = useAtom(roomAtom);
   const [isMatching, matching] = useState(false);
   const transitions = useTransition(isMatching, null, {
     from: { position: "absolute", opacity: 0 },
@@ -21,7 +21,11 @@ const Menu = (): JSX.Element => {
   });
 
   const findGame = () => {
-    socket.emit(CLIENT_EVENT_NAME.FindGame, name);
+    socket.emit(CLIENT_EVENT_NAME.FindGame);
+  };
+
+  const createRoom = () => {
+    socket.emit(CLIENT_EVENT_NAME.CreateRoom);
   };
 
   useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>
@@ -37,7 +41,12 @@ const Menu = (): JSX.Element => {
           </animated.div>
         ) : (
           <animated.div style={props} css={[gridStyle, centerizeContainerStyle]} key="menu">
-            <Button onClick={findGame}>Find game</Button>
+            {!room && (
+              <>
+                <Button onClick={createRoom}>Create room</Button>
+              </>
+            )}
+            {(!room || (room && room.owner === socket.id)) && <Button onClick={findGame}>Find game</Button>}
             <Button>How to play</Button>
             <Button>About</Button>
           </animated.div>
