@@ -1,5 +1,6 @@
 import { ClientInfo, ClientSocket } from "../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../shared/constants";
+import Lobby from "./GameMatcher/Lobby";
 import Room from "./Room";
 import Server from "./Server";
 
@@ -26,6 +27,10 @@ class Client {
       if (!this.room) {
         this.room = new Room(this);
         Server.getInstance().addRoom(this.room);
+        this.socket.removeAllListeners(CLIENT_EVENT_NAME.FindGame);
+        this.socket.on(CLIENT_EVENT_NAME.FindGame, () => {
+          new Lobby();
+        });
       }
     });
 
@@ -35,6 +40,8 @@ class Client {
       if (room) {
         try {
           room.add(this);
+          this.room = room;
+          this.socket.removeAllListeners(CLIENT_EVENT_NAME.FindGame);
         } catch (e) {
           this.socket.emit(SERVER_EVENT_NAME.Notify, e.message, "Danger");
         }

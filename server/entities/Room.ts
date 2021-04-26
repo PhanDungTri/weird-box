@@ -1,7 +1,8 @@
 import { RoomInfo } from "../../shared/@types";
-import { MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
+import { CLIENT_EVENT_NAME, MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
 import generateUniqueId from "../../shared/utils/generateUniqueId";
 import Client from "./Client";
+import Lobby from "./GameMatcher/Lobby";
 import Server from "./Server";
 
 class Room {
@@ -9,7 +10,14 @@ class Room {
   private guests = new Set<Client>();
 
   constructor(private owner: Client) {
+    this.owner.getSocket().removeAllListeners(CLIENT_EVENT_NAME.FindGame);
+    // TODO reset the original find game listener when client is not in room anymore
+    this.owner.getSocket().on(CLIENT_EVENT_NAME.FindGame, this.findGame.bind(this));
     this.owner.getSocket().emit(SERVER_EVENT_NAME.GetRoomInfo, this.getInfo());
+  }
+
+  private findGame() {
+    new Lobby([this.owner, ...Array.from(this.guests)]);
   }
 
   public getOwner(): Client {
@@ -34,6 +42,7 @@ class Room {
 
     this.owner.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo());
     this.guests.forEach((f) => f.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo()));
+    client.getSocket().removeAllListeners(CLIENT_EVENT_NAME.FindGame);
     this.guests.add(client);
     client.getSocket().emit(SERVER_EVENT_NAME.GetRoomInfo, this.getInfo());
   }
