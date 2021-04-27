@@ -1,11 +1,11 @@
-import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import Client from "../Client";
-import Game from "../Game";
-import Qualifier from "../Qualifier";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../shared/constants";
+import Client from "./Client";
+import Game from "./Game";
+import Qualifier from "./Qualifier";
 
 class Lobby extends Qualifier {
-  constructor(clients: Client[], waitTime?: number) {
-    super(clients, waitTime);
+  constructor(clients: Client[], waitTime?: number, room = false) {
+    super(clients, waitTime, room);
     this.clients.forEach((cl) => {
       cl.getSocket().once(CLIENT_EVENT_NAME.RejectGame, () => this.fail(cl));
       cl.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "found");
@@ -13,7 +13,7 @@ class Lobby extends Qualifier {
   }
 
   protected onQualified(): void {
-    new Game(this.clients);
+    new Game(this.clients, this.room);
   }
 
   protected ready(client: Client): void {

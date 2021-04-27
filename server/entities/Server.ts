@@ -41,6 +41,9 @@ class Server {
   }
 
   public disconnectClient(client: Client): void {
+    const room = this.getRoomHasClient(client);
+
+    if (room) room.remove(client);
     this.gameMatcher.dequeue(client);
   }
 

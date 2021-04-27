@@ -1,11 +1,10 @@
 import { useAtom } from "jotai";
 import { useCallback } from "react";
 import { CLIENT_EVENT_NAME } from "../../../shared/constants";
+import { roomAtom } from "../../atoms";
 import { IntegrateInput } from "../../components/Input";
 import socket from "../../services/socket";
-import { playerNameAtom, roomAtom } from "./atom";
-
-// TODO add rename button
+import { playerNameAtom } from "./atom";
 
 const PlayerNameInput = (): JSX.Element => {
   const [name, setName] = useAtom(playerNameAtom);

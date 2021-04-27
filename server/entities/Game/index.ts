@@ -22,12 +22,13 @@ class Game {
 
   constructor(
     clients: Client[],
+    room = false,
     public readonly maxHP = DEFAULT_MAX_HP,
     public readonly timePerTurn = DEFAULT_TIME_PER_TURN
   ) {
     this.players = clients.map((cl) => new Player(cl, this));
     this.currentPlayerIndex = this.players.length - 1;
-    new GameReadyChecker(clients, this);
+    new GameReadyChecker(clients, this, room);
     this.broadcast(SERVER_EVENT_NAME.NewGame);
   }
 

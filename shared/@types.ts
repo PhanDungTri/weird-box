@@ -70,6 +70,7 @@ export interface EventsFromClient {
   [CLIENT_EVENT_NAME.LeaveGame]: () => void;
   [CLIENT_EVENT_NAME.CreateRoom]: () => void;
   [CLIENT_EVENT_NAME.JoinRoom]: (id: string) => void;
+  [CLIENT_EVENT_NAME.LeaveRoom]: () => void;
 }
 
 export type ClientSocket = Socket<EventsFromClient, EventsFromServer>;

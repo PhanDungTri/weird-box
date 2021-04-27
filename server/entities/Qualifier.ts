@@ -9,7 +9,7 @@ class Qualifier {
   protected failures = new Set<Client>();
   private timeout: NodeJS.Timeout;
 
-  constructor(protected clients: Client[], waitTime = DEFAULT_WAIT_TIME) {
+  constructor(protected clients: Client[], waitTime = DEFAULT_WAIT_TIME, protected room = false) {
     this.clients.forEach((c) => {
       const onReady = () => {
         this.ready(c);
@@ -56,6 +56,7 @@ class Qualifier {
     this.clients.forEach((c) => {
       c.getSocket().removeAllListeners(CLIENT_EVENT_NAME.Ready);
       c.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "canceled");
+      if (this.room) return;
       if (this.passes.has(c)) Server.getInstance().enqueueClient(c);
     });
   }

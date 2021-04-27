@@ -1,5 +1,5 @@
-import { CONFIRM_WAIT_TIME, MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import Client from "../Client";
+import { CONFIRM_WAIT_TIME, MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
+import Client from "./Client";
 import Lobby from "./Lobby";
 
 const WAIT_FOR_FULL_LOBBY = 5000;

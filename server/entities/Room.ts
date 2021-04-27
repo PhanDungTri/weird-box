@@ -1,8 +1,8 @@
 import { RoomInfo } from "../../shared/@types";
-import { CLIENT_EVENT_NAME, MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
+import { MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
 import generateUniqueId from "../../shared/utils/generateUniqueId";
 import Client from "./Client";
-import Lobby from "./GameMatcher/Lobby";
+import Lobby from "./Lobby";
 import Server from "./Server";
 
 class Room {
@@ -10,26 +10,27 @@ class Room {
   private guests = new Set<Client>();
 
   constructor(private owner: Client) {
-    this.owner.getSocket().removeAllListeners(CLIENT_EVENT_NAME.FindGame);
-    // TODO reset the original find game listener when client is not in room anymore
-    this.owner.getSocket().on(CLIENT_EVENT_NAME.FindGame, this.findGame.bind(this));
     this.owner.getSocket().emit(SERVER_EVENT_NAME.GetRoomInfo, this.getInfo());
   }
 
-  private findGame() {
-    new Lobby([this.owner, ...Array.from(this.guests)]);
+  public findGame(): void {
+    new Lobby([this.owner, ...Array.from(this.guests)], undefined, true);
   }
 
   public getOwner(): Client {
     return this.owner;
   }
 
-  private getInfo(): RoomInfo {
+  public getInfo(): RoomInfo {
     return {
       id: this.id,
       owner: this.owner.id,
       members: [this.owner.getInfo(), ...Array.from(this.guests).map((g) => g.getInfo())],
     };
+  }
+
+  public getSize(): number {
+    return this.guests.size + 1;
   }
 
   public has(client: Client): boolean {
@@ -42,7 +43,6 @@ class Room {
 
     this.owner.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo());
     this.guests.forEach((f) => f.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo()));
-    client.getSocket().removeAllListeners(CLIENT_EVENT_NAME.FindGame);
     this.guests.add(client);
     client.getSocket().emit(SERVER_EVENT_NAME.GetRoomInfo, this.getInfo());
   }
