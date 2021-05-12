@@ -58,19 +58,21 @@ export interface EventsFromServer {
   [SERVER_EVENT_NAME.ActivatePassive]: (passive: PassiveAction) => void;
   [SERVER_EVENT_NAME.FriendJoined]: (friend: ClientInfo) => void;
   [SERVER_EVENT_NAME.FriendLeft]: (id: string) => void;
+  [SERVER_EVENT_NAME.OwnerChanged]: (id: string) => void;
   [SERVER_EVENT_NAME.GetRoomInfo]: (info: RoomInfo) => void;
 }
 
 export interface EventsFromClient {
   [CLIENT_EVENT_NAME.Rename]: (name: string) => void;
   [CLIENT_EVENT_NAME.FindGame]: () => void;
-  [CLIENT_EVENT_NAME.Ready]: () => void;
-  [CLIENT_EVENT_NAME.RejectGame]: () => void;
+  [CLIENT_EVENT_NAME.ReadyConfirm]: (ready: boolean) => void;
   [CLIENT_EVENT_NAME.PlayCard]: (id: string, cb: (err: boolean, msg?: string) => void) => void;
   [CLIENT_EVENT_NAME.LeaveGame]: () => void;
   [CLIENT_EVENT_NAME.CreateRoom]: () => void;
   [CLIENT_EVENT_NAME.JoinRoom]: (id: string) => void;
   [CLIENT_EVENT_NAME.LeaveRoom]: () => void;
+  [CLIENT_EVENT_NAME.CancelFindGame]: () => void;
+  [CLIENT_EVENT_NAME.TransferOwnership]: (id: string) => void;
 }
 
 export type ClientSocket = Socket<EventsFromClient, EventsFromServer>;

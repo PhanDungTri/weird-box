@@ -1,14 +1,15 @@
 import { css } from "@emotion/react";
 import { useAtom } from "jotai";
 import { CLIENT_EVENT_NAME } from "../../../../shared/constants";
-import PlayerAvatar from "../../../assets/sprites/white_gamepad.png";
 import { roomAtom } from "../../../atoms";
+import Button from "../../../components/Button";
+import DropDown from "../../../components/Dropdown";
 import EmptySlot from "../../../components/EmptySlot";
 import { IntegrateInput } from "../../../components/Input";
-import Sprite from "../../../components/Sprite";
 import socket from "../../../services/socket";
 import { headingStyle } from "../../../styles";
-import { memberListStyle, memberStyle, roomStyle } from "./styles";
+import Member from "./Member";
+import { memberListStyle, roomStyle } from "./styles";
 
 const Room = (): JSX.Element => {
   const [room] = useAtom(roomAtom);
@@ -19,26 +20,16 @@ const Room = (): JSX.Element => {
     for (let i = 0; i < 4; i++) {
       const member = room?.members[i];
       if (member) {
+        const component = <Member id={member.id} name={member.name} />;
         arr.push(
-          <div css={memberStyle} key={member.id}>
-            <Sprite
-              css={css`
-                position: relative;
-                display: block;
-              `}
-              src={PlayerAvatar}
-              size={[24, 13]}
-            />
-            <div
-              css={css`
-                font-size: 8px;
-                text-align: center;
-                word-break: break-all;
-              `}
-            >
-              {member.name}
-            </div>
-          </div>
+          socket.id === room?.owner && member.id !== socket.id ? (
+            <DropDown header={component} top>
+              <Button variation="Warning">Transfer ownership</Button>
+              <Button variation="Danger">Kick</Button>
+            </DropDown>
+          ) : (
+            component
+          )
         );
       } else arr.push(<EmptySlot key={i} />);
     }

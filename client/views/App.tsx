@@ -29,10 +29,13 @@ const App = (): JSX.Element => {
     )
   );
 
-  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, (id: string) =>
+  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, (id: string, owner: string) =>
     setRoom((room) =>
       produce(room, (draft) => {
-        if (draft) draft.members = draft?.members.filter((m) => m.id !== id);
+        if (draft) {
+          draft.members = draft?.members.filter((m) => m.id !== id);
+          draft.owner = owner;
+        }
       })
     )
   );

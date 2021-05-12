@@ -18,3 +18,10 @@ export const memberStyle = css`
   justify-items: center;
   padding: 4px;
 `;
+
+export const keyStyle = css`
+  transform: rotate(90deg);
+  background-color: white;
+  top: -12px;
+  right: -2px;
+`;

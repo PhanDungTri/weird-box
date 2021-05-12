@@ -1,3 +1,5 @@
+export type ReservedEvent = "disconnect" | "disconnecting" | "error";
+
 export enum SERVER_EVENT_NAME {
   Notify = "notify",
   UpdateGameMatchingStatus = "update game matcher status",
@@ -17,16 +19,18 @@ export enum SERVER_EVENT_NAME {
   GetRoomInfo = "get room info",
   FriendJoined = "friend joined",
   FriendLeft = "friend left",
+  OwnerChanged = "owner changed",
 }
 
 export enum CLIENT_EVENT_NAME {
   Rename = "rename",
   FindGame = "find game",
-  Ready = "ready",
-  RejectGame = "reject game",
+  CancelFindGame = "cancel find game",
+  ReadyConfirm = "ready confirm",
   PlayCard = "play card",
   LeaveGame = "leave game",
   CreateRoom = "create room",
   JoinRoom = "join room",
   LeaveRoom = "leave room",
+  TransferOwnership = "transfer ownership",
 }

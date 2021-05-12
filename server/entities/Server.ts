@@ -1,6 +1,8 @@
 import { Server as SocketServer } from "socket.io";
 import { GameSocket } from "../../shared/@types";
 import Client from "./Client";
+import FindingState from "./Client/FindingState";
+import IdleState from "./Client/IdleState";
 import GameMatcher from "./GameMatcher";
 import Room from "./Room";
 
@@ -17,8 +19,9 @@ class Server {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    return;
+  }
 
   public static getInstance(): Server {
     if (!Server.instance) Server.instance = new Server();
@@ -29,22 +32,20 @@ class Server {
     console.info("Server started on port " + Server.port);
 
     this.socketServer.on("connect", (socket) => {
-      const client = new Client(socket);
-
-      console.log("Client connected: " + client.id);
-      client.run();
+      new Client(socket);
+      console.log("Client connected: " + socket.id);
+      socket.on("disconnect", () => console.log("Client left: " + socket.id));
     });
   }
 
   public enqueueClient(client: Client): void {
-    this.gameMatcher.enqueue(client);
+    this.gameMatcher.add(client);
+    client.changeState(new FindingState(client), true);
   }
 
-  public disconnectClient(client: Client): void {
-    const room = this.getRoomHasClient(client);
-
-    if (room) room.remove(client);
-    this.gameMatcher.dequeue(client);
+  public dequeueClient(client: Client): void {
+    this.gameMatcher.remove(client);
+    client.changeState(new IdleState(client));
   }
 
   public addRoom(room: Room): void {
@@ -57,10 +58,6 @@ class Server {
 
   public getRoom(id: string): Room | undefined {
     return this.rooms.find((r) => r.id === id);
-  }
-
-  public getRoomHasClient(client: Client): Room | undefined {
-    return this.rooms.find((r) => r.has(client));
   }
 }
 

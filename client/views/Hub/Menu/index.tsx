@@ -1,12 +1,12 @@
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { animated, useTransition } from "react-spring";
+import { animated } from "react-spring";
 import { GameMatchingStatus } from "../../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../shared/constants";
 import { roomAtom } from "../../../atoms";
 import Button from "../../../components/Button";
 import Loading from "../../../components/Loading";
-import { useListenServerEvent } from "../../../hooks";
+import { useListenServerEvent, useRevealAnimation } from "../../../hooks";
 import socket from "../../../services/socket";
 import { centerizeContainerStyle, gridStyle } from "../../../styles";
 import { optionMenuStyle } from "./styles";
@@ -14,11 +14,7 @@ import { optionMenuStyle } from "./styles";
 const Menu = (): JSX.Element => {
   const [room] = useAtom(roomAtom);
   const [isMatching, matching] = useState(false);
-  const transitions = useTransition(isMatching, null, {
-    from: { position: "absolute", opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  });
+  const transitions = useRevealAnimation(isMatching);
 
   const findGame = () => {
     socket.emit(CLIENT_EVENT_NAME.FindGame);
