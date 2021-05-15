@@ -7,12 +7,12 @@ import ROUTE from "../constants/ROUTE";
 import { useListenServerEvent } from "../hooks";
 import Game from "./Game";
 import Hub from "./Hub";
-import Test from "./Test";
+//import Test from "./Test";
 
 const pages = {
   [ROUTE.InGame]: <Game />,
   [ROUTE.Hub]: <Hub />,
-  [ROUTE.Test]: <Test />,
+  [ROUTE.Test]: <div />,
 };
 
 const App = (): JSX.Element => {
@@ -29,16 +29,21 @@ const App = (): JSX.Element => {
     )
   );
 
-  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, (id: string, owner: string) =>
+  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, (id: string) =>
     setRoom((room) =>
       produce(room, (draft) => {
-        if (draft) {
-          draft.members = draft?.members.filter((m) => m.id !== id);
-          draft.owner = owner;
-        }
+        if (draft) draft.members = draft?.members.filter((m) => m.id !== id);
       })
     )
   );
+
+  useListenServerEvent(SERVER_EVENT_NAME.OwnerChanged, (id: string) => {
+    setRoom((room) =>
+      produce(room, (draft) => {
+        if (draft) draft.owner = id;
+      })
+    );
+  });
 
   return pages[route];
 };

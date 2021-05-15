@@ -1,21 +1,21 @@
-import { MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
-import Client from "./Client";
-import Game from "./Game";
-import ReadyChecker from "./ReadyChecker";
+import { MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../../shared/constants";
+import Client from "../Client";
+import MatchingChecker from "../ReadyChecker/MatchingChecker";
 
 const WAIT_FOR_FULL_LOBBY = 5000;
 
 class GameMatcher {
   private queue: Client[] = [];
-  private timeout: NodeJS.Timeout | undefined;
+  private timeout!: NodeJS.Timeout;
 
   private found() {
+    console.log("found");
     const clients = this.queue.splice(
-      -this.queue.length < MAX_PLAYERS_PER_GAME ? this.queue.length : MAX_PLAYERS_PER_GAME
+      -(this.queue.length < MAX_PLAYERS_PER_GAME ? this.queue.length : MAX_PLAYERS_PER_GAME)
     );
 
     clients.forEach((c) => c.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "found"));
-    new ReadyChecker(clients, (cls, inRoom) => new Game(cls, inRoom), false);
+    new MatchingChecker(clients);
   }
 
   private match() {

@@ -18,7 +18,7 @@ const Game = (): JSX.Element => {
     const onCanceled = (status: GameMatchingStatus) => status === "canceled" && changeRoute(ROUTE.Hub);
     const onNewTurn = () => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);
 
-    socket.emit(CLIENT_EVENT_NAME.Ready);
+    socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, true);
     socket.once(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);
     socket.once(SERVER_EVENT_NAME.NewTurn, onNewTurn);
   }, []);

@@ -1,8 +1,8 @@
-import Client from ".";
-import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import Room from "../Room";
-import Server from "../Server";
-import ClientState from "./ClientState";
+import ClientState from ".";
+import Client from "..";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../shared/constants";
+import Room from "../../Room";
+import Server from "../../Server";
 
 class IdleState extends ClientState {
   private onCreateRoom: () => void;
@@ -15,7 +15,7 @@ class IdleState extends ClientState {
 
     this.onCreateRoom = this.createRoom.bind(this);
     this.onJoinRoom = this.joinRoom.bind(this);
-    this.onFindGame = Server.getInstance().enqueueClient.bind(this, this.client);
+    this.onFindGame = Server.getInstance().enqueueClient.bind(Server.getInstance(), this.client);
     this.onRename = this.setName.bind(this);
   }
 
@@ -38,6 +38,7 @@ class IdleState extends ClientState {
 
   private setName(name: string) {
     this.client.name = name;
+    this.socket.emit(SERVER_EVENT_NAME.Notify, "Name changed!", "Safe");
   }
 
   public enter(): void {

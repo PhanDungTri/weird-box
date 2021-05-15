@@ -1,9 +1,8 @@
-import Room from "../Room";
-import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import Client from "../Client";
+import Client from "..";
+import { SERVER_EVENT_NAME, CLIENT_EVENT_NAME } from "../../../../shared/constants";
+import MatchingChecker from "../../ReadyChecker/MatchingChecker";
+import Room from "../../Room";
 import InRoomState from "./InRoomState";
-import ReadyChecker from "../ReadyChecker";
-import Game from "../Game";
 
 class RoomOwnerState extends InRoomState {
   private onTransferOwnership: (id: string) => void;
@@ -17,28 +16,23 @@ class RoomOwnerState extends InRoomState {
   }
 
   private transferOwnership(id: string) {
-    if (id === this.client.getId()) this.socket.emit(SERVER_EVENT_NAME.Notify, "You are already the owner!", "Danger");
-    else {
+    if (id === this.id) this.socket.emit(SERVER_EVENT_NAME.Notify, "You are already the owner!", "Warning");
+    else
       try {
         this.room.changeOwner(id);
       } catch (e) {
         this.socket.emit(SERVER_EVENT_NAME.Notify, e.message, "Danger");
       }
-    }
   }
 
   private startGame() {
     if (this.room.getSize() <= 1) this.socket.emit(SERVER_EVENT_NAME.Notify, "Not enough player!", "Danger");
-    else {
-      new ReadyChecker(this.room.getMembers(), (cls, inRoom) => new Game(cls, inRoom), true);
-      // TODO start game
-    }
+    else new MatchingChecker(this.room.getMembers(), this.room);
   }
 
   public enter(): void {
     super.enter();
-
-    this.socket.on(CLIENT_EVENT_NAME.TransferOwnership, this.transferOwnership);
+    this.socket.on(CLIENT_EVENT_NAME.TransferOwnership, this.onTransferOwnership);
     this.socket.on(CLIENT_EVENT_NAME.FindGame, this.onStartGame);
   }
 

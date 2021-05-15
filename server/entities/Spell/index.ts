@@ -50,7 +50,7 @@ abstract class Spell {
       name: this.name,
       power: this.power,
       duration: this.duration,
-      target: this.target.getClient().id,
+      target: this.target.id,
     };
   }
 }

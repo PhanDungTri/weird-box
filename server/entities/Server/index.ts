@@ -1,10 +1,10 @@
 import { Server as SocketServer } from "socket.io";
-import { GameSocket } from "../../shared/@types";
-import Client from "./Client";
-import FindingState from "./Client/FindingState";
-import IdleState from "./Client/IdleState";
+import { GameSocket } from "../../../shared/@types";
+import Client from "../Client";
+import FindingState from "../Client/State/FindingState";
+import IdleState from "../Client/State/IdleState";
 import GameMatcher from "./GameMatcher";
-import Room from "./Room";
+import Room from "../Room";
 
 class Server {
   public static port = 3000;
@@ -58,6 +58,10 @@ class Server {
 
   public getRoom(id: string): Room | undefined {
     return this.rooms.find((r) => r.id === id);
+  }
+
+  public getRoomHasClient(client: Client): Room | undefined {
+    return this.rooms.find((r) => r.getMembers().includes(client));
   }
 }
 

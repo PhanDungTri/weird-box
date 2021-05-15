@@ -1,7 +1,7 @@
-import Client from ".";
-import { CLIENT_EVENT_NAME } from "../../../shared/constants";
-import Server from "../Server";
-import ClientState from "./ClientState";
+import ClientState from ".";
+import Client from "..";
+import { CLIENT_EVENT_NAME } from "../../../../shared/constants";
+import Server from "../../Server";
 
 class FindingState extends ClientState {
   private onCancelFindGame: () => void;

@@ -1,12 +1,15 @@
-import { ClientInfo, ClientSocket } from "../../../shared/@types";
-import ClientState from "./ClientState";
-import IdleState from "./IdleState";
+import { ClientSocket, ClientInfo } from "../../../shared/@types";
+import ClientState from "./State";
+import IdleState from "./State/IdleState";
 
 class Client {
-  private state: ClientState = new IdleState(this);
-  private savedState: ClientState | null = null;
+  private state: ClientState;
+  private savedState!: ClientState;
 
-  constructor(private socket: ClientSocket, public name = "player") {}
+  constructor(private socket: ClientSocket, public name = "player") {
+    this.state = new IdleState(this);
+    this.state.enter();
+  }
 
   public getId(): string {
     return this.socket.id;

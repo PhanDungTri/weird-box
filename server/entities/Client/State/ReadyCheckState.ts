@@ -1,7 +1,7 @@
-import Client from ".";
-import { CLIENT_EVENT_NAME } from "../../../shared/constants";
-import ReadyChecker from "../ReadyChecker";
-import ClientState from "./ClientState";
+import ClientState from ".";
+import Client from "..";
+import { CLIENT_EVENT_NAME } from "../../../../shared/constants";
+import ReadyChecker from "../../ReadyChecker";
 
 class ReadyCheckState extends ClientState {
   private onFail: () => void;

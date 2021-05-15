@@ -66,7 +66,7 @@ export interface EventsFromClient {
   [CLIENT_EVENT_NAME.Rename]: (name: string) => void;
   [CLIENT_EVENT_NAME.FindGame]: () => void;
   [CLIENT_EVENT_NAME.ReadyConfirm]: (ready: boolean) => void;
-  [CLIENT_EVENT_NAME.PlayCard]: (id: string, cb: (err: boolean, msg?: string) => void) => void;
+  [CLIENT_EVENT_NAME.PlayCard]: (id: string) => void;
   [CLIENT_EVENT_NAME.LeaveGame]: () => void;
   [CLIENT_EVENT_NAME.CreateRoom]: () => void;
   [CLIENT_EVENT_NAME.JoinRoom]: (id: string) => void;

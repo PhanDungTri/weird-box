@@ -1,11 +1,11 @@
-import { RoomInfo } from "../../../shared/@types";
-import { MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import generateUniqueId from "../../../shared/utils/generateUniqueId";
-import Client from "../Client";
-import IdleState from "../Client/IdleState";
-import InRoomState from "../Client/InRoomState";
-import RoomOwnerState from "../Client/RoomOwnerState";
-import Server from "../Server";
+import { RoomInfo } from "../../shared/@types";
+import { MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
+import generateUniqueId from "../../shared/utils/generateUniqueId";
+import Client from "./Client";
+import IdleState from "./Client/State/IdleState";
+import InRoomState from "./Client/State/InRoomState";
+import RoomOwnerState from "./Client/State/RoomOwnerState";
+import Server from "./Server";
 
 class Room {
   public readonly id = generateUniqueId();
@@ -22,13 +22,6 @@ class Room {
     return this.members;
   }
 
-  public getOwner(): Client {
-    const owner = this.members.find((m) => m.getId() === this.ownerId);
-
-    if (owner) return owner;
-    throw new Error("Room has no owner");
-  }
-
   public getInfo(): RoomInfo {
     return {
       id: this.id,
@@ -38,7 +31,14 @@ class Room {
   }
 
   public getSize(): number {
-    return this.members.length + 1;
+    return this.members.length;
+  }
+
+  private getOwner(): Client {
+    const owner = this.members.find((m) => m.getId() === this.ownerId);
+
+    if (owner) return owner;
+    throw new Error("Room has no owner");
   }
 
   public changeOwner(id: string): void {
@@ -61,13 +61,13 @@ class Room {
     if (this.members.includes(client)) throw Error("You are already in room!");
 
     this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo()));
-    client.changeState(new InRoomState(client, this), true);
     this.members.push(client);
+    client.changeState(new InRoomState(client, this), true);
   }
 
   public remove(client: Client): void {
     if (client.getId() === this.ownerId) {
-      const nextOwner = this.members.shift();
+      const nextOwner = this.members.find((m) => m.getId() !== this.ownerId);
 
       if (nextOwner) this.changeOwner(nextOwner.getId());
       else Server.getInstance().removeRoom(this);
@@ -76,6 +76,13 @@ class Room {
     client.changeState(new IdleState(client));
     this.members = this.members.filter((g) => g !== client);
     this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendLeft, client.getId()));
+  }
+
+  public back(client: Client): void {
+    client.changeState(
+      client.getId() === this.ownerId ? new RoomOwnerState(client, this) : new InRoomState(client, this),
+      true
+    );
   }
 }
 

@@ -37,12 +37,10 @@ const Hand = (): JSX.Element => {
       if (chosenCard !== id) {
         setChosenCard(id);
         chooseSound.play();
-      } else if (isInTurn)
-        socket.emit(CLIENT_EVENT_NAME.PlayCard, chosenCard, (err, message = "") => {
-          if (err) notify({ message, variant: "Danger" });
-          else setCards((list) => list.filter((c) => c.id !== chosenCard));
-        });
-      else notify({ message: "Not your turn!", variant: "Danger" });
+      } else if (isInTurn) {
+        socket.emit(CLIENT_EVENT_NAME.PlayCard, chosenCard);
+        setCards((list) => list.filter((c) => c.id !== chosenCard));
+      } else notify({ message: "Not your turn!", variant: "Danger" });
     },
     [isInTurn, chosenCard]
   );

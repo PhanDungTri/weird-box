@@ -24,7 +24,9 @@ const Room = (): JSX.Element => {
         arr.push(
           socket.id === room?.owner && member.id !== socket.id ? (
             <DropDown header={component} top>
-              <Button variation="Warning">Transfer ownership</Button>
+              <Button variation="Warning" onClick={() => socket.emit(CLIENT_EVENT_NAME.TransferOwnership, member.id)}>
+                Transfer ownership
+              </Button>
               <Button variation="Danger">Kick</Button>
             </DropDown>
           ) : (

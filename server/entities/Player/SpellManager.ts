@@ -14,18 +14,9 @@ class SpellManager {
     private broadcast: (ev: SERVER_EVENT_NAME, ...data: Parameters<EventsFromServer[SERVER_EVENT_NAME]>) => void
   ) {}
 
-  public async triggerPendingDebuffs(): Promise<void> {
-    for (const debuff of this.debuffs) {
-      await debuff.trigger();
-      if (debuff.getDuration() === 0) this.debuffs = this.debuffs.filter((d) => d !== debuff);
-      this.broadcast(SERVER_EVENT_NAME.TakeSpell, debuff.toJsonData());
-      await waitFor(1000);
-    }
-  }
-
   private addTalisman(talisman: PassiveSpell): void {
     this.talismans.push(talisman);
-    this.player.getClient().getSocket().emit(SERVER_EVENT_NAME.TakeSpell, talisman.toJsonData());
+    this.player.socket.emit(SERVER_EVENT_NAME.TakeSpell, talisman.toJsonData());
   }
 
   private async activateTalisman(spell: Spell): Promise<boolean> {
@@ -36,7 +27,7 @@ class SpellManager {
       for await (const action of talisman.activate(spell)) {
         this.broadcast(SERVER_EVENT_NAME.ActivatePassive, {
           id: talisman.id,
-          target: this.player.getClient().id,
+          target: this.player.id,
           action,
         });
 
@@ -47,6 +38,15 @@ class SpellManager {
     }
 
     return false;
+  }
+
+  public async triggerPendingDebuffs(): Promise<void> {
+    for (const debuff of this.debuffs) {
+      await debuff.trigger();
+      if (debuff.getDuration() === 0) this.debuffs = this.debuffs.filter((d) => d !== debuff);
+      this.broadcast(SERVER_EVENT_NAME.TakeSpell, debuff.toJsonData());
+      await waitFor(1000);
+    }
   }
 
   public async takeSpell(spell: Spell): Promise<void> {

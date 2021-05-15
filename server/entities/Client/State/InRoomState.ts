@@ -1,7 +1,7 @@
-import Client from ".";
-import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import Room from "../Room";
-import ClientState from "./ClientState";
+import ClientState from ".";
+import Client from "..";
+import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../shared/constants";
+import Room from "../../Room";
 
 class InRoomState extends ClientState {
   private onLeaveRoom: () => void;

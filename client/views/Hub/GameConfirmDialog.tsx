@@ -21,7 +21,7 @@ const GameConfirmDialog = (): JSX.Element => {
   const [rejectSound] = useState(new Howl({ src: [RejectSound] }));
 
   const onConfirm = useCallback((isAccepted: boolean) => {
-    socket.emit(isAccepted ? CLIENT_EVENT_NAME.Ready : CLIENT_EVENT_NAME.RejectGame);
+    socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, isAccepted);
     setConfirm(isAccepted ? "accepted" : "rejected");
   }, []);
 
