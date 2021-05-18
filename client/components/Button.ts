@@ -7,10 +7,11 @@ import { isDarkColor, shadeColor, tintColor } from "../utils/color";
 
 type ButtonProps = {
   variation?: StyleVariant;
+  disabled?: boolean;
 };
 
 const Button = styled.button<ButtonProps>`
-  ${({ variation = "Primary" }) => css`
+  ${({ variation = "Primary", disabled = false }) => css`
     ${pixelBorderStyle(2, [shadeColor(COLOR[variation], 70)])};
     background-color: ${COLOR[variation]};
     color: ${isDarkColor(COLOR[variation]) ? COLOR.White : COLOR.Black};
@@ -18,7 +19,7 @@ const Button = styled.button<ButtonProps>`
     border-style: solid none;
 
     &:hover {
-      border-bottom-color: rgba(0, 0, 0, 0.4);
+      border-bottom-color: ${disabled ? COLOR[variation] : "rgba(0, 0, 0, 0.4)"};
     }
 
     &:active {

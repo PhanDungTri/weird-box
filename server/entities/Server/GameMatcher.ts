@@ -33,6 +33,7 @@ class GameMatcher {
 
   public remove(client: Client): void {
     this.queue = this.queue.filter((c) => c !== client);
+    client.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "canceled");
     this.match();
   }
 }
