@@ -24,6 +24,8 @@ const ChargePointBar = (): JSX.Element => {
     else setBarState("Danger");
   }, [chargePoint]);
 
+  const stopAnimation = () => animate(false);
+
   const renderNodes = () =>
     nodes.map((isCharged, i, arr) => {
       const isIncreased = chargePoint >= prevNodes.current.filter(Boolean).length;
@@ -56,7 +58,7 @@ const ChargePointBar = (): JSX.Element => {
   useListenServerEvent(SERVER_EVENT_NAME.GetCards, () => animate(true));
 
   return (
-    <StyledChargePointBar css={shouldAnimate && chargePointBarDealAnimation} onAnimationEnd={() => animate(false)}>
+    <StyledChargePointBar css={shouldAnimate && chargePointBarDealAnimation} onAnimationEnd={stopAnimation}>
       {renderNodes()}
     </StyledChargePointBar>
   );

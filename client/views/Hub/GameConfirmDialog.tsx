@@ -1,5 +1,5 @@
 import { Howl } from "howler";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
 import AcceptSound from "../../assets/sounds/accept_game.mp3";
@@ -20,10 +20,20 @@ const GameConfirmDialog = (): JSX.Element => {
   const [acceptSound] = useState(new Howl({ src: [AcceptSound] }));
   const [rejectSound] = useState(new Howl({ src: [RejectSound] }));
 
-  const onConfirm = useCallback((isAccepted: boolean) => {
+  const onConfirm = (isAccepted: boolean) => {
     socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, isAccepted);
-    setConfirm(isAccepted ? "accepted" : "rejected");
-  }, []);
+
+    if (isAccepted) {
+      setConfirm("accepted");
+      acceptSound.play();
+    } else {
+      setConfirm("rejected");
+      rejectSound.play();
+    }
+  };
+
+  const onYes = () => onConfirm(true);
+  const onNo = () => onConfirm(false);
 
   useEffect(() => {
     if (!shouldShow) setConfirm("pending");
@@ -38,16 +48,10 @@ const GameConfirmDialog = (): JSX.Element => {
     <Dialog
       show={shouldShow}
       title="Game found"
-      confirmMessage="Accept"
-      onConfirm={() => {
-        onConfirm(true);
-        acceptSound.play();
-      }}
-      cancelMessage="Reject"
-      onCancel={() => {
-        onConfirm(false);
-        rejectSound.play();
-      }}
+      yesMessage="Accept"
+      onYes={onYes}
+      noMessage="Reject"
+      onNo={onNo}
       color={confirm === "pending" ? COLOR.Info : confirm === "accepted" ? COLOR.Safe : COLOR.Danger}
       noFooter={confirm !== "pending"}
     >

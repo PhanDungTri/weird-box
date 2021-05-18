@@ -26,7 +26,6 @@ const Member = ({ id, name }: MemberProps): JSX.Element => {
       />
       <div
         css={css`
-          font-size: 8px;
           text-align: center;
           word-break: break-all;
         `}

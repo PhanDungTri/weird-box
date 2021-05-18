@@ -19,9 +19,11 @@ const DropDown = ({ header, children, top = false, background = COLOR.White }: D
   const ref = useOnClickOutside<HTMLDivElement>(() => show(false));
   const transitions = useRevealAnimation(shouldShow);
 
+  const toggleShow = () => show(!shouldShow);
+
   return (
     <div style={{ position: "relative" }}>
-      <div ref={ref} onClick={() => show(!shouldShow)}>
+      <div ref={ref} onClick={toggleShow}>
         {!header || typeof header === "string" ? (
           <Button>
             <span>{header}</span>

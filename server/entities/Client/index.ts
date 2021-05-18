@@ -1,4 +1,5 @@
 import { ClientSocket, ClientInfo } from "../../../shared/@types";
+import Server from "../Server";
 import ClientState from "./State";
 import IdleState from "./State/IdleState";
 
@@ -8,7 +9,9 @@ class Client {
 
   constructor(private socket: ClientSocket, public name = "player") {
     this.state = new IdleState(this);
+
     this.state.enter();
+    this.socket.on("disconnect", this.onDisconnect.bind(this));
   }
 
   public getId(): string {
@@ -24,6 +27,16 @@ class Client {
       id: this.getId(),
       name: this.name,
     };
+  }
+
+  public getState(): ClientState {
+    return this.state;
+  }
+
+  private onDisconnect() {
+    // because player is maybe in room while in game
+    const room = Server.getInstance().getRoomHasClient(this);
+    if (room) room.remove(this);
   }
 
   public changeState(state: ClientState, save = false): void {

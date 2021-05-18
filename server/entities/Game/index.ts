@@ -20,7 +20,7 @@ class Game {
   private chargePoint = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck(true);
-  private timeout!: number;
+  private timeout!: NodeJS.Timeout;
 
   constructor(
     clients: Client[],
@@ -38,8 +38,9 @@ class Game {
     return this.players[this.currentPlayerIndex];
   }
 
-  private shouldEnd() {
-    return this.players.reduce((count, p) => (p.isEliminated ? count : count + 1), 0) <= 1;
+  private shouldEnd(): boolean {
+    // The game ends when there is only 1 player that hasn't been eliminated yet
+    return this.players.reduce((count, p) => (p.isEliminated ? count : count + 1), 0) === 1;
   }
 
   private dealCards() {
@@ -79,19 +80,18 @@ class Game {
 
   private async newTurn() {
     this.nextPlayer();
-    const currentPlayer = this.getCurrentPlayer();
-
-    currentPlayer.takeCards(this.drawCard());
-    this.broadcast(SERVER_EVENT_NAME.NewTurn, currentPlayer.id, this.drawDeck.getSize());
-
-    this.timeout = setTimeout(this.eliminatePlayer.bind(this), this.timePerTurn);
-  }
-
-  private async endTurn() {
     await this.updatePlayers();
 
     if (this.shouldEnd()) this.end();
-    else this.newTurn();
+    else {
+      const currentPlayer = this.getCurrentPlayer();
+
+      currentPlayer.takeCards(this.drawCard());
+      currentPlayer.startTurn();
+      this.broadcast(SERVER_EVENT_NAME.NewTurn, currentPlayer.id, this.drawDeck.getSize());
+
+      this.timeout = setTimeout(() => this.eliminatePlayer(currentPlayer), this.timePerTurn);
+    }
   }
 
   private async updatePlayers() {
@@ -107,14 +107,11 @@ class Game {
     do {
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     } while (this.getCurrentPlayer().isEliminated);
-
-    this.getCurrentPlayer().startTurn();
   }
 
   private end() {
     clearTimeout(this.timeout);
     this.broadcast(SERVER_EVENT_NAME.GameOver, this.players.find((p) => !p.isEliminated)?.id || "");
-    this.players.forEach((p) => this.removePlayer(p));
   }
 
   public drawCard(): Card {
@@ -141,7 +138,7 @@ class Game {
       await this.changeChargePoint(newChargePoint);
     }
 
-    this.endTurn();
+    this.newTurn();
   }
 
   public start(): void {
@@ -161,22 +158,22 @@ class Game {
   }
 
   public eliminatePlayer(player: Player): void {
-    player.isEliminated = true;
-    this.broadcast(SERVER_EVENT_NAME.PlayerEliminated, player.id);
+    if (!this.shouldEnd()) {
+      player.isEliminated = true;
+      this.broadcast(SERVER_EVENT_NAME.PlayerEliminated, player.id);
 
-    if (this.getCurrentPlayer() === player) this.endTurn();
-    else if (this.shouldEnd()) this.end();
+      if (this.getCurrentPlayer() === player) this.newTurn();
+      else if (this.shouldEnd()) this.end();
+    }
   }
 
   public removePlayer(player: Player): void {
     const client = player.getClient();
-    this.players = this.players.filter((p) => p !== player);
 
-    if (this.room && this.shouldEnd()) this.room.back(client);
-    else {
-      this.room?.remove(client);
-      client.changeState(new IdleState(client));
-    }
+    if (this.room)
+      if (this.shouldEnd()) this.room.back(client);
+      else this.room.remove(client);
+    else client.changeState(new IdleState(client));
   }
 
   public broadcast(event: SERVER_EVENT_NAME, ...data: Parameters<EventsFromServer[SERVER_EVENT_NAME]>): void {

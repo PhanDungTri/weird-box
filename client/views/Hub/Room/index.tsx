@@ -14,6 +14,9 @@ import { memberListStyle, roomStyle } from "./styles";
 const Room = (): JSX.Element => {
   const [room] = useAtom(roomAtom);
 
+  const leave = () => socket.emit(CLIENT_EVENT_NAME.LeaveRoom);
+  const join = (id?: string) => id && socket.emit(CLIENT_EVENT_NAME.JoinRoom, id);
+
   const generateList = () => {
     const arr: JSX.Element[] = [];
 
@@ -21,13 +24,15 @@ const Room = (): JSX.Element => {
       const member = room?.members[i];
       if (member) {
         const component = <Member id={member.id} name={member.name} />;
+
+        const kick = () => socket.emit(CLIENT_EVENT_NAME.Kick, member.id);
+
         arr.push(
           socket.id === room?.owner && member.id !== socket.id ? (
             <DropDown header={component} top>
-              <Button variation="Warning" onClick={() => socket.emit(CLIENT_EVENT_NAME.TransferOwnership, member.id)}>
-                Transfer ownership
+              <Button variation="Danger" onClick={kick}>
+                Kick
               </Button>
-              <Button variation="Danger">Kick</Button>
             </DropDown>
           ) : (
             component
@@ -37,10 +42,6 @@ const Room = (): JSX.Element => {
     }
 
     return arr;
-  };
-
-  const join = (id?: string) => {
-    if (id) socket.emit(CLIENT_EVENT_NAME.JoinRoom, id);
   };
 
   return (
@@ -58,6 +59,9 @@ const Room = (): JSX.Element => {
             {room.id}
           </div>
           <div css={memberListStyle}>{generateList()}</div>
+          <Button variation="Danger" onClick={leave}>
+            Leave
+          </Button>
         </>
       ) : (
         <IntegrateInput placeholder="Enter room code..." onClick={join}>

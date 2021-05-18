@@ -12,6 +12,8 @@ const RecentPlayedCard = (): JSX.Element => {
   const [card, setCard] = useState<CardInfo>();
   const [playCardSound] = useState(new Howl({ src: [PlayCardSound] }));
 
+  const stopAnimation = () => setCard(undefined);
+
   useListenServerEvent(SERVER_EVENT_NAME.CardPlayed, (card: CardInfo) => {
     setCard(card);
     playCardSound.play();
@@ -20,7 +22,7 @@ const RecentPlayedCard = (): JSX.Element => {
   return (
     <>
       {card && (
-        <div onAnimationEnd={() => setCard(undefined)} css={[cardPlayedAnimation, centerizeStyle]}>
+        <div onAnimationEnd={stopAnimation} css={[cardPlayedAnimation, centerizeStyle]}>
           <Card card={card} />
         </div>
       )}

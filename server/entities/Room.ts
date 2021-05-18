@@ -10,6 +10,7 @@ import Server from "./Server";
 class Room {
   public readonly id = generateUniqueId();
   private members: Client[] = [];
+  private blacklist: Client[] = [];
   private ownerId: string;
 
   constructor(owner: Client) {
@@ -34,31 +35,10 @@ class Room {
     return this.members.length;
   }
 
-  private getOwner(): Client {
-    const owner = this.members.find((m) => m.getId() === this.ownerId);
-
-    if (owner) return owner;
-    throw new Error("Room has no owner");
-  }
-
-  public changeOwner(id: string): void {
-    const owner = this.getOwner();
-    const newOwner = this.members.find((m) => m.getId() === id);
-
-    if (newOwner) {
-      owner.changeState(new InRoomState(owner, this), true);
-      newOwner.changeState(new RoomOwnerState(newOwner, this), true);
-      this.ownerId = newOwner.getId();
-      this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.OwnerChanged, this.ownerId));
-      return;
-    }
-
-    throw new Error("Invalid client id!");
-  }
-
   public add(client: Client): void {
     if (this.members.length >= MAX_PLAYERS_PER_GAME - 1) throw Error("Room is full!");
     if (this.members.includes(client)) throw Error("You are already in room!");
+    if (this.blacklist.includes(client)) throw Error("You aren't permitted to join this room!");
 
     this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo()));
     this.members.push(client);
@@ -66,16 +46,34 @@ class Room {
   }
 
   public remove(client: Client): void {
-    if (client.getId() === this.ownerId) {
-      const nextOwner = this.members.find((m) => m.getId() !== this.ownerId);
+    client.changeState(new IdleState(client));
 
-      if (nextOwner) this.changeOwner(nextOwner.getId());
-      else Server.getInstance().removeRoom(this);
+    if (client.getId() === this.ownerId) {
+      const newOwner = this.members.find((m) => m.getId() !== this.ownerId);
+      if (newOwner) {
+        this.ownerId = newOwner.getId();
+        // We must not change the players state if they are in a game, because the players will lost their in game state
+        if (newOwner.getState() instanceof InRoomState) newOwner.changeState(new RoomOwnerState(newOwner, this), true);
+      }
     }
 
-    client.changeState(new IdleState(client));
+    client.getSocket().emit(SERVER_EVENT_NAME.LeftRoom);
     this.members = this.members.filter((g) => g !== client);
-    this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendLeft, client.getId()));
+    this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendLeft, client.getId(), this.ownerId));
+
+    if (this.getSize() === 0) Server.getInstance().removeRoom(this);
+  }
+
+  public kick(id: string): void {
+    if (id === this.ownerId) throw new Error("Can't kick yourself!");
+
+    const client = this.members.find((m) => m.getId() === id);
+
+    if (client) {
+      this.remove(client);
+      this.blacklist.push(client);
+      client.getSocket().emit(SERVER_EVENT_NAME.Notify, "You got kicked!", "Warning");
+    } else throw new Error("Invalid member!");
   }
 
   public back(client: Client): void {

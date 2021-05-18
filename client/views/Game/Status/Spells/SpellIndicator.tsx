@@ -8,6 +8,8 @@ const SpellIndicator = ({ duration, name, power }: SpellInfo): JSX.Element => {
   const [triggered, setTriggered] = useState(false);
   const firstRender = useRef(true);
 
+  const stopTransition = () => setTriggered(false);
+
   useEffect(() => {
     if (firstRender.current) firstRender.current = false;
     else setTriggered(true);
@@ -20,7 +22,7 @@ const SpellIndicator = ({ duration, name, power }: SpellInfo): JSX.Element => {
       `}
     >
       <img
-        onTransitionEnd={() => setTriggered(false)}
+        onTransitionEnd={stopTransition}
         src={spriteLookup[name]}
         css={[
           css`

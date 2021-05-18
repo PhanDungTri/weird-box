@@ -37,6 +37,9 @@ const BoxOfCard = (): JSX.Element => {
   const [dealSound] = useState(new Howl({ src: [DealSound] }));
   const [status, setStatus] = useState<BoxOfCardStatus>("idle");
 
+  const idle = () => setStatus("idle");
+  const stabilize = () => overcharge(false);
+
   useListenServerEvent(SERVER_EVENT_NAME.Overcharged, () => overcharge(true));
   useListenServerEvent(SERVER_EVENT_NAME.GetCards, () => setStatus("deal"));
 
@@ -48,7 +51,7 @@ const BoxOfCard = (): JSX.Element => {
     <>
       <SpriteSheet
         key={status}
-        onAnimationEnd={() => setStatus("idle")}
+        onAnimationEnd={idle}
         onReachFrame={{
           7: () => {
             dealSound.play();
@@ -58,9 +61,7 @@ const BoxOfCard = (): JSX.Element => {
         {...boxOfCardAnimationState[status]}
         {...commonProps}
       />
-      {isOvercharged && (
-        <SpriteSheet src={OverChargedSprite} steps={9} {...commonProps} onAnimationEnd={() => overcharge(false)} />
-      )}
+      {isOvercharged && <SpriteSheet src={OverChargedSprite} steps={9} {...commonProps} onAnimationEnd={stabilize} />}
     </>
   );
 };

@@ -57,9 +57,9 @@ export interface EventsFromServer {
   [SERVER_EVENT_NAME.TakeSpell]: (spell: SpellInfo) => void;
   [SERVER_EVENT_NAME.ActivatePassive]: (passive: PassiveAction) => void;
   [SERVER_EVENT_NAME.FriendJoined]: (friend: ClientInfo) => void;
-  [SERVER_EVENT_NAME.FriendLeft]: (id: string) => void;
-  [SERVER_EVENT_NAME.OwnerChanged]: (id: string) => void;
+  [SERVER_EVENT_NAME.FriendLeft]: (id: string, owner: string) => void;
   [SERVER_EVENT_NAME.GetRoomInfo]: (info: RoomInfo) => void;
+  [SERVER_EVENT_NAME.LeftRoom]: () => void;
 }
 
 export interface EventsFromClient {
@@ -72,7 +72,7 @@ export interface EventsFromClient {
   [CLIENT_EVENT_NAME.JoinRoom]: (id: string) => void;
   [CLIENT_EVENT_NAME.LeaveRoom]: () => void;
   [CLIENT_EVENT_NAME.CancelFindGame]: () => void;
-  [CLIENT_EVENT_NAME.TransferOwnership]: (id: string) => void;
+  [CLIENT_EVENT_NAME.Kick]: (id: string) => void;
 }
 
 export type ClientSocket = Socket<EventsFromClient, EventsFromServer>;

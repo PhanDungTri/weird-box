@@ -17,13 +17,11 @@ class InRoomState extends ClientState {
 
   public enter(): void {
     this.socket.on(CLIENT_EVENT_NAME.LeaveRoom, this.onLeaveRoom);
-    this.socket.on("disconnect", this.onLeaveRoom);
     this.socket.emit(SERVER_EVENT_NAME.GetRoomInfo, this.room.getInfo());
   }
 
   public exit(): void {
     this.socket.off(CLIENT_EVENT_NAME.LeaveRoom, this.onLeaveRoom);
-    this.socket.off("disconnect", this.onLeaveRoom);
   }
 }
 

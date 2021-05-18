@@ -10,13 +10,13 @@ type DialogProps = {
   title?: string;
   children?: ReactNode;
   show?: boolean;
-  onConfirm?: () => void;
-  confirmMessage?: string;
+  onYes?: () => void;
+  yesMessage?: string;
   noFooter?: boolean;
 };
 
-type NoCancelButtonDialogProps = DialogProps & { cancelMessage?: string };
-type WithCancelButtonDialogProps = DialogProps & { cancelMessage: string; onCancel?: () => void };
+type NoCancelButtonDialogProps = DialogProps & { noMessage?: string };
+type WithCancelButtonDialogProps = DialogProps & { noMessage: string; onNo?: () => void };
 
 function Dialog(props: NoCancelButtonDialogProps): JSX.Element;
 function Dialog(props: WithCancelButtonDialogProps): JSX.Element;
@@ -26,11 +26,11 @@ function Dialog({
   title,
   children,
   noFooter,
-  confirmMessage = "OK",
-  onConfirm,
-  cancelMessage,
-  onCancel,
-}: DialogProps & { cancelMessage?: string; onCancel?: () => void }): JSX.Element {
+  yesMessage = "OK",
+  onYes,
+  noMessage,
+  onNo,
+}: DialogProps & { noMessage?: string; onNo?: () => void }): JSX.Element {
   return createPortal(
     <div css={[dialogStyle, show && showDialogStyle]}>
       <div css={dialogContentStyle(shadeColor(color, 70))}>
@@ -38,12 +38,12 @@ function Dialog({
         {children}
         {!noFooter && (
           <div css={dialogFooterStyle}>
-            <Button variation="Safe" onClick={onConfirm}>
-              {confirmMessage}
+            <Button variation="Safe" onClick={onYes}>
+              {yesMessage}
             </Button>
-            {cancelMessage && (
-              <Button variation="Danger" onClick={onCancel}>
-                {cancelMessage}
+            {noMessage && (
+              <Button variation="Danger" onClick={onNo}>
+                {noMessage}
               </Button>
             )}
           </div>

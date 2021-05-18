@@ -29,6 +29,8 @@ const IntegrateInput = ({
   const button = useRef<HTMLButtonElement>(null);
   const input = useRef<HTMLInputElement>(null);
 
+  const submit = () => onClick(input.current?.value);
+
   return (
     <div
       css={[
@@ -45,12 +47,7 @@ const IntegrateInput = ({
         ref={input}
         css={integrateInputStyle(variation)}
       />
-      <Button
-        disabled={disabled}
-        ref={button}
-        css={integrateButtonStyle(variation)}
-        onClick={() => onClick(input.current?.value)}
-      >
+      <Button disabled={disabled} ref={button} css={integrateButtonStyle(variation)} onClick={submit}>
         {children}
       </Button>
     </div>
