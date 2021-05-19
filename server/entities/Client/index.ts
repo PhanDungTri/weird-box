@@ -5,7 +5,6 @@ import IdleState from "./State/IdleState";
 
 class Client {
   private state: ClientState;
-  private savedState!: ClientState;
 
   constructor(private socket: ClientSocket, public name = "player") {
     this.state = new IdleState(this);
@@ -39,16 +38,10 @@ class Client {
     if (room) room.remove(this);
   }
 
-  public changeState(state: ClientState, save = false): void {
+  public changeState(state: ClientState): void {
     this.state.exit();
-    if (save) this.savedState = state;
     this.state = state;
     state.enter();
-  }
-
-  public changeToSavedState(): void {
-    if (this.savedState) this.changeState(this.savedState);
-    else throw new Error("Null saved state");
   }
 }
 

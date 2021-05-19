@@ -40,7 +40,7 @@ class Server {
 
   public enqueueClient(client: Client): void {
     this.gameMatcher.add(client);
-    client.changeState(new FindingState(client), true);
+    client.changeState(new FindingState(client));
   }
 
   public dequeueClient(client: Client): void {

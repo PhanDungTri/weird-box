@@ -12,9 +12,6 @@ class ReadyCheckState extends ClientState {
 
     this.onFail = this.confirm.bind(this, false);
     this.onConfirm = this.confirm.bind(this);
-
-    this.socket.on(CLIENT_EVENT_NAME.ReadyConfirm, this.onConfirm);
-    this.socket.on("disconnect", this.onFail);
   }
 
   private confirm(ready: boolean) {
@@ -22,6 +19,11 @@ class ReadyCheckState extends ClientState {
 
     if (ready) this.checker.ready(this.client);
     else this.checker.fail(this.client);
+  }
+
+  public enter(): void {
+    this.socket.on(CLIENT_EVENT_NAME.ReadyConfirm, this.onConfirm);
+    this.socket.on("disconnect", this.onFail);
   }
 
   public exit(): void {

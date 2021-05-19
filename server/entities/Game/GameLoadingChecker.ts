@@ -9,7 +9,7 @@ class GameLoadingChecker extends ReadyChecker {
   }
 
   protected onQualify(): void {
-    this.game.start();
+    this.game.start(this.clients);
   }
 }
 

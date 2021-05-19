@@ -15,8 +15,8 @@ const NUM_OF_STARTING_CARDS = 5;
 
 class Game {
   public readonly id = generateUniqueId();
-  private players: Player[];
-  private currentPlayerIndex: number;
+  private players: Player[] = [];
+  private currentPlayerIndex = 0;
   private chargePoint = 0;
   private drawDeck = new Deck();
   private discardDeck: Deck = new Deck(true);
@@ -28,10 +28,8 @@ class Game {
     public readonly maxHP = DEFAULT_MAX_HP,
     public readonly timePerTurn = DEFAULT_TIME_PER_TURN
   ) {
-    this.players = clients.map((cl) => new Player(cl, this));
-    this.currentPlayerIndex = this.players.length - 1;
     new GameLoadingChecker(this, clients, this.room);
-    this.broadcast(SERVER_EVENT_NAME.NewGame);
+    clients.forEach((c) => c.getSocket().emit(SERVER_EVENT_NAME.NewGame));
   }
 
   public getCurrentPlayer(): Player {
@@ -141,7 +139,9 @@ class Game {
     this.newTurn();
   }
 
-  public start(): void {
+  public start(clients: Client[]): void {
+    this.players = clients.map((cl) => new Player(cl, this));
+    this.currentPlayerIndex = this.players.length - 1;
     const startingHands = this.dealCards();
     const playerList = this.players.map((p) => ({
       ...p.getClient().getInfo(),

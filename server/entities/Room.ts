@@ -16,7 +16,7 @@ class Room {
   constructor(owner: Client) {
     this.members.push(owner);
     this.ownerId = owner.getId();
-    owner.changeState(new RoomOwnerState(owner, this), true);
+    owner.changeState(new RoomOwnerState(owner, this));
   }
 
   public getMembers(): Client[] {
@@ -42,7 +42,7 @@ class Room {
 
     this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo()));
     this.members.push(client);
-    client.changeState(new InRoomState(client, this), true);
+    client.changeState(new InRoomState(client, this));
   }
 
   public remove(client: Client): void {
@@ -53,7 +53,7 @@ class Room {
       if (newOwner) {
         this.ownerId = newOwner.getId();
         // We must not change the players state if they are in a game, because the players will lost their in game state
-        if (newOwner.getState() instanceof InRoomState) newOwner.changeState(new RoomOwnerState(newOwner, this), true);
+        if (newOwner.getState() instanceof InRoomState) newOwner.changeState(new RoomOwnerState(newOwner, this));
       }
     }
 
@@ -78,8 +78,7 @@ class Room {
 
   public back(client: Client): void {
     client.changeState(
-      client.getId() === this.ownerId ? new RoomOwnerState(client, this) : new InRoomState(client, this),
-      true
+      client.getId() === this.ownerId ? new RoomOwnerState(client, this) : new InRoomState(client, this)
     );
   }
 }

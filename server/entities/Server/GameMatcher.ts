@@ -9,7 +9,6 @@ class GameMatcher {
   private timeout!: NodeJS.Timeout;
 
   private found() {
-    console.log("found");
     const clients = this.queue.splice(
       -(this.queue.length < MAX_PLAYERS_PER_GAME ? this.queue.length : MAX_PLAYERS_PER_GAME)
     );
