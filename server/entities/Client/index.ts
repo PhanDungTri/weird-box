@@ -39,6 +39,9 @@ class Client {
   }
 
   public changeState(state: ClientState): void {
+    const oldState = this.state.constructor.name;
+    const newState = state.constructor.name;
+    console.log(`${this.getId()} changed state from ${oldState} to ${newState}`);
     this.state.exit();
     this.state = state;
     state.enter();

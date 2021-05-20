@@ -10,17 +10,19 @@ class GameMatcher {
 
   private found() {
     const clients = this.queue.splice(
-      -(this.queue.length < MAX_PLAYERS_PER_GAME ? this.queue.length : MAX_PLAYERS_PER_GAME)
+      0,
+      this.queue.length < MAX_PLAYERS_PER_GAME ? this.queue.length : MAX_PLAYERS_PER_GAME
     );
 
     clients.forEach((c) => c.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "found"));
+    console.table(clients.map((c) => c.getId()));
     new MatchingChecker(clients);
   }
 
   private match() {
-    if (this.timeout) clearTimeout(this.timeout);
+    clearTimeout(this.timeout);
     if (this.queue.length <= 1) return;
-    else if (this.queue.length >= 4) this.found();
+    if (this.queue.length >= 4) this.found();
     else this.timeout = setTimeout(this.found.bind(this), WAIT_FOR_FULL_LOBBY);
   }
 

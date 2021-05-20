@@ -39,8 +39,8 @@ class Server {
   }
 
   public enqueueClient(client: Client): void {
-    this.gameMatcher.add(client);
     client.changeState(new FindingState(client));
+    this.gameMatcher.add(client);
   }
 
   public dequeueClient(client: Client): void {
