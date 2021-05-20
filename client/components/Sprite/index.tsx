@@ -8,6 +8,7 @@ type SpriteProps = {
   scale?: number;
   className?: string;
   onAnimationEnd?: () => void;
+  onClick?: () => void;
 };
 
 const Sprite = ({ size: [width, height], src, scale = 1, ...props }: SpriteProps): JSX.Element => {

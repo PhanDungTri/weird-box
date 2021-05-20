@@ -2,6 +2,7 @@ import { memo, useEffect, useState } from "react";
 import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN, SERVER_EVENT_NAME } from "../../../../shared/constants";
 import socket from "../../../services/socket";
 import HitPointBar from "./HitPointBar";
+import LeaveButton from "./LeaveButton";
 import Spells from "./Spells";
 import { horizontalStatusStyle, statusStyle } from "./styles";
 import Timer from "./Timer";
@@ -28,6 +29,7 @@ const Status = ({ id, horizontal = false }: StatusProps): JSX.Element => {
     <div css={[statusStyle, horizontal && horizontalStatusStyle]}>
       <HitPointBar id={id} maxHP={maxHP} />
       <Spells id={id} align={horizontal ? "left" : "center"} />
+      {horizontal && <LeaveButton />}
       <Timer id={id} timePerTurn={timePerTurn} fluid={horizontal} />
     </div>
   );
