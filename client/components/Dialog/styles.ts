@@ -40,4 +40,8 @@ export const dialogFooterStyle = css`
   display: flex;
   gap: 8px;
   justify-content: flex-end;
+
+  & button {
+    text-transform: capitalize;
+  }
 `;
