@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import ContentFrameSprite from "../../../assets/sprites/card_content_frame.png";
 import COLOR from "../../../constants/COLOR";
 import { BorderColors, centerizeStyle, pixelBorderStyle } from "../../../styles";
-import { shadeColor, tintColor } from "../../../utils/color";
+import { shadeColor, tintColor } from "../../../utils";
 
 const contentBorderWidth = 12;
 

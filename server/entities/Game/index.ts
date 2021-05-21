@@ -1,7 +1,8 @@
 import { EventsFromServer } from "../../../shared/@types";
-import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN, SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
-import generateUniqueId from "../../../shared/utils/generateUniqueId";
-import waitFor from "../../utilities/waitFor";
+import { SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
+import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN } from "../../../shared/config";
+import { generateUniqueId } from "../../../shared/utils";
+import { waitFor } from "../../utilities";
 import Card from "../Card";
 import Client from "../Client";
 import GameLoadingChecker from "./GameLoadingChecker";

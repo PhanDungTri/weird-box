@@ -1,13 +1,13 @@
 import produce from "immer";
 import { atom } from "jotai";
 import { Getter, Setter } from "jotai/core/types";
-import generateUniqueId from "../../shared/utils/generateUniqueId";
-import { StyleVariant } from "../@types";
+import { NotificationVariant } from "../../shared/@types";
+import { generateUniqueId } from "../../shared/utils";
 
 type Notification = {
   id: string;
   message: string;
-  variant: StyleVariant;
+  variant: NotificationVariant;
 };
 
 const HIDE_TIMEOUT = 1500;

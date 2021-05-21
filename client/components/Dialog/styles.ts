@@ -1,7 +1,7 @@
 import { css, SerializedStyles } from "@emotion/react";
-import COLOR from "../../constants/COLOR";
+import { COLOR } from "../../constants";
 import { headingStyle, pageStyle } from "../../styles";
-import { hexToRgb, isDarkColor } from "../../utils/color";
+import { hexToRgb, isDarkColor } from "../../utils";
 
 export const showDialogStyle = css`
   opacity: 1;

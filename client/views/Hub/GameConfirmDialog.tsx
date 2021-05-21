@@ -7,7 +7,7 @@ import FoundGameSound from "../../assets/sounds/found_game.mp3";
 import RejectSound from "../../assets/sounds/reject_game.mp3";
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
-import COLOR from "../../constants/COLOR";
+import { COLOR } from "../../constants";
 import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
 
@@ -41,7 +41,7 @@ const GameConfirmDialog = (): JSX.Element => {
   }, [shouldShow]);
 
   useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>
-    show(status === "found")
+    show(status === "Found")
   );
 
   return (

@@ -9,7 +9,7 @@ import { notificationsAtom } from "../../../../atoms";
 import { useInTurn, useListenServerEvent, useOnEliminate } from "../../../../hooks";
 import { useOnClickOutside } from "../../../../hooks";
 import socket from "../../../../services/socket";
-import { fadeOut } from "../../../../styles/animations";
+import { fadeOut } from "../../../../styles";
 import Card from "../../Card";
 import { handStyle } from "./styles";
 

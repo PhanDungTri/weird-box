@@ -19,7 +19,7 @@ const PlayerNameInput = (): JSX.Element => {
   useListenServerEvent(SERVER_EVENT_NAME.LeftRoom, () => disable(false));
   useListenServerEvent(SERVER_EVENT_NAME.GetRoomInfo, () => disable(true));
   useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>
-    disable(status !== "canceled")
+    disable(status !== "Canceled")
   );
 
   return (

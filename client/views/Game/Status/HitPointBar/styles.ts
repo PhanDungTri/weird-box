@@ -1,7 +1,7 @@
 import { css, SerializedStyles } from "@emotion/react";
 import COLOR from "../../../../constants/COLOR";
 import { pixelBorderStyle } from "../../../../styles";
-import { shadeColor, tintColor } from "../../../../utils/color";
+import { shadeColor, tintColor } from "../../../../utils";
 
 export const hitPointBarStyle = css`
   position: relative;

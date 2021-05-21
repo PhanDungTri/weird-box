@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from "react";
-import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN, SERVER_EVENT_NAME } from "../../../../shared/constants";
+import { SERVER_EVENT_NAME } from "../../../../shared/constants";
+import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN } from "../../../../shared/config";
 import socket from "../../../services/socket";
 import HitPointBar from "./HitPointBar";
 import LeaveButton from "./LeaveButton";

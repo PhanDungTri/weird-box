@@ -1,5 +1,5 @@
 import { SPELL_NAME } from "../../shared/constants";
-import generateUniqueId from "../../shared/utils/generateUniqueId";
+import { generateUniqueId } from "../../shared/utils";
 
 class Card {
   public readonly id = generateUniqueId();

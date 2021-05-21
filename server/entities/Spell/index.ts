@@ -1,6 +1,6 @@
 import { SpellInfo } from "../../../shared/@types";
 import { SPELL_NAME } from "../../../shared/constants";
-import generateUniqueId from "../../../shared/utils/generateUniqueId";
+import { generateUniqueId } from "../../../shared/utils";
 import Player from "../Player";
 
 const debuffs = [SPELL_NAME.Poison, SPELL_NAME.Punch];

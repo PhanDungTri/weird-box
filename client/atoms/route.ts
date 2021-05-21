@@ -1,4 +1,4 @@
 import { atom } from "jotai";
-import ROUTE from "../constants/ROUTE";
+import { ROUTE } from "../constants";
 
 export const routeAtom = atom<ROUTE>(ROUTE.Hub);

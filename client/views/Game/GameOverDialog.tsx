@@ -6,7 +6,7 @@ import DefeatSound from "../../assets/sounds/defeat.mp3";
 import VictorySound from "../../assets/sounds/victory.mp3";
 import { routeAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
-import ROUTE from "../../constants/ROUTE";
+import { ROUTE } from "../../constants";
 import socket from "../../services/socket";
 
 const GameOverDialog = (): JSX.Element => {

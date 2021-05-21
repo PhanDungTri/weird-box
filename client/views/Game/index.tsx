@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { SERVER_EVENT_NAME, CLIENT_EVENT_NAME } from "../../../shared/constants";
 import { routeAtom } from "../../atoms";
-import ROUTE from "../../constants/ROUTE";
+import { ROUTE } from "../../constants";
 import socket from "../../services/socket";
 import GameBoard from "./GameBoard";
 import GameOverDialog from "./GameOverDialog";
@@ -15,7 +15,7 @@ const Game = (): JSX.Element => {
   const [, changeRoute] = useAtom(routeAtom);
 
   useEffect(() => {
-    const onCanceled = (status: GameMatchingStatus) => status === "canceled" && changeRoute(ROUTE.Hub);
+    const onCanceled = (status: GameMatchingStatus) => status === "Canceled" && changeRoute(ROUTE.Hub);
     const onNewTurn = () => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);
 
     socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, true);

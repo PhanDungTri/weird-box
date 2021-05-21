@@ -4,7 +4,7 @@ import { animated, useTransition } from "react-spring";
 import { NotificationVariant } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
 import { notificationsAtom } from "../../atoms";
-import COLOR from "../../constants/COLOR";
+import { COLOR } from "../../constants";
 import { useListenServerEvent } from "../../hooks";
 import { notificationStyle } from "./styles";
 import SafeSound from "../../assets/sounds/noti_safe.mp3";
@@ -21,6 +21,7 @@ const Notifications = (): JSX.Element => {
     Danger: new Howl({ src: [DangerSound] }),
     Warning: new Howl({ src: [WarningSound] }),
     Info: new Howl({ src: [InfoSound] }),
+    Primary: null,
   });
 
   const transitions = useTransition(notifications, (n) => n.id, {
@@ -30,7 +31,7 @@ const Notifications = (): JSX.Element => {
   });
 
   useListenServerEvent(SERVER_EVENT_NAME.Notify, (message: string, variant: NotificationVariant) => {
-    sound[variant].play();
+    sound[variant]?.play();
     notify({ message, variant });
   });
 

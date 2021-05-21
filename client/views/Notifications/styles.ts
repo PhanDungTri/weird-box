@@ -1,6 +1,6 @@
 import { css, SerializedStyles } from "@emotion/react";
 import COLOR from "../../constants/COLOR";
-import { isDarkColor, shadeColor } from "../../utils/color";
+import { isDarkColor, shadeColor } from "../../utils";
 
 export const notificationStyle = (color: string, pos: number): SerializedStyles => {
   const borderColor = shadeColor(color, 70);

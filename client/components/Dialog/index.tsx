@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
-import COLOR from "../../constants/COLOR";
-import { shadeColor } from "../../utils/color";
+import { COLOR } from "../../constants";
+import { shadeColor } from "../../utils";
 import Button from "../Button";
 import { dialogContentStyle, dialogFooterStyle, dialogHeaderStyle, dialogStyle, showDialogStyle } from "./styles";
 

@@ -1,10 +1,10 @@
 import { SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
-import waitFor from "../../utilities/waitFor";
+import { waitFor } from "../../utilities";
 import Card from "../Card";
 import Client from "../Client";
+import ClientDerived from "../Client/ClientDerived";
 import InGameState from "../Client/State/InGameState";
 import InTurnState from "../Client/State/InTurnState";
-import ClientDerived from "../Client/ClientDerived";
 import Game from "../Game";
 import Spell from "../Spell";
 import SpellManager from "./SpellManager";

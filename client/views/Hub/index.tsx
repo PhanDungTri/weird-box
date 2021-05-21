@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
 import { routeAtom } from "../../atoms";
-import ROUTE from "../../constants/ROUTE";
+import { ROUTE } from "../../constants";
 import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
 import { centerizeContainerStyle, gridStyle, pageStyle } from "../../styles";
@@ -20,7 +20,7 @@ const Hub = (): JSX.Element => {
   useEffect(() => void socket.once(SERVER_EVENT_NAME.NewGame, () => changeRoute(ROUTE.InGame)), []);
 
   useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>
-    match(status !== "canceled")
+    match(status !== "Canceled")
   );
 
   return (

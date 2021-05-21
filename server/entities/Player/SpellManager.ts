@@ -1,7 +1,7 @@
 import Player from ".";
 import { EventsFromServer } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
-import waitFor from "../../utilities/waitFor";
+import { waitFor } from "../../utilities";
 import Spell from "../Spell";
 import PassiveSpell from "../Spell/PassiveSpell";
 

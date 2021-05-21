@@ -5,7 +5,7 @@ import { useState } from "react";
 import { RoomInfo, ClientInfo } from "../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../shared/constants";
 import { roomAtom, routeAtom } from "../atoms";
-import ROUTE from "../constants/ROUTE";
+import { ROUTE } from "../constants";
 import { useListenServerEvent } from "../hooks";
 import Game from "./Game";
 import Hub from "./Hub";

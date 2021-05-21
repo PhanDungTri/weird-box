@@ -1,7 +1,8 @@
 import { Server, Socket } from "socket.io";
 import { CLIENT_EVENT_NAME, PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "./constants";
 
-export type GameMatchingStatus = "finding" | "found" | "canceled";
+export type GameMatchingStatus = "Finding" | "Found" | "Canceled";
+export type NotificationVariant = "Primary" | "Danger" | "Safe" | "Info" | "Warning";
 
 export type ClientInfo = {
   id: string;
@@ -37,8 +38,6 @@ export type RoomInfo = {
   owner: string;
   members: ClientInfo[];
 };
-
-export type NotificationVariant = "Danger" | "Safe" | "Info" | "Warning";
 
 export interface EventsFromServer {
   [SERVER_EVENT_NAME.Notify]: (msg: string, variant: NotificationVariant) => void;

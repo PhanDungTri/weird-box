@@ -1,4 +1,4 @@
-enum COLOR {
+export enum COLOR {
   White = "#ffffff",
   Black = "#000000",
   Primary = "#f2eecb",
@@ -9,5 +9,3 @@ enum COLOR {
   Info = "#1ca27f",
   Disabled = "dddddd",
 }
-
-export default COLOR;

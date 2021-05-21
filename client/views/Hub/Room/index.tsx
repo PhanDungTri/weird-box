@@ -7,7 +7,7 @@ import Dialog from "../../../components/Dialog";
 import DropDown from "../../../components/Dropdown";
 import EmptySlot from "../../../components/EmptySlot";
 import { IntegrateInput } from "../../../components/Input";
-import COLOR from "../../../constants/COLOR";
+import { COLOR } from "../../../constants";
 import useShowDialog from "../../../hooks/useShowDialog";
 import socket from "../../../services/socket";
 import { headingStyle } from "../../../styles";

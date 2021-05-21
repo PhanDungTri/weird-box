@@ -1,12 +1,12 @@
 import { css, keyframes, SerializedStyles } from "@emotion/react";
 import styled from "@emotion/styled";
-import COLOR from "../../../../constants/COLOR";
-import SIZE from "../../../../constants/SIZE";
+import { COLOR } from "../../../../constants";
 import { centerizeStyle, gridStyle, pixelBorderStyle } from "../../../../styles";
-import { shadeColor } from "../../../../utils/color";
+import { shadeColor } from "../../../../utils";
 import { ChargePointBarState } from "./types";
 
-const nodeBorderColor = "#2e1710";
+const NODE_BORDER_COLOR = "#2e1710";
+const BOX_OF_CARD_SIZE = 59;
 
 const bouncingKeyframes = keyframes`
   0%, 100% {
@@ -31,7 +31,7 @@ const bouncingKeyframes = keyframes`
 `;
 
 export const emptyNodeStyle = css`
-  background-color: ${nodeBorderColor};
+  background-color: ${NODE_BORDER_COLOR};
   box-shadow: inset 0px 8px 0px 0px #a79995;
 `;
 
@@ -52,8 +52,8 @@ export const StyledChargePointBar = styled.div`
   width: 105px;
   height: 20px;
   grid-template-columns: repeat(10, 1fr);
-  top: calc(50% - ${SIZE.BoxOfCard / 2}px);
+  top: calc(50% - ${BOX_OF_CARD_SIZE / 2}px);
   transform: translateX(calc(-50% - 4px));
-  border: 4px solid ${nodeBorderColor};
-  background-color: ${nodeBorderColor};
+  border: 4px solid ${NODE_BORDER_COLOR};
+  background-color: ${NODE_BORDER_COLOR};
 `;

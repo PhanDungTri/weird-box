@@ -4,7 +4,7 @@ import { animated, useTransition } from "react-spring";
 import { PassiveAction, SpellInfo } from "../../../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { useListenServerEvent } from "../../../../hooks";
-import { fadeOut } from "../../../../styles/animations";
+import { fadeOut } from "../../../../styles";
 import SpellIndicator from "./SpellIndicator";
 import { spellsStyle } from "./styles";
 

@@ -1,6 +1,7 @@
 import { RoomInfo } from "../../shared/@types";
-import { MAX_PLAYERS_PER_GAME, SERVER_EVENT_NAME } from "../../shared/constants";
-import generateUniqueId from "../../shared/utils/generateUniqueId";
+import { SERVER_EVENT_NAME } from "../../shared/constants";
+import { MAX_PLAYERS_PER_GAME } from "../../shared/config";
+import { generateUniqueId } from "../../shared/utils";
 import Client from "./Client";
 import IdleState from "./Client/State/IdleState";
 import InRoomState from "./Client/State/InRoomState";
