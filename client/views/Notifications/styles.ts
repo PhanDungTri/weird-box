@@ -1,5 +1,5 @@
 import { css, SerializedStyles } from "@emotion/react";
-import COLOR from "../../constants/COLOR";
+import { COLOR } from "../../constants";
 import { isDarkColor, shadeColor } from "../../utils";
 
 export const notificationStyle = (color: string, pos: number): SerializedStyles => {

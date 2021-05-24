@@ -11,12 +11,14 @@ import Game from "./Game";
 import Hub from "./Hub";
 import DoorKnockSound from "../assets/sounds/door_knock.mp3";
 import DoorCloseSound from "../assets/sounds/door_close.mp3";
+import Initiator from "./Initiator";
 //import Test from "./Test";
 
 const pages = {
   [ROUTE.InGame]: <Game />,
   [ROUTE.Hub]: <Hub />,
   [ROUTE.Test]: <div />,
+  [ROUTE.Init]: <Initiator />,
 };
 
 const App = (): JSX.Element => {

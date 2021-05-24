@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
 import { animated } from "react-spring";
 import DropDownSprite from "../../assets/sprites/dropdown.png";
-import COLOR from "../../constants/COLOR";
+import { COLOR } from "../../constants";
 import { useOnClickOutside, useRevealAnimation } from "../../hooks";
 import Button from "../Button";
 import Sprite from "../Sprite";

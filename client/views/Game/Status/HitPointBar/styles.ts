@@ -1,5 +1,5 @@
 import { css, SerializedStyles } from "@emotion/react";
-import COLOR from "../../../../constants/COLOR";
+import { COLOR } from "../../../../constants";
 import { pixelBorderStyle } from "../../../../styles";
 import { shadeColor, tintColor } from "../../../../utils";
 

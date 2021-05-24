@@ -2,14 +2,14 @@ import { Howl } from "howler";
 import { useEffect, useState } from "react";
 import { SERVER_EVENT_NAME } from "../../../../shared/constants";
 import DealSound from "../../../assets/sounds/deal_pop.mp3";
+import OverchargedSound from "../../../assets/sounds/overcharged.mp3";
+import TakeSound from "../../../assets/sounds/take_card.mp3";
 import IdleSprite from "../../../assets/sprites/box_of_cards.png";
 import DealCardSprite from "../../../assets/sprites/box_of_cards_deal_card.png";
 import OverChargedSprite from "../../../assets/sprites/box_of_cards_overcharged.png";
 import SpriteSheet from "../../../components/SpriteSheet";
 import { useListenServerEvent } from "../../../hooks";
 import { centerizeStyle } from "../../../styles";
-import OverchargedSound from "../../../assets/sounds/overcharged.mp3";
-import TakeSound from "../../../assets/sounds/take_card.mp3";
 
 type BoxOfCardStatus = "idle" | "deal";
 

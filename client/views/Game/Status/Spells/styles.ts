@@ -1,8 +1,8 @@
 import { css } from "@emotion/react";
 import { SerializedStyles } from "@emotion/utils";
-import COLOR from "../../../../constants/COLOR";
+import { COLOR } from "../../../../constants";
 
-const badgeSize = 14;
+const BADGE_SIZE = 14;
 
 export const spellsStyle = (align: "center" | "left"): SerializedStyles => css`
   padding: 4px;
@@ -17,12 +17,12 @@ export const spellTriggerAnimation = css`
 
 export const spellIndicatorBadge = css`
   position: absolute;
-  font-size: ${badgeSize}px;
+  font-size: ${BADGE_SIZE}px;
   background-color: ${COLOR.Coal};
-  width: ${badgeSize}px;
-  height: ${badgeSize}px;
-  top: ${badgeSize}px;
-  left: ${badgeSize}px;
+  width: ${BADGE_SIZE}px;
+  height: ${BADGE_SIZE}px;
+  top: ${BADGE_SIZE}px;
+  left: ${BADGE_SIZE}px;
   text-align: center;
   color: ${COLOR.White};
 `;

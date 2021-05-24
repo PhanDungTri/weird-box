@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import COLOR from "../../constants/COLOR";
+import { COLOR } from "../../constants";
 
 export const inputStyle = css`
   display: flex;

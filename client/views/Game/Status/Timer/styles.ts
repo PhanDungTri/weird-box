@@ -1,5 +1,5 @@
 import { css, keyframes, SerializedStyles } from "@emotion/react";
-import COLOR from "../../../../constants/COLOR";
+import { COLOR } from "../../../../constants";
 
 const countdownKeyframes = keyframes`
   from {
