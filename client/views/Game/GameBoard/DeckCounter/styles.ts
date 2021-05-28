@@ -4,4 +4,5 @@ export const deckCounterStyle = css`
   position: absolute;
   bottom: 0;
   right: 0;
+  margin: 4px;
 `;

@@ -11,8 +11,13 @@ export const spellsStyle = (align: "center" | "left"): SerializedStyles => css`
   justify-content: ${align};
 `;
 
-export const spellTriggerAnimation = css`
-  transform: scale(1.5);
+export const spellTriggerAnimation = (trigger = false): SerializedStyles => css`
+  position: relative;
+  transition: transform 0.2s ease;
+  ${trigger &&
+  css`
+    transform: scale(1.5);
+  `}
 `;
 
 export const spellIndicatorBadge = css`

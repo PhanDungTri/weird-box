@@ -1,18 +1,10 @@
+import { css } from "@emotion/react";
 import { memo } from "react";
-import { SPELL_NAME } from "../../../../shared/constants";
 import { CardInfo } from "../../../../shared/@types";
-import Sprite from "../../../components/Sprite";
+import { SPELL_NAME } from "../../../../shared/constants";
+import Icon from "../../../components/Icon";
 import { centerizeStyle, disabledStyle } from "../../../styles";
-import spriteLookup from "../../../utils/spriteLookup";
-import { CardAction, cardChosenStyle, CardContent, CardPower, cardStyle } from "./styles";
-
-const setSprite = (spellName: SPELL_NAME, isCharge: boolean) => {
-  if (spriteLookup[spellName]) {
-    return spriteLookup[spellName];
-  }
-
-  return isCharge ? spriteLookup.Charge : spriteLookup.Consume;
-};
+import { CardAction, cardChosenStyle, CardContent, CardPower, NormalCard, SmallCard } from "./styles";
 
 type CardProps = {
   card: CardInfo;
@@ -20,9 +12,21 @@ type CardProps = {
   chosen?: boolean;
   disabled?: boolean;
   className?: string;
+  small?: boolean;
 };
 
-const Card = ({ onClick, chosen = false, card, disabled = false, className }: CardProps): JSX.Element => {
+const getPowerPrefix = (power: number) => (power >= 0 ? "+" : "-");
+const handleSpellName = (card: CardInfo) =>
+  card.spell !== SPELL_NAME.Void ? card.spell : card.power >= 0 ? "charge" : "consume";
+
+const Card = ({
+  onClick,
+  chosen = false,
+  card,
+  disabled = false,
+  small = false,
+  className,
+}: CardProps): JSX.Element => {
   const choose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     if (!disabled && onClick) {
       event.stopPropagation();
@@ -30,14 +34,24 @@ const Card = ({ onClick, chosen = false, card, disabled = false, className }: Ca
     }
   };
 
-  return (
-    <div className={className} css={[cardStyle, chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
+  return small ? (
+    <SmallCard className={className} css={[chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
+      <div>{getPowerPrefix(card.power) + Math.abs(card.power)}</div>
+      <Icon
+        name={handleSpellName(card)}
+        css={css`
+          position: relative;
+        `}
+      />
+    </SmallCard>
+  ) : (
+    <NormalCard className={className} css={[chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
       <CardContent>
         <CardPower>{Math.abs(card.power)}</CardPower>
-        <Sprite src={setSprite(card.spell, card.power >= 0)} size={[24, 24]} css={centerizeStyle} />
-        <CardAction>{card.power >= 0 ? "+" : "-"}</CardAction>
+        <Icon name={handleSpellName(card)} css={centerizeStyle} />
+        <CardAction>{getPowerPrefix(card.power)}</CardAction>
       </CardContent>
-    </div>
+    </NormalCard>
   );
 };
 

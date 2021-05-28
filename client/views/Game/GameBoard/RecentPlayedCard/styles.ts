@@ -18,6 +18,12 @@ const cardPlayedKeyframes = keyframes`
 `;
 
 export const cardPlayedAnimation = css`
-  animation: ${cardPlayedKeyframes} 1s;
-  animation-fill-mode: forwards;
+  animation: ${cardPlayedKeyframes} 1s forwards;
+`;
+
+export const recentPlayedCard = css`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 6px 12px;
 `;

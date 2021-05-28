@@ -1,105 +1,92 @@
-import SpeechlessSprite from "../assets/sprites/speechless.png";
-import DropDownSprite from "../assets/sprites/dropdown.png";
-import LoadingSpriteSheet from "../assets/sprites/loading_animation.png";
-import HealSpellSprite from "../assets/sprites/heal.png";
-import PoisonSpellSprite from "../assets/sprites/poison.png";
-import PunchSpellSprite from "../assets/sprites/punch.png";
-import ShieldSpellSprite from "../assets/sprites/shield.png";
-import ChargeSprite from "../assets/sprites/charge.png";
-import ConsumeSprite from "../assets/sprites/consume.png";
-import MirrorSpellSprite from "../assets/sprites/mirror.png";
-import ContentFrameSprite from "../assets/sprites/card_content_frame.png";
-import IdleSprite from "../assets/sprites/box_of_cards.png";
-import DealCardSprite from "../assets/sprites/box_of_cards_deal_card.png";
-import OverChargedSprite from "../assets/sprites/box_of_cards_overcharged.png";
-import DeckSprite from "../assets/sprites/deck.png";
-import HealSpellAnimation from "../assets/sprites/heal_animation.png";
-import MirrorAnimation from "../assets/sprites/mirror_animation.png";
-import MirrorPierceAnimation from "../assets/sprites/mirror_pierce_animation.png";
-import MirrorReflectAnimation from "../assets/sprites/mirror_reflect_animation.png";
-import PoisonSpellAnimation from "../assets/sprites/poison_animation.png";
-import PunchSpellAnimation from "../assets/sprites/punch_animation.png";
-import ShieldSpellAnimation from "../assets/sprites/shield_animation.png";
-import ShieldBlockAnimation from "../assets/sprites/shield_block_animation.png";
-import ShieldPierceAnimation from "../assets/sprites/shield_pierce_animation.png";
-import LeaveIcon from "../assets/sprites/leave.png";
-import KeySprite from "../assets/sprites/key.png";
-import PlayerAvatar from "../assets/sprites/white_gamepad.png";
-import EliminateSound from "../assets/sounds/eliminate.mp3";
-import DoorKnockSound from "../assets/sounds/door_knock.mp3";
-import DoorCloseSound from "../assets/sounds/door_close.mp3";
-import DefeatSound from "../assets/sounds/defeat.mp3";
-import VictorySound from "../assets/sounds/victory.mp3";
-import DealSound from "../assets/sounds/deal_pop.mp3";
-import OverchargedSound from "../assets/sounds/overcharged.mp3";
-import TakeSound from "../assets/sounds/take_card.mp3";
-import PlayCardSound from "../assets/sounds/play_card.mp3";
-import ChooseSound from "../assets/sounds/choose_card.mp3";
-import PunchSound from "../assets/sounds/punch.mp3";
-import PoisonSound from "../assets/sounds/poison.mp3";
-import HealSound from "../assets/sounds/heal.mp3";
-import WhooshSound from "../assets/sounds/whoosh.mp3";
-import ShieldSound from "../assets/sounds/shield.mp3";
-import ReflectSound from "../assets/sounds/mirror_reflect.mp3";
-import BlockSound from "../assets/sounds/shield_block.mp3";
-import ShieldBreakSound from "../assets/sounds/shield_break.mp3";
-import MirrorSound from "../assets/sounds/mirror.mp3";
-import MirrorCrackSound from "../assets/sounds/mirror_crack.mp3";
-import AcceptSound from "../assets/sounds/accept_game.mp3";
-import FoundGameSound from "../assets/sounds/found_game.mp3";
-import RejectSound from "../assets/sounds/reject_game.mp3";
-import SafeSound from "../assets/sounds/noti_safe.mp3";
-import DangerSound from "../assets/sounds/noti_danger.mp3";
-import WarningSound from "../assets/sounds/noti_warn.mp3";
-import InfoSound from "../assets/sounds/noti_info.mp3";
-import { useRef, useState } from "react";
 import { css } from "@emotion/react";
+import { Howl } from "howler";
+import { useAtom } from "jotai";
+import { useEffect, useRef, useState } from "react";
+import EffectSound from "../assets/sounds/effects.mp3";
+import BoxOfCardSprites from "../assets/sprites/box_of_cards.png";
+import ContentFrameSprite from "../assets/sprites/card_content_frame.png";
+import IconSprites from "../assets/sprites/icons.png";
+import LoadingSpriteSheet from "../assets/sprites/loading_animation.png";
+import SpellAnimations from "../assets/sprites/spell_animations.png";
+import { routeAtom, soundAtom } from "../atoms";
+import Loading from "../components/Loading";
+import ProgressBar from "../components/ProgressBar";
+import { ROUTE } from "../constants";
+import { centerizeStyle, pageStyle } from "../styles";
 
 const Initiator = (): JSX.Element => {
-  const [loadedCounter, setLoadedCounter] = useState(0);
-  const assets = useRef<string[]>([
-    SpeechlessSprite,
-    DropDownSprite,
-    LoadingSpriteSheet,
-    HealSpellSprite,
-    PoisonSpellSprite,
-    PunchSpellSprite,
-    ShieldSpellSprite,
-    ChargeSprite,
-    ConsumeSprite,
-    MirrorSpellSprite,
+  const [, setRoute] = useAtom(routeAtom);
+  const [, setSound] = useAtom(soundAtom);
+  const [loadedAssetCounter, setLoadedAssetCounter] = useState(0);
+  const spriteSources = useRef<string[]>([
+    IconSprites,
+    SpellAnimations,
     ContentFrameSprite,
-    IdleSprite,
-    DealCardSprite,
-    OverChargedSprite,
-    DeckSprite,
-    HealSpellAnimation,
-    MirrorAnimation,
-    MirrorPierceAnimation,
-    MirrorReflectAnimation,
-    PoisonSpellAnimation,
-    PunchSpellAnimation,
-    ShieldSpellAnimation,
-    ShieldBlockAnimation,
-    ShieldPierceAnimation,
-    LeaveIcon,
-    KeySprite,
-    PlayerAvatar,
+    LoadingSpriteSheet,
+    BoxOfCardSprites,
   ]);
+  const total = useRef(spriteSources.current.length + 1);
 
-  const onLoad = () => {
-    if (loadedCounter !== assets.current.length) setLoadedCounter(loadedCounter + 1);
-  };
+  useEffect(() => {
+    if (loadedAssetCounter < spriteSources.current.length) {
+      const img = new Image();
+      img.src = spriteSources.current[loadedAssetCounter];
+      img.onload = () => setLoadedAssetCounter(loadedAssetCounter + 1);
+    } else if (loadedAssetCounter === spriteSources.current.length)
+      setSound(
+        new Howl({
+          src: [EffectSound],
+          sprite: {
+            accept_game: [0, 1457.8231292517007],
+            button_click: [3000, 415.01133786848055],
+            choose_card: [5000, 199.63718820861675],
+            deal_pop: [7000, 417.95918367346906],
+            defeat: [9000, 1500],
+            door_close: [12000, 762.1541950113375],
+            door_knock: [14000, 498.730158730158],
+            eliminate: [16000, 612.4036281179137],
+            found_game: [18000, 1058.8208616780043],
+            heal: [21000, 1000],
+            mirror: [23000, 1054.0589569161014],
+            mirror_crack: [26000, 500],
+            mirror_reflect: [28000, 835.1020408163272],
+            Danger: [30000, 141.29251700680356],
+            Info: [32000, 394.55782312925436],
+            Safe: [34000, 746.8934240362798],
+            Warning: [36000, 435.0340136054456],
+            overcharged: [38000, 750],
+            play_card: [40000, 501.0430839002282],
+            poison: [42000, 581.8594104308374],
+            punch: [44000, 373.4467120181435],
+            reject_game: [46000, 2000],
+            shield: [49000, 1117.052154195008],
+            shield_block: [52000, 900.0907029478426],
+            shield_break: [54000, 709.7505668934261],
+            take_card: [56000, 504.05895691609715],
+            victory: [58000, 2275.510204081634],
+            whoosh: [62000, 250.09070294784408],
+          },
+          onload: () => setLoadedAssetCounter(loadedAssetCounter + 1),
+        })
+      );
+    else if (loadedAssetCounter === total.current) setTimeout(() => setRoute(ROUTE.Hub), 1000);
+  }, [loadedAssetCounter]);
 
   return (
-    <div>
-      <div>Loading {(loadedCounter * 100) / assets.current.length}%</div>
-      <img
-        src={assets.current[loadedCounter]}
-        css={css`
-          display: none;
-        `}
-        onLoad={onLoad}
+    <div css={[pageStyle]}>
+      <Loading css={centerizeStyle} scale={4} />
+      <ProgressBar
+        css={[
+          css`
+            ${centerizeStyle}
+            width: 80%;
+            position: fixed;
+            bottom: 0;
+            top: initial;
+          `,
+        ]}
+        current={Math.floor((loadedAssetCounter * 100) / total.current)}
+        suffix="%"
       />
     </div>
   );

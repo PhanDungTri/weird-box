@@ -18,6 +18,7 @@ export enum SERVER_EVENT_NAME {
   FriendJoined = "friend joined",
   FriendLeft = "friend left",
   LeftRoom = "left room",
+  JoinedRoom = "join room",
 }
 
 export enum CLIENT_EVENT_NAME {

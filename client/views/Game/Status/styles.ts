@@ -3,6 +3,7 @@ import { gridStyle } from "../../../styles";
 
 export const statusStyle = css`
   ${gridStyle};
+  box-sizing: border-box;
   grid-template-rows: 32px 32px 16px;
 `;
 

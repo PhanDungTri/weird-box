@@ -1,6 +1,6 @@
 import Server from "./entities/Server";
-import dotenv from "dotenv";
+import { config as dotenvConfig } from "dotenv";
 
-dotenv.config();
+dotenvConfig();
 Server.port = parseInt(process.env.HOST_PORT || "3000");
 Server.getInstance().run();

@@ -1,13 +1,10 @@
-import { Howl } from "howler";
 import { useAtom } from "jotai";
 import { memo, useCallback, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { CardInfo } from "../../../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/constants";
-import ChooseSound from "../../../../assets/sounds/choose_card.mp3";
-import { notificationsAtom } from "../../../../atoms";
-import { useInTurn, useListenServerEvent, useOnEliminate } from "../../../../hooks";
-import { useOnClickOutside } from "../../../../hooks";
+import { notificationsAtom, soundAtom } from "../../../../atoms";
+import { useInTurn, useListenServerEvent, useOnClickOutside, useOnEliminate } from "../../../../hooks";
 import socket from "../../../../services/socket";
 import { fadeOut } from "../../../../styles";
 import Card from "../../Card";
@@ -16,10 +13,10 @@ import { handStyle } from "./styles";
 const Hand = (): JSX.Element => {
   const isInTurn = useInTurn(socket.id);
   const isEliminated = useOnEliminate(socket.id);
-  const [cards, setCards] = useState<CardInfo[]>([]);
-  const [chooseSound] = useState(new Howl({ src: [ChooseSound] }));
-  const [chosenCard, setChosenCard] = useState("");
+  const [sound] = useAtom(soundAtom);
   const [, notify] = useAtom(notificationsAtom);
+  const [cards, setCards] = useState<CardInfo[]>([]);
+  const [chosenCard, setChosenCard] = useState("");
   const ref = useOnClickOutside<HTMLDivElement>(() => setChosenCard(""));
 
   const transitions = useTransition(cards, (c) => c.id, {
@@ -36,7 +33,7 @@ const Hand = (): JSX.Element => {
     (id: string) => {
       if (chosenCard !== id) {
         setChosenCard(id);
-        chooseSound.play();
+        sound?.play("choose_card");
       } else if (isInTurn) {
         socket.emit(CLIENT_EVENT_NAME.PlayCard, chosenCard);
         setCards((list) => list.filter((c) => c.id !== chosenCard));

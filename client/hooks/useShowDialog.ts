@@ -8,8 +8,8 @@ type ShowDialogHook = [
   }
 ];
 
-const useShowDialog = (): ShowDialogHook => {
-  const [shouldShow, show] = useState(false);
+const useShowDialog = (init = false): ShowDialogHook => {
+  const [shouldShow, show] = useState(init);
 
   const hide = () => show(false);
   const reveal = () => show(true);

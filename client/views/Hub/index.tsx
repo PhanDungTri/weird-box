@@ -2,8 +2,9 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
-import { routeAtom } from "../../atoms";
+import { routeAtom, soundAtom } from "../../atoms";
 import { ROUTE } from "../../constants";
+import withSpriteLoading from "../../HOCs/withSpriteLoading";
 import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
 import { centerizeContainerStyle, gridStyle, pageStyle } from "../../styles";
@@ -12,8 +13,11 @@ import GameConfirmDialog from "./GameConfirmDialog";
 import Menu from "./Menu";
 import PlayerNameInput from "./PlayerNameInput";
 import Room from "./Room";
+import IconSprites from "../../assets/sprites/icons.png";
+import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
 
 const Hub = (): JSX.Element => {
+  const [sound] = useAtom(soundAtom);
   const [, changeRoute] = useAtom(routeAtom);
   const [isMatching, match] = useState(false);
 
@@ -22,6 +26,11 @@ const Hub = (): JSX.Element => {
   useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>
     match(status !== "Canceled")
   );
+
+  useListenServerEvent(SERVER_EVENT_NAME.FriendJoined, () => sound?.play("door_knock"));
+  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, () => sound?.play("door_close"));
+  useListenServerEvent(SERVER_EVENT_NAME.LeftRoom, () => sound?.play("door_close"));
+  useListenServerEvent(SERVER_EVENT_NAME.JoinedRoom, () => sound?.play("door_knock"));
 
   return (
     <div css={[pageStyle, gridStyle, centerizeContainerStyle]}>
@@ -40,4 +49,4 @@ const Hub = (): JSX.Element => {
   );
 };
 
-export default Hub;
+export default withSpriteLoading(Hub, [IconSprites, LoadingSpriteSheet]);

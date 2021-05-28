@@ -16,12 +16,12 @@ const list = atom<Notification[]>([]);
 const notify = (get: Getter, set: Setter, { message, variant }: Pick<Notification, "message" | "variant">) => {
   const id = generateUniqueId();
   const notifications = produce(get(list), (draft) => {
-    if (draft.length >= 3) draft.shift();
+    if (draft.length === 3) draft.shift();
     draft.push({ id, message, variant });
   });
 
   set(list, notifications);
-  setTimeout(() => set(list, get(list).slice(0, -1)), HIDE_TIMEOUT);
+  setTimeout(() => set(list, get(list).slice(1)), HIDE_TIMEOUT);
 };
 
 export const notificationsAtom = atom<Notification[], Pick<Notification, "message" | "variant">>(

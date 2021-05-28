@@ -59,6 +59,7 @@ export interface EventsFromServer {
   [SERVER_EVENT_NAME.FriendLeft]: (id: string, owner: string) => void;
   [SERVER_EVENT_NAME.GetRoomInfo]: (info: RoomInfo) => void;
   [SERVER_EVENT_NAME.LeftRoom]: () => void;
+  [SERVER_EVENT_NAME.JoinedRoom]: () => void;
 }
 
 export interface EventsFromClient {

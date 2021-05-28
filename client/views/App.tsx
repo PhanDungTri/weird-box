@@ -1,45 +1,39 @@
-import { Howl } from "howler";
 import produce from "immer";
 import { useAtom } from "jotai";
-import { useState } from "react";
-import { RoomInfo, ClientInfo } from "../../shared/@types";
+import { lazy, Suspense } from "react";
+import { ClientInfo, GameMatchingStatus, RoomInfo } from "../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../shared/constants";
 import { roomAtom, routeAtom } from "../atoms";
+import Loading from "../components/Loading";
 import { ROUTE } from "../constants";
 import { useListenServerEvent } from "../hooks";
-import Game from "./Game";
-import Hub from "./Hub";
-import DoorKnockSound from "../assets/sounds/door_knock.mp3";
-import DoorCloseSound from "../assets/sounds/door_close.mp3";
-import Initiator from "./Initiator";
+import { centerizeStyle, pageStyle } from "../styles";
 //import Test from "./Test";
 
-const pages = {
-  [ROUTE.InGame]: <Game />,
-  [ROUTE.Hub]: <Hub />,
-  [ROUTE.Test]: <div />,
-  [ROUTE.Init]: <Initiator />,
-};
+const Game = lazy(() => import("./Game"));
+const Hub = lazy(() => import("./Hub"));
+const Initiator = lazy(() => import("./Initiator"));
 
 const App = (): JSX.Element => {
-  const [route] = useAtom(routeAtom);
+  const [route, changeRoute] = useAtom(routeAtom);
   const [, setRoom] = useAtom(roomAtom);
-  const [doorKnockSound] = useState(new Howl({ src: [DoorKnockSound] }));
-  const [doorCloseSound] = useState(new Howl({ src: [DoorCloseSound] }));
 
   useListenServerEvent(SERVER_EVENT_NAME.GetRoomInfo, (info: RoomInfo) => setRoom(info));
+  useListenServerEvent(SERVER_EVENT_NAME.LeftRoom, () => setRoom(null));
 
-  useListenServerEvent(SERVER_EVENT_NAME.FriendJoined, (friend: ClientInfo) => {
-    doorKnockSound.play();
+  useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) => {
+    if (status === "Canceled") changeRoute(ROUTE.Hub);
+  });
+
+  useListenServerEvent(SERVER_EVENT_NAME.FriendJoined, (friend: ClientInfo) =>
     setRoom((room) =>
       produce(room, (draft) => {
         draft?.members.push(friend);
       })
-    );
-  });
+    )
+  );
 
-  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, (id: string, owner: string) => {
-    doorCloseSound.play();
+  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, (id: string, owner: string) =>
     setRoom((room) =>
       produce(room, (draft) => {
         if (draft) {
@@ -47,12 +41,22 @@ const App = (): JSX.Element => {
           draft.owner = owner;
         }
       })
-    );
-  });
+    )
+  );
 
-  useListenServerEvent(SERVER_EVENT_NAME.LeftRoom, () => setRoom(null));
-
-  return pages[route];
+  return (
+    <Suspense
+      fallback={
+        <div css={pageStyle}>
+          <Loading css={centerizeStyle} scale={4} />{" "}
+        </div>
+      }
+    >
+      {route === ROUTE.Init && <Initiator />}
+      {route === ROUTE.Hub && <Hub />}
+      {route === ROUTE.InGame && <Game />}
+    </Suspense>
+  );
 };
 
 export default App;

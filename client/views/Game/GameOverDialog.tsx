@@ -1,20 +1,16 @@
-import { Howl } from "howler";
 import { useAtom } from "jotai";
 import { memo, useEffect, useState } from "react";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import DefeatSound from "../../assets/sounds/defeat.mp3";
-import VictorySound from "../../assets/sounds/victory.mp3";
-import { routeAtom } from "../../atoms";
+import { routeAtom, soundAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import { ROUTE } from "../../constants";
 import socket from "../../services/socket";
 
 const GameOverDialog = (): JSX.Element => {
   const [, changeRoute] = useAtom(routeAtom);
+  const [sound] = useAtom(soundAtom);
   const [shouldShow, show] = useState(false);
   const [shouldVictory, victory] = useState(false);
-  const [victorySound] = useState(new Howl({ src: [VictorySound] }));
-  const [defeatSound] = useState(new Howl({ src: [DefeatSound] }));
 
   const backToHub = () => {
     socket.emit(CLIENT_EVENT_NAME.LeaveGame);
@@ -26,7 +22,7 @@ const GameOverDialog = (): JSX.Element => {
       show(true);
       console.log(id, socket.id);
       victory(id === socket.id);
-      id === socket.id ? victorySound.play() : defeatSound.play();
+      id === socket.id ? sound?.play("victory") : sound?.play("defeat");
     });
   }, []);
 

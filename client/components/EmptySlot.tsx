@@ -1,6 +1,5 @@
-import Sprite from "./Sprite";
-import SpeechlessSprite from "../assets/sprites/speechless.png";
 import { centerizeStyle, slotStyle } from "../styles";
+import Icon from "./Icon";
 
 type EmptySlotProps = {
   scale?: number;
@@ -10,7 +9,7 @@ type EmptySlotProps = {
 const EmptySlot = ({ scale = 1, ...props }: EmptySlotProps): JSX.Element => {
   return (
     <div css={slotStyle(scale)} {...props}>
-      <Sprite src={SpeechlessSprite} size={[24, 24]} scale={scale} css={centerizeStyle} />
+      <Icon name="sleep_bubble" scale={scale} css={centerizeStyle} />
     </div>
   );
 };

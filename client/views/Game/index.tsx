@@ -1,27 +1,20 @@
-import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { GameMatchingStatus } from "../../../shared/@types";
-import { SERVER_EVENT_NAME, CLIENT_EVENT_NAME } from "../../../shared/constants";
-import { routeAtom } from "../../atoms";
-import { ROUTE } from "../../constants";
+import { CLIENT_EVENT_NAME } from "../../../shared/constants";
+import BoxOfCardSprites from "../../assets/sprites/box_of_cards.png";
+import ContentFrameSprite from "../../assets/sprites/card_content_frame.png";
+import IconSprites from "../../assets/sprites/icons.png";
+import SpellAnimations from "../../assets/sprites/spell_animations.png";
+import withSpriteLoading from "../../HOCs/withSpriteLoading";
 import socket from "../../services/socket";
 import GameBoard from "./GameBoard";
 import GameOverDialog from "./GameOverDialog";
 import Opponents from "./Opponents";
 import Player from "./Player";
 import gameStyle from "./styles";
+import WaitingForOthersDialog from "./WaitingForOthersDialog";
 
 const Game = (): JSX.Element => {
-  const [, changeRoute] = useAtom(routeAtom);
-
-  useEffect(() => {
-    const onCanceled = (status: GameMatchingStatus) => status === "Canceled" && changeRoute(ROUTE.Hub);
-    const onNewTurn = () => void socket.off(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);
-
-    socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, true);
-    socket.once(SERVER_EVENT_NAME.UpdateGameMatchingStatus, onCanceled);
-    socket.once(SERVER_EVENT_NAME.NewTurn, onNewTurn);
-  }, []);
+  useEffect(() => void socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, true), []);
 
   return (
     <div css={gameStyle}>
@@ -29,8 +22,9 @@ const Game = (): JSX.Element => {
       <GameBoard />
       <Player />
       <GameOverDialog />
+      <WaitingForOthersDialog />
     </div>
   );
 };
 
-export default Game;
+export default withSpriteLoading(Game, [BoxOfCardSprites, ContentFrameSprite, IconSprites, SpellAnimations]);

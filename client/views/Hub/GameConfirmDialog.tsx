@@ -1,10 +1,8 @@
-import { Howl } from "howler";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import AcceptSound from "../../assets/sounds/accept_game.mp3";
-import FoundGameSound from "../../assets/sounds/found_game.mp3";
-import RejectSound from "../../assets/sounds/reject_game.mp3";
+import { soundAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
 import { COLOR } from "../../constants";
@@ -14,21 +12,19 @@ import socket from "../../services/socket";
 type ConfirmStatus = "pending" | "accepted" | "rejected";
 
 const GameConfirmDialog = (): JSX.Element => {
+  const [sound] = useAtom(soundAtom);
   const [shouldShow, show] = useState(false);
   const [confirm, setConfirm] = useState<ConfirmStatus>("pending");
-  const [showSound] = useState(new Howl({ src: [FoundGameSound] }));
-  const [acceptSound] = useState(new Howl({ src: [AcceptSound] }));
-  const [rejectSound] = useState(new Howl({ src: [RejectSound] }));
 
   const onConfirm = (isAccepted: boolean) => {
     socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, isAccepted);
 
     if (isAccepted) {
       setConfirm("accepted");
-      acceptSound.play();
+      sound?.play("accept_game");
     } else {
       setConfirm("rejected");
-      rejectSound.play();
+      sound?.play("reject_game");
     }
   };
 
@@ -37,7 +33,7 @@ const GameConfirmDialog = (): JSX.Element => {
 
   useEffect(() => {
     if (!shouldShow) setConfirm("pending");
-    else showSound.play();
+    else sound?.play("found_game");
   }, [shouldShow]);
 
   useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>

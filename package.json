@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev-client": "parcel ./client/index.html",
-    "dev-server": "ts-node-dev --respawn --transpile-only ./server/index.ts"
+    "dev-server": "ts-node-dev --respawn --transpile-only --project ./node.tsconfig.json ./server/index.ts"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "normalize.css": "^8.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-spring": "^8.0.27",
     "socket.io": "^4.0.0",
     "socket.io-client": "^4.0.0"
@@ -39,6 +41,7 @@
     "@types/howler": "^2.2.2",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.2",
+    "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",

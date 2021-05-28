@@ -43,6 +43,7 @@ class Room {
 
     this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo()));
     this.members.push(client);
+    client.getSocket().emit(SERVER_EVENT_NAME.JoinedRoom);
     client.changeState(new InRoomState(client, this));
   }
 

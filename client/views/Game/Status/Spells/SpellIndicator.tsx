@@ -1,37 +1,22 @@
-import { css } from "@emotion/react";
 import { memo, useEffect, useRef, useState } from "react";
 import { SpellInfo } from "../../../../../shared/@types";
-import spriteLookup from "../../../../utils/spriteLookup";
+import Icon from "../../../../components/Icon";
 import { spellIndicatorBadge, spellTriggerAnimation } from "./styles";
 
 const SpellIndicator = ({ duration, name, power }: SpellInfo): JSX.Element => {
-  const [triggered, setTriggered] = useState(false);
+  const [shouldTrigger, trigger] = useState(false);
   const firstRender = useRef(true);
 
-  const stopTransition = () => setTriggered(false);
+  const stopTransition = () => trigger(false);
 
   useEffect(() => {
     if (firstRender.current) firstRender.current = false;
-    else setTriggered(true);
+    else trigger(true);
   }, [duration, power]);
 
   return (
-    <div
-      css={css`
-        position: relative;
-      `}
-    >
-      <img
-        onTransitionEnd={stopTransition}
-        src={spriteLookup[name]}
-        css={[
-          css`
-            transition: transform 0.2s ease;
-          `,
-          triggered && spellTriggerAnimation,
-        ]}
-      />
-
+    <div style={{ position: "relative" }}>
+      <Icon name={name} onTransitionEnd={stopTransition} css={spellTriggerAnimation(shouldTrigger)} />
       <div css={spellIndicatorBadge}>{power}</div>
     </div>
   );

@@ -1,10 +1,9 @@
 import { ReactNode, useState } from "react";
 import { animated } from "react-spring";
-import DropDownSprite from "../../assets/sprites/dropdown.png";
 import { COLOR } from "../../constants";
 import { useOnClickOutside, useRevealAnimation } from "../../hooks";
 import Button from "../Button";
-import Sprite from "../Sprite";
+import Icon from "../Icon";
 import { dropDownContentStyle, dropDownIconStyle } from "./styles";
 
 type DropDownProps = {
@@ -27,7 +26,7 @@ const DropDown = ({ header, children, top = false, background = COLOR.White }: D
         {!header || typeof header === "string" ? (
           <Button>
             <span>{header}</span>
-            <Sprite css={dropDownIconStyle} src={DropDownSprite} size={[9, 6]} />
+            <Icon name="triangle" scale={1 / 3} css={dropDownIconStyle} />
           </Button>
         ) : (
           header
