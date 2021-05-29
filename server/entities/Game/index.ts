@@ -127,8 +127,11 @@ class Game {
     this.discardDeck.push(card);
   }
 
-  public async consumeCard(card: Card): Promise<void> {
+  public endTurn(): void {
     clearTimeout(this.timeout);
+  }
+
+  public async consumeCard(card: Card): Promise<void> {
     const newChargePoint = this.chargePoint + card.getPower();
 
     if (newChargePoint < 0 || newChargePoint > 10) await this.onOvercharged();

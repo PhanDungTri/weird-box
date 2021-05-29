@@ -28,7 +28,7 @@ const Status = ({ id, horizontal = false }: StatusProps): JSX.Element => {
 
   return (
     <div css={[statusStyle, horizontal && horizontalStatusStyle]}>
-      <HitPointBar id={id} maxHP={maxHP} />
+      <HitPointBar id={id} maxHP={maxHP} reverse={horizontal} />
       <Spells id={id} align={horizontal ? "left" : "center"} />
       {horizontal && <LeaveButton />}
       <Timer id={id} timePerTurn={timePerTurn} fluid={horizontal} />

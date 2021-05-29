@@ -4,6 +4,7 @@ import { CardInfo } from "../../../../shared/@types";
 import { SPELL_NAME } from "../../../../shared/constants";
 import Icon from "../../../components/Icon";
 import { centerizeStyle, disabledStyle } from "../../../styles";
+import { getNumberSign } from "../../../../shared/utils";
 import { CardAction, cardChosenStyle, CardContent, CardPower, NormalCard, SmallCard } from "./styles";
 
 type CardProps = {
@@ -15,7 +16,6 @@ type CardProps = {
   small?: boolean;
 };
 
-const getPowerPrefix = (power: number) => (power >= 0 ? "+" : "-");
 const handleSpellName = (card: CardInfo) =>
   card.spell !== SPELL_NAME.Void ? card.spell : card.power >= 0 ? "charge" : "consume";
 
@@ -36,7 +36,7 @@ const Card = ({
 
   return small ? (
     <SmallCard className={className} css={[chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
-      <div>{getPowerPrefix(card.power) + Math.abs(card.power)}</div>
+      <div>{getNumberSign(card.power) + Math.abs(card.power)}</div>
       <Icon
         name={handleSpellName(card)}
         css={css`
@@ -49,7 +49,7 @@ const Card = ({
       <CardContent>
         <CardPower>{Math.abs(card.power)}</CardPower>
         <Icon name={handleSpellName(card)} css={centerizeStyle} />
-        <CardAction>{getPowerPrefix(card.power)}</CardAction>
+        <CardAction>{getNumberSign(card.power)}</CardAction>
       </CardContent>
     </NormalCard>
   );

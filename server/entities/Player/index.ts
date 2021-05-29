@@ -52,6 +52,7 @@ class Player extends ClientDerived {
     const card = this.cards.find((c) => c.id === id);
 
     if (card) {
+      this.game.endTurn();
       this.client.changeState(new InGameState(this.client, this, this.game));
 
       this.cards = this.cards.filter((c) => c.id !== id);

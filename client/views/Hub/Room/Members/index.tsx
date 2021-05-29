@@ -38,7 +38,7 @@ const Members = (): JSX.Element => {
               </DropDown>
 
               <Dialog
-                key={member.id}
+                key={"dialog-" + member.id}
                 color={COLOR.Danger}
                 title="kick player"
                 yesMessage="yes"

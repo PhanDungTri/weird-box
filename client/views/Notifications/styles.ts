@@ -12,9 +12,8 @@ export const notificationStyle = (color: string, pos: number): SerializedStyles 
     top: -${pos * 15}px;
     color: ${isDarkColor(color) ? COLOR.White : COLOR.Black};
     text-align: center;
-    font-size: 14px;
     padding: 8px;
-    font-weight: bold;
+    font-size: 16px;
     box-shadow: 4px 0px 0px 0px ${borderColor}, -4px 0px 0px 0px ${borderColor}, 0px -4px 0px 0px ${borderColor},
       inset 0px -8px 0px 0px ${shadeColor(color, 30)};
     background-color: ${color};
