@@ -4,11 +4,9 @@ import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../shared/constan
 import Room from "../../Room";
 
 class InRoomState extends ClientState {
-  private onLeaveRoom: () => void;
-
   constructor(client: Client, protected room: Room) {
     super(client);
-    this.onLeaveRoom = this.leaveRoom.bind(this);
+    this.leaveRoom = this.leaveRoom.bind(this);
   }
 
   private leaveRoom() {
@@ -16,12 +14,12 @@ class InRoomState extends ClientState {
   }
 
   public enter(): void {
-    this.socket.on(CLIENT_EVENT_NAME.LeaveRoom, this.onLeaveRoom);
+    this.socket.on(CLIENT_EVENT_NAME.LeaveRoom, this.leaveRoom);
     this.socket.emit(SERVER_EVENT_NAME.GetRoomInfo, this.room.getInfo());
   }
 
   public exit(): void {
-    this.socket.off(CLIENT_EVENT_NAME.LeaveRoom, this.onLeaveRoom);
+    this.socket.off(CLIENT_EVENT_NAME.LeaveRoom, this.leaveRoom);
   }
 }
 

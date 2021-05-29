@@ -5,11 +5,9 @@ import Game from "../../Game";
 import Player from "../../Player";
 
 class InGameState extends ClientState {
-  private onLeaveGame: () => void;
-
   constructor(client: Client, protected player: Player, protected game: Game) {
     super(client);
-    this.onLeaveGame = this.leaveGame.bind(this);
+    this.leaveGame = this.leaveGame.bind(this);
   }
 
   private leaveGame(): void {
@@ -18,13 +16,13 @@ class InGameState extends ClientState {
   }
 
   public enter(): void {
-    this.socket.on("disconnect", this.onLeaveGame);
-    this.socket.on(CLIENT_EVENT_NAME.LeaveGame, this.onLeaveGame);
+    this.socket.on("disconnect", this.leaveGame);
+    this.socket.on(CLIENT_EVENT_NAME.LeaveGame, this.leaveGame);
   }
 
   public exit(): void {
-    this.socket.off("disconnect", this.onLeaveGame);
-    this.socket.off(CLIENT_EVENT_NAME.LeaveGame, this.onLeaveGame);
+    this.socket.off("disconnect", this.leaveGame);
+    this.socket.off(CLIENT_EVENT_NAME.LeaveGame, this.leaveGame);
   }
 }
 

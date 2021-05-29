@@ -5,23 +5,23 @@ import Player from "../../Player";
 import InGameState from "./InGameState";
 
 class InTurnState extends InGameState {
-  private onPlayCard: (id: string) => void;
+  private playCard: (id: string) => void;
 
   constructor(client: Client, player: Player, game: Game) {
     super(client, player, game);
-    this.onPlayCard = this.player.playCard.bind(this.player);
+    this.playCard = this.player.playCard.bind(this.player);
   }
 
   public enter(): void {
     super.enter();
 
     this.socket.emit(SERVER_EVENT_NAME.Notify, "It's your turn", "Info");
-    this.socket.on(CLIENT_EVENT_NAME.PlayCard, this.onPlayCard);
+    this.socket.on(CLIENT_EVENT_NAME.PlayCard, this.playCard);
   }
 
   public exit(): void {
     super.exit();
-    this.socket.off(CLIENT_EVENT_NAME.PlayCard, this.onPlayCard);
+    this.socket.off(CLIENT_EVENT_NAME.PlayCard, this.playCard);
   }
 }
 

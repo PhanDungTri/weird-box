@@ -5,18 +5,15 @@ import Room from "../../Room";
 import Server from "../../Server";
 
 class IdleState extends ClientState {
-  private onCreateRoom: () => void;
-  private onJoinRoom: (id: string) => void;
-  private onFindGame: () => void;
-  private onRename: (name: string) => void;
+  private findGame: () => void;
 
   constructor(client: Client) {
     super(client);
 
-    this.onCreateRoom = this.createRoom.bind(this);
-    this.onJoinRoom = this.joinRoom.bind(this);
-    this.onFindGame = Server.getInstance().enqueueClient.bind(Server.getInstance(), this.client);
-    this.onRename = this.setName.bind(this);
+    this.createRoom = this.createRoom.bind(this);
+    this.joinRoom = this.joinRoom.bind(this);
+    this.findGame = Server.getInstance().enqueueClient.bind(Server.getInstance(), this.client);
+    this.setName = this.setName.bind(this);
   }
 
   private createRoom() {
@@ -42,17 +39,17 @@ class IdleState extends ClientState {
   }
 
   public enter(): void {
-    this.socket.on(CLIENT_EVENT_NAME.CreateRoom, this.onCreateRoom);
-    this.socket.on(CLIENT_EVENT_NAME.JoinRoom, this.onJoinRoom);
-    this.socket.on(CLIENT_EVENT_NAME.FindGame, this.onFindGame);
-    this.socket.on(CLIENT_EVENT_NAME.Rename, this.onRename);
+    this.socket.on(CLIENT_EVENT_NAME.CreateRoom, this.createRoom);
+    this.socket.on(CLIENT_EVENT_NAME.JoinRoom, this.joinRoom);
+    this.socket.on(CLIENT_EVENT_NAME.FindGame, this.findGame);
+    this.socket.on(CLIENT_EVENT_NAME.Rename, this.setName);
   }
 
   public exit(): void {
-    this.socket.off(CLIENT_EVENT_NAME.CreateRoom, this.onCreateRoom);
-    this.socket.off(CLIENT_EVENT_NAME.JoinRoom, this.onJoinRoom);
-    this.socket.off(CLIENT_EVENT_NAME.FindGame, this.onFindGame);
-    this.socket.off(CLIENT_EVENT_NAME.Rename, this.onRename);
+    this.socket.off(CLIENT_EVENT_NAME.CreateRoom, this.createRoom);
+    this.socket.off(CLIENT_EVENT_NAME.JoinRoom, this.joinRoom);
+    this.socket.off(CLIENT_EVENT_NAME.FindGame, this.findGame);
+    this.socket.off(CLIENT_EVENT_NAME.Rename, this.setName);
   }
 }
 

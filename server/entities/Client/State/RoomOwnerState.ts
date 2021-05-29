@@ -5,13 +5,10 @@ import Room from "../../Room";
 import InRoomState from "./InRoomState";
 
 class RoomOwnerState extends InRoomState {
-  private onStartGame: () => void;
-  private onKick: (id: string) => void;
-
   constructor(client: Client, room: Room) {
     super(client, room);
-    this.onStartGame = this.startGame.bind(this);
-    this.onKick = this.kick.bind(this);
+    this.startGame = this.startGame.bind(this);
+    this.kick = this.kick.bind(this);
   }
 
   private startGame() {
@@ -31,14 +28,14 @@ class RoomOwnerState extends InRoomState {
 
   public enter(): void {
     super.enter();
-    this.socket.on(CLIENT_EVENT_NAME.FindGame, this.onStartGame);
-    this.socket.on(CLIENT_EVENT_NAME.Kick, this.onKick);
+    this.socket.on(CLIENT_EVENT_NAME.FindGame, this.startGame);
+    this.socket.on(CLIENT_EVENT_NAME.Kick, this.kick);
   }
 
   public exit(): void {
     super.exit();
-    this.socket.off(CLIENT_EVENT_NAME.FindGame, this.onStartGame);
-    this.socket.off(CLIENT_EVENT_NAME.Kick, this.onKick);
+    this.socket.off(CLIENT_EVENT_NAME.FindGame, this.startGame);
+    this.socket.off(CLIENT_EVENT_NAME.Kick, this.kick);
   }
 }
 

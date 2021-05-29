@@ -4,11 +4,9 @@ import { CLIENT_EVENT_NAME } from "../../../../shared/constants";
 import Server from "../../Server";
 
 class FindingState extends ClientState {
-  private onCancelFindGame: () => void;
-
   constructor(client: Client) {
     super(client);
-    this.onCancelFindGame = this.cancelFindGame.bind(this);
+    this.cancelFindGame = this.cancelFindGame.bind(this);
   }
 
   private cancelFindGame() {
@@ -16,13 +14,13 @@ class FindingState extends ClientState {
   }
 
   public enter(): void {
-    this.socket.on(CLIENT_EVENT_NAME.CancelFindGame, this.onCancelFindGame);
-    this.socket.on("disconnect", this.onCancelFindGame);
+    this.socket.on(CLIENT_EVENT_NAME.CancelFindGame, this.cancelFindGame);
+    this.socket.on("disconnect", this.cancelFindGame);
   }
 
   public exit(): void {
-    this.socket.off(CLIENT_EVENT_NAME.CancelFindGame, this.onCancelFindGame);
-    this.socket.off("disconnect", this.onCancelFindGame);
+    this.socket.off(CLIENT_EVENT_NAME.CancelFindGame, this.cancelFindGame);
+    this.socket.off("disconnect", this.cancelFindGame);
   }
 }
 
