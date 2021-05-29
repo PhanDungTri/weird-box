@@ -19,13 +19,8 @@ const GameConfirmDialog = (): JSX.Element => {
   const onConfirm = (isAccepted: boolean) => {
     socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, isAccepted);
 
-    if (isAccepted) {
-      setConfirm("accepted");
-      sound?.play("accept_game");
-    } else {
-      setConfirm("rejected");
-      sound?.play("reject_game");
-    }
+    if (isAccepted) setConfirm("accepted");
+    else setConfirm("rejected");
   };
 
   const onYes = () => onConfirm(true);
@@ -33,7 +28,7 @@ const GameConfirmDialog = (): JSX.Element => {
 
   useEffect(() => {
     if (!shouldShow) setConfirm("pending");
-    else sound?.play("found_game");
+    else sound?.play("GameFound");
   }, [shouldShow]);
 
   useListenServerEvent(SERVER_EVENT_NAME.UpdateGameMatchingStatus, (status: GameMatchingStatus) =>

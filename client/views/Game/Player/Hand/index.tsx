@@ -3,7 +3,7 @@ import { memo, useCallback, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { CardInfo } from "../../../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/constants";
-import { notificationsAtom, soundAtom } from "../../../../atoms";
+import { notificationsAtom } from "../../../../atoms";
 import { useInTurn, useListenServerEvent, useOnClickOutside, useOnEliminate } from "../../../../hooks";
 import socket from "../../../../services/socket";
 import { fadeOut } from "../../../../styles";
@@ -13,7 +13,6 @@ import { handStyle } from "./styles";
 const Hand = (): JSX.Element => {
   const isInTurn = useInTurn(socket.id);
   const isEliminated = useOnEliminate(socket.id);
-  const [sound] = useAtom(soundAtom);
   const [, notify] = useAtom(notificationsAtom);
   const [cards, setCards] = useState<CardInfo[]>([]);
   const [chosenCard, setChosenCard] = useState("");
@@ -31,10 +30,8 @@ const Hand = (): JSX.Element => {
 
   const playCard = useCallback(
     (id: string) => {
-      if (chosenCard !== id) {
-        setChosenCard(id);
-        sound?.play("choose_card");
-      } else if (isInTurn) {
+      if (chosenCard !== id) setChosenCard(id);
+      else if (isInTurn) {
         socket.emit(CLIENT_EVENT_NAME.PlayCard, chosenCard);
         setCards((list) => list.filter((c) => c.id !== chosenCard));
       } else notify({ message: "Not your turn!", variant: "Danger" });

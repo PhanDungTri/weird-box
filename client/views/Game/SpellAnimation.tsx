@@ -37,32 +37,32 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
   const [spell, setSpell] = useState<Effects>(SPELL_NAME.Void);
   const spellSounds = useRef<Partial<Record<Effects, (frame: number) => void>>>({
     [SPELL_NAME.Punch]: (frame) => {
-      if (frame === 1) sound?.play("whoosh");
-      if (frame === 3) sound?.play("punch");
+      if (frame === 1) sound?.play("Swoosh");
+      if (frame === 3) sound?.play("Punch");
     },
     [SPELL_NAME.Poison]: (frame) => {
-      if (frame === 1) sound?.play("poison");
+      if (frame === 1) sound?.play("Poison");
     },
     [SPELL_NAME.Heal]: (frame) => {
-      if (frame === 1) sound?.play("heal");
+      if (frame === 1) sound?.play("Heal");
     },
     [SPELL_NAME.Shield]: (frame) => {
-      if (frame === 1) sound?.play("shield");
+      if (frame === 1) sound?.play("Shield");
     },
     [SPELL_NAME.Mirror]: (frame) => {
-      if (frame === 1) sound?.play("mirror");
+      if (frame === 1) sound?.play("Mirror");
     },
     [PASSIVE_ACTION.Reflect]: (frame) => {
-      if (frame === 3) sound?.play("mirror_reflect");
+      if (frame === 3) sound?.play("MirrorReflect");
     },
     [PASSIVE_ACTION.Block]: (frame) => {
-      if (frame === 1) sound?.play("shield_block");
+      if (frame === 1) sound?.play("ShieldBlock");
     },
     [PASSIVE_ACTION.ShieldPierce]: (frame) => {
-      if (frame === 1) sound?.play("shield_break");
+      if (frame === 1) sound?.play("ShieldBreak");
     },
     [PASSIVE_ACTION.MirrorPierce]: (frame) => {
-      if (frame === 1) sound?.play("mirror_crack");
+      if (frame === 1) sound?.play("MirrorBreak");
     },
   });
 

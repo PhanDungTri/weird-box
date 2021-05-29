@@ -22,7 +22,7 @@ const GameOverDialog = (): JSX.Element => {
       show(true);
       console.log(id, socket.id);
       victory(id === socket.id);
-      id === socket.id ? sound?.play("victory") : sound?.play("defeat");
+      id === socket.id ? sound?.play("Victory") : sound?.play("Defeat");
     });
   }, []);
 

@@ -12,6 +12,7 @@ import { routeAtom, soundAtom } from "../atoms";
 import Loading from "../components/Loading";
 import ProgressBar from "../components/ProgressBar";
 import { ROUTE } from "../constants";
+import socket from "../services/socket";
 import { centerizeStyle, pageStyle } from "../styles";
 
 const Initiator = (): JSX.Element => {
@@ -37,39 +38,40 @@ const Initiator = (): JSX.Element => {
         new Howl({
           src: [EffectSound],
           sprite: {
-            accept_game: [0, 1457.8231292517007],
-            button_click: [3000, 415.01133786848055],
-            choose_card: [5000, 199.63718820861675],
-            deal_pop: [7000, 417.95918367346906],
-            defeat: [9000, 1500],
-            door_close: [12000, 762.1541950113375],
-            door_knock: [14000, 498.730158730158],
-            eliminate: [16000, 612.4036281179137],
-            found_game: [18000, 1058.8208616780043],
-            heal: [21000, 1000],
-            mirror: [23000, 1054.0589569161014],
-            mirror_crack: [26000, 500],
-            mirror_reflect: [28000, 835.1020408163272],
-            Danger: [30000, 141.29251700680356],
-            Info: [32000, 394.55782312925436],
-            Safe: [34000, 746.8934240362798],
-            Warning: [36000, 435.0340136054456],
-            overcharged: [38000, 750],
-            play_card: [40000, 501.0430839002282],
-            poison: [42000, 581.8594104308374],
-            punch: [44000, 373.4467120181435],
-            reject_game: [46000, 2000],
-            shield: [49000, 1117.052154195008],
-            shield_block: [52000, 900.0907029478426],
-            shield_break: [54000, 709.7505668934261],
-            take_card: [56000, 504.05895691609715],
-            victory: [58000, 2275.510204081634],
-            whoosh: [62000, 250.09070294784408],
+            Accept: [0, 6000],
+            Cancel: [7000, 6000],
+            Defeat: [14000, 1500],
+            DoorClose: [17000, 762.1541950113375],
+            Eliminated: [19000, 835.9183673469381],
+            Error: [21000, 360.0226757369604],
+            GameFound: [23000, 1058.8435374149653],
+            Heal: [26000, 1450.657596371883],
+            Info: [29000, 599.7278911564621],
+            KnockDoor: [31000, 498.730158730158],
+            Mirror: [33000, 1054.036281179137],
+            MirrorBreak: [36000, 500],
+            MirrorReflect: [38000, 835.1020408163237],
+            Overcharged: [40000, 750],
+            PlayCard: [42000, 501.0430839002282],
+            Poison: [44000, 827.7324263038537],
+            Pop: [46000, 417.9591836734673],
+            Punch: [48000, 286.96145124716566],
+            Safe: [50000, 1109.3424036281192],
+            Shield: [53000, 1117.052154195008],
+            ShieldBlock: [56000, 900.0907029478426],
+            ShieldBreak: [58000, 603.5600907029491],
+            Swoosh: [60000, 1109.3424036281192],
+            TakeCard: [63000, 504.0362811791397],
+            Victory: [65000, 2275.510204081627],
+            Warning: [69000, 366.0997732426239],
           },
           onload: () => setLoadedAssetCounter(loadedAssetCounter + 1),
         })
       );
-    else if (loadedAssetCounter === total.current) setTimeout(() => setRoute(ROUTE.Hub), 1000);
+    else if (loadedAssetCounter === total.current) {
+      socket.connect();
+      socket.on("connect", () => setTimeout(() => setRoute(ROUTE.Hub), 1000));
+    }
   }, [loadedAssetCounter]);
 
   return (

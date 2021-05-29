@@ -9,7 +9,7 @@ export const useOnEliminate = (id: string): boolean => {
   const [sound] = useAtom(soundAtom);
 
   useEffect(() => {
-    if (isEliminated) sound?.play("eliminate");
+    if (isEliminated) sound?.play("Eliminated");
   }, [isEliminated]);
 
   useListenServerEvent(SERVER_EVENT_NAME.PlayerEliminated, (target: string) => eliminate(target === id));

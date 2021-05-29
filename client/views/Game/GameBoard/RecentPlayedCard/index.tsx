@@ -22,7 +22,7 @@ const RecentPlayedCard = (): JSX.Element => {
   useListenServerEvent(SERVER_EVENT_NAME.CardPlayed, (card: CardInfo) => {
     setCard(card);
     animate(true);
-    sound?.play("play_card");
+    sound?.play("PlayCard");
   });
 
   useListenServerEvent(SERVER_EVENT_NAME.NewTurn, () => animate(false));

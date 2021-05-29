@@ -8,6 +8,7 @@ import Loading from "../components/Loading";
 import { ROUTE } from "../constants";
 import { useListenServerEvent } from "../hooks";
 import { centerizeStyle, pageStyle } from "../styles";
+import ReconnectDialog from "./ReconnectDialog";
 //import Test from "./Test";
 
 const Game = lazy(() => import("./Game"));
@@ -45,17 +46,20 @@ const App = (): JSX.Element => {
   );
 
   return (
-    <Suspense
-      fallback={
-        <div css={pageStyle}>
-          <Loading css={centerizeStyle} scale={4} />{" "}
-        </div>
-      }
-    >
-      {route === ROUTE.Init && <Initiator />}
-      {route === ROUTE.Hub && <Hub />}
-      {route === ROUTE.InGame && <Game />}
-    </Suspense>
+    <>
+      <Suspense
+        fallback={
+          <div css={pageStyle}>
+            <Loading css={centerizeStyle} scale={4} />{" "}
+          </div>
+        }
+      >
+        {route === ROUTE.Init && <Initiator />}
+        {route === ROUTE.Hub && <Hub />}
+        {route === ROUTE.InGame && <Game />}
+      </Suspense>
+      <ReconnectDialog />
+    </>
   );
 };
 

@@ -27,10 +27,10 @@ const Hub = (): JSX.Element => {
     match(status !== "Canceled")
   );
 
-  useListenServerEvent(SERVER_EVENT_NAME.FriendJoined, () => sound?.play("door_knock"));
-  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, () => sound?.play("door_close"));
-  useListenServerEvent(SERVER_EVENT_NAME.LeftRoom, () => sound?.play("door_close"));
-  useListenServerEvent(SERVER_EVENT_NAME.JoinedRoom, () => sound?.play("door_knock"));
+  useListenServerEvent(SERVER_EVENT_NAME.FriendJoined, () => sound?.play("KnockDoor"));
+  useListenServerEvent(SERVER_EVENT_NAME.FriendLeft, () => sound?.play("DoorClose"));
+  useListenServerEvent(SERVER_EVENT_NAME.LeftRoom, () => sound?.play("DoorClose"));
+  useListenServerEvent(SERVER_EVENT_NAME.JoinedRoom, () => sound?.play("KnockDoor"));
 
   return (
     <div css={[pageStyle, gridStyle, centerizeContainerStyle]}>

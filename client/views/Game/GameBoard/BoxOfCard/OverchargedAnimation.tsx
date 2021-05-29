@@ -16,7 +16,7 @@ const OverchargedAnimation = (): JSX.Element => {
   useListenServerEvent(SERVER_EVENT_NAME.Overcharged, () => overcharge(true));
 
   useEffect(() => {
-    if (isOvercharged) sound?.play("overcharged");
+    if (isOvercharged) sound?.play("Overcharged");
   }, [isOvercharged]);
 
   return (

@@ -12,8 +12,8 @@ const BoxSprite = (props: BoxSpriteProps): JSX.Element => {
 
   const playDealSound = (frame: number) => {
     if (frame === 7) {
-      sound?.play("deal_pop");
-      sound?.play("take_card");
+      sound?.play("Pop");
+      sound?.play("TakeCard");
     }
   };
 
