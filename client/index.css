@@ -4,13 +4,13 @@
 }
 
 @font-face {
-  font-family: "Free Pixel";
-  src: url("./assets/fonts/FreePixel.ttf");
+  font-family: "Main Font";
+  src: url("./assets/fonts/c&cra.ttf");
 }
 
 html {
   font-size: 12px;
-  font-family: "Free Pixel";
+  font-family: "Main Font";
   color: black;
   image-rendering: optimizeSpeed;
   image-rendering: pixelated;
