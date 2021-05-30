@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { SerializedStyles } from "@emotion/utils";
 import { COLOR } from "../../../../constants";
 
-const BADGE_SIZE = 14;
+const BADGE_SIZE = 12;
 
 export const spellsStyle = (align: "center" | "left"): SerializedStyles => css`
   padding: 4px;

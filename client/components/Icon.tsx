@@ -3,7 +3,19 @@ import IconSprites from "../assets/sprites/icons.png";
 import { SpriteProps } from "../types";
 import Sprite from "./Sprite";
 
-type IconName = "deck" | "triangle" | "gamepad" | "key" | "exit" | "sleep_bubble" | "charge" | "consume" | SPELL_NAME;
+type IconName =
+  | "deck"
+  | "triangle"
+  | "gamepad"
+  | "key"
+  | "exit"
+  | "sleep_bubble"
+  | "charge"
+  | "consume"
+  | "cog"
+  | "sound"
+  | "music"
+  | SPELL_NAME;
 
 const SIZE = [24, 24] as [number, number];
 
@@ -25,6 +37,9 @@ const SPRITE_POS: IconName[] = [
   "key",
   "exit",
   "sleep_bubble",
+  "cog",
+  "sound",
+  "music",
 ];
 
 const Icon = ({ name, ...props }: IconProps): JSX.Element => {

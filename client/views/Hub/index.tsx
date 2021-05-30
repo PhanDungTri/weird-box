@@ -15,6 +15,7 @@ import PlayerNameInput from "./PlayerNameInput";
 import Room from "./Room";
 import IconSprites from "../../assets/sprites/icons.png";
 import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
+import Header from "./Header";
 
 const Hub = (): JSX.Element => {
   const [sound] = useAtom(soundAtom);
@@ -34,6 +35,7 @@ const Hub = (): JSX.Element => {
 
   return (
     <div css={[pageStyle, gridStyle, centerizeContainerStyle]}>
+      <Header />
       <div>UNTITLED CARD GAME</div>
       <PlayerNameInput />
       {isMatching ? (

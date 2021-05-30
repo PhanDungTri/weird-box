@@ -15,7 +15,7 @@ const hpDiffKeyframes = (reverse = false) => keyframes`
 export const HPDiff = styled.div<HPDiffProps>`
   ${centerizeStyle};
   top: ${({ reverse = false }) => (reverse ? 0 : 400)}%;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   z-index: 2;
   animation: ${({ reverse = false }) =>
