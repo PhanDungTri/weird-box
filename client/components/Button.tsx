@@ -1,12 +1,12 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { NotificationVariant } from "../../shared/@types";
+import { StyleVariant } from "../../shared/@types";
 import { COLOR } from "../constants";
 import { pixelBorderStyle } from "../styles";
 import { isDarkColor, shadeColor, tintColor } from "../utils";
 
 type ButtonProps = {
-  variation?: NotificationVariant;
+  variation?: StyleVariant;
   disabled?: boolean;
 };
 

@@ -1,12 +1,12 @@
 import { css } from "@emotion/react";
 import { ReactNode, useRef } from "react";
-import { NotificationVariant } from "../../../../shared/@types";
+import { StyleVariant } from "../../../../shared/@types";
 import { disabledStyle } from "../../../styles";
 import Button from "../../Button";
 import { integrateButtonStyle, integrateInputStyle } from "./styles";
 
 type IntegrateInputProps = {
-  variation?: NotificationVariant;
+  variation?: StyleVariant;
   children?: ReactNode;
   onClick?: (value?: string) => void;
   disabled?: boolean;

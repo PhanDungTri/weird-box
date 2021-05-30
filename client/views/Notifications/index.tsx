@@ -2,16 +2,16 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { animated, useTransition } from "react-spring";
-import { NotificationVariant } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
-import { notificationsAtom, soundAtom } from "../../atoms";
+import { notificationsAtom } from "../../atoms";
 import { COLOR } from "../../constants";
+import { useNotify } from "../../hooks/useNotify";
 import socket from "../../services/socket";
 import { notificationStyle } from "./styles";
 
 const Notifications = (): JSX.Element => {
-  const [notifications, notify] = useAtom(notificationsAtom);
-  const [sound] = useAtom(soundAtom);
+  const [notifications] = useAtom(notificationsAtom);
+  const notify = useNotify();
 
   const transitions = useTransition(notifications, (n) => n.id, {
     from: { transform: "translate(-50%, 0%)", opacity: 0 },
@@ -20,15 +20,10 @@ const Notifications = (): JSX.Element => {
   });
 
   useEffect(() => {
-    const onNoti = (message: string, variant: NotificationVariant) => {
-      sound?.play(variant);
-      notify({ message, variant });
-    };
+    socket.on(SERVER_EVENT_NAME.Notify, notify);
 
-    socket.on(SERVER_EVENT_NAME.Notify, onNoti);
-
-    return () => void socket.off(SERVER_EVENT_NAME.Notify, onNoti);
-  }, [sound]);
+    return () => void socket.off(SERVER_EVENT_NAME.Notify, notify);
+  }, [notify]);
 
   return createPortal(
     transitions.map(({ item, props, key }, i, arr) => (

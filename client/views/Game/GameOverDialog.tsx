@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { memo, useEffect, useState } from "react";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import { routeAtom, soundAtom } from "../../atoms";
+import { musicAtom, routeAtom, soundAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import { ROUTE } from "../../constants";
 import socket from "../../services/socket";
@@ -9,11 +9,13 @@ import socket from "../../services/socket";
 const GameOverDialog = (): JSX.Element => {
   const [, changeRoute] = useAtom(routeAtom);
   const [sound] = useAtom(soundAtom);
+  const [music] = useAtom(musicAtom);
   const [shouldShow, show] = useState(false);
   const [shouldVictory, victory] = useState(false);
 
   const backToHub = () => {
     socket.emit(CLIENT_EVENT_NAME.LeaveGame);
+    music?.play();
     changeRoute(ROUTE.Hub);
   };
 

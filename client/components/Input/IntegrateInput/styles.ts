@@ -1,9 +1,9 @@
 import { css, SerializedStyles } from "@emotion/react";
-import { NotificationVariant } from "../../../../shared/@types";
+import { StyleVariant } from "../../../../shared/@types";
 import { COLOR } from "../../../constants";
 import { shadeColor } from "../../../utils";
 
-export const integrateButtonStyle = (variation: NotificationVariant): SerializedStyles => {
+export const integrateButtonStyle = (variation: StyleVariant): SerializedStyles => {
   const borderColor = shadeColor(COLOR[variation], 70);
 
   return css`
@@ -13,7 +13,7 @@ export const integrateButtonStyle = (variation: NotificationVariant): Serialized
   `;
 };
 
-export const integrateInputStyle = (variation: NotificationVariant): SerializedStyles => {
+export const integrateInputStyle = (variation: StyleVariant): SerializedStyles => {
   const borderColor = shadeColor(COLOR[variation], 70);
 
   return css`

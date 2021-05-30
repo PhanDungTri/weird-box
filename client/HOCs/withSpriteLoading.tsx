@@ -1,8 +1,9 @@
 import { useAtom } from "jotai";
 import { JSXElementConstructor, useEffect, useRef, useState } from "react";
-import { notificationsAtom, routeAtom } from "../atoms";
+import { routeAtom } from "../atoms";
 import Loading from "../components/Loading";
 import { ROUTE } from "../constants";
+import { useNotify } from "../hooks/useNotify";
 import { centerizeStyle, pageStyle } from "../styles";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -11,10 +12,10 @@ function withSpriteLoading<P, C>(WrappedComponent: JSXElementConstructor<P> & C,
 
   const WithSpriteLoading = (props: Props) => {
     const [, changeRoute] = useAtom(routeAtom);
-    const [, notify] = useAtom(notificationsAtom);
     const [status, setStatus] = useState<"Loading" | "Loaded" | "Failed">("Loading");
     const [loaded, setLoaded] = useState(0);
     const total = useRef(paths.length);
+    const notify = useNotify();
 
     useEffect(() => {
       if (loaded === total.current) setStatus("Loaded");
@@ -23,11 +24,7 @@ function withSpriteLoading<P, C>(WrappedComponent: JSXElementConstructor<P> & C,
         img.src = paths[loaded];
         img.onload = () => setLoaded(loaded + 1);
         img.onerror = () => {
-          notify({
-            message: "Failed to load resources!",
-            variant: "Danger",
-          });
-
+          notify("Failed to load resources!", "Danger");
           changeRoute(ROUTE.Hub);
         };
       }

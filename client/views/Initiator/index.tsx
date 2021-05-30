@@ -1,23 +1,26 @@
-import { css } from "@emotion/react";
 import { Howl } from "howler";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import EffectSound from "../assets/sounds/effects.mp3";
-import BoxOfCardSprites from "../assets/sprites/box_of_cards.png";
-import ContentFrameSprite from "../assets/sprites/card_content_frame.png";
-import IconSprites from "../assets/sprites/icons.png";
-import LoadingSpriteSheet from "../assets/sprites/loading_animation.png";
-import SpellAnimations from "../assets/sprites/spell_animations.png";
-import { routeAtom, soundAtom } from "../atoms";
-import Loading from "../components/Loading";
-import ProgressBar from "../components/ProgressBar";
-import { ROUTE } from "../constants";
-import socket from "../services/socket";
-import { centerizeStyle, pageStyle } from "../styles";
+import SoundEffects from "../../assets/sounds/effects.mp3";
+import Music from "../../assets/sounds/music.mp3";
+import BoxOfCardSprites from "../../assets/sprites/box_of_cards.png";
+import ContentFrameSprite from "../../assets/sprites/card_content_frame.png";
+import IconSprites from "../../assets/sprites/icons.png";
+import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
+import SpellAnimations from "../../assets/sprites/spell_animations.png";
+import { musicAtom, routeAtom, soundAtom } from "../../atoms";
+import Loading from "../../components/Loading";
+import ProgressBar from "../../components/ProgressBar";
+import { ROUTE } from "../../constants";
+import socket from "../../services/socket";
+import { centerizeStyle, pageStyle } from "../../styles";
+import { LoadingProgress } from "./styles";
 
 const Initiator = (): JSX.Element => {
   const [, setRoute] = useAtom(routeAtom);
   const [, setSound] = useAtom(soundAtom);
+  const [, setMusic] = useAtom(musicAtom);
+  const [message, setMessage] = useState("Loading sprites");
   const [loadedAssetCounter, setLoadedAssetCounter] = useState(0);
   const spriteSources = useRef<string[]>([
     IconSprites,
@@ -26,24 +29,25 @@ const Initiator = (): JSX.Element => {
     LoadingSpriteSheet,
     BoxOfCardSprites,
   ]);
-  const total = useRef(spriteSources.current.length + 1);
+  const total = useRef(spriteSources.current.length + 2);
 
   useEffect(() => {
     if (loadedAssetCounter < spriteSources.current.length) {
       const img = new Image();
       img.src = spriteSources.current[loadedAssetCounter];
       img.onload = () => setLoadedAssetCounter(loadedAssetCounter + 1);
-    } else if (loadedAssetCounter === spriteSources.current.length)
+    } else if (loadedAssetCounter === spriteSources.current.length) {
+      setMessage("Loading sound effects");
       setSound(
         new Howl({
-          src: [EffectSound],
+          src: [SoundEffects],
           sprite: {
             Accept: [0, 6000],
             Cancel: [7000, 6000],
             Defeat: [14000, 1500],
             DoorClose: [17000, 762.1541950113375],
             Eliminated: [19000, 835.9183673469381],
-            Error: [21000, 360.0226757369604],
+            Danger: [21000, 360.0226757369604],
             GameFound: [23000, 1058.8435374149653],
             Heal: [26000, 1450.657596371883],
             Info: [29000, 599.7278911564621],
@@ -65,10 +69,23 @@ const Initiator = (): JSX.Element => {
             Victory: [65000, 2275.510204081627],
             Warning: [69000, 366.0997732426239],
           },
+          volume: 0.75,
           onload: () => setLoadedAssetCounter(loadedAssetCounter + 1),
         })
       );
-    else if (loadedAssetCounter === total.current) {
+    } else if (loadedAssetCounter === total.current - 1) {
+      setMessage("Loading music");
+      setMusic(
+        new Howl({
+          src: Music,
+          autoplay: true,
+          loop: true,
+          volume: 0.1,
+          onplay: () => setLoadedAssetCounter(loadedAssetCounter + 1),
+        })
+      );
+    } else if (loadedAssetCounter === total.current) {
+      setMessage("Connecting to game server");
       socket.connect();
       socket.on("connect", () => setTimeout(() => setRoute(ROUTE.Hub), 1000));
     }
@@ -77,19 +94,14 @@ const Initiator = (): JSX.Element => {
   return (
     <div css={[pageStyle]}>
       <Loading css={centerizeStyle} scale={4} />
-      <ProgressBar
-        css={[
-          css`
-            ${centerizeStyle}
-            width: 80%;
-            position: fixed;
-            bottom: 0;
-            top: initial;
-          `,
-        ]}
-        current={Math.floor((loadedAssetCounter * 100) / total.current)}
-        suffix="%"
-      />
+      <LoadingProgress>
+        <p style={{ textAlign: "center", fontSize: "16px", fontWeight: "bold" }}>{message}</p>
+        <ProgressBar
+          css={{ centerizeStyle }}
+          current={Math.floor((loadedAssetCounter * 100) / total.current)}
+          suffix="%"
+        />
+      </LoadingProgress>
     </div>
   );
 };
