@@ -1,16 +1,21 @@
 import { css } from "@emotion/react";
-import { gridStyle, slotStyle } from "../../../../styles";
+import styled from "@emotion/styled";
+import Grid from "../../../../components/Grid";
+import { slotStyle } from "../../../../styles";
 
-export const memberListStyle = css`
-  ${gridStyle}
+export const StyledMembers = styled(Grid)`
   grid-template-columns: repeat(4, 48px);
 `;
 
-export const memberStyle = css`
+export const StyledMember = styled(Grid)`
   ${slotStyle()}
-  ${gridStyle}
   justify-items: center;
   padding: 4px;
+`;
+
+export const MemberName = styled.div`
+  text-align: center;
+  word-break: break-all;
 `;
 
 export const keyStyle = css`

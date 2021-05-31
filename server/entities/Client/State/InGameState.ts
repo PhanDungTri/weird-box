@@ -11,8 +11,8 @@ class InGameState extends ClientState {
   }
 
   private leaveGame(): void {
-    this.game.eliminatePlayer(this.player);
     this.game.removePlayer(this.player);
+    this.game.eliminatePlayer(this.player);
   }
 
   public enter(): void {

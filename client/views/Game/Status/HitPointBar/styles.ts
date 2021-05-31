@@ -2,24 +2,20 @@ import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { centerizeStyle } from "../../../../styles";
 
-type HPDiffProps = {
-  reverse?: boolean;
-};
-
-const hpDiffKeyframes = (reverse = false) => keyframes`
+const hpDiffKeyframes = (goUp = false) => keyframes`
 	to {
-		top: ${reverse ? -100 : 500}%;
+		top: ${goUp ? -100 : 500}%;
 	}
 `;
 
-export const HPDiff = styled.div<HPDiffProps>`
+export const HPDiff = styled.div<{ goUp?: boolean }>`
   ${centerizeStyle};
-  top: ${({ reverse = false }) => (reverse ? 0 : 400)}%;
+  top: ${({ goUp = false }) => (goUp ? 0 : 400)}%;
   font-size: 16px;
   font-weight: bold;
   z-index: 2;
-  animation: ${({ reverse = false }) =>
+  animation: ${({ goUp = false }) =>
     css`
-      ${hpDiffKeyframes(reverse)} 0.8s forwards
+      ${hpDiffKeyframes(goUp)} 0.8s forwards
     `};
 `;

@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { memo, useEffect, useState } from "react";
 import { SpriteProps } from "../../types";
-import { spriteSheetStyle } from "./styles";
+import { spriteAnimation, StyledSprite } from "./styles";
 
 const Sprite = ({
   size: [width, height],
@@ -35,19 +35,20 @@ const Sprite = ({
   }, [stop]);
 
   return (
-    <div
+    <StyledSprite
       css={[
         css`
-          position: absolute;
-          display: inline-block;
           width: ${width * scale}px;
           height: ${height * scale}px;
           background-image: url(${src});
           background-size: ${naturalWidth * scale}px;
           background-position-y: -${height * row * scale}px;
-          overflow: hidden;
         `,
-        !stop && spriteSheetStyle(steps, fps, loop, width * scale * steps),
+        !stop &&
+          css`
+            animation: ${spriteAnimation(width * scale * steps)} ${steps / fps}s steps(${steps})
+              ${loop ? "infinite" : ""};
+          `,
       ]}
       {...props}
     />

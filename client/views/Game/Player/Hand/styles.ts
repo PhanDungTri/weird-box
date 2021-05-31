@@ -1,6 +1,6 @@
-import { css } from "@emotion/react";
+import styled from "@emotion/styled";
 
-export const handStyle = css`
+export const StyledHand = styled.div`
   display: flex;
   margin: 8px;
   gap: 4px;

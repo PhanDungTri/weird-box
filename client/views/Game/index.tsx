@@ -10,20 +10,20 @@ import GameBoard from "./GameBoard";
 import GameOverDialog from "./GameOverDialog";
 import Opponents from "./Opponents";
 import Player from "./Player";
-import gameStyle from "./styles";
+import { StyledGame } from "./styles";
 import WaitingForOthersDialog from "./WaitingForOthersDialog";
 
 const Game = (): JSX.Element => {
   useEffect(() => void socket.emit(CLIENT_EVENT_NAME.ReadyConfirm, true), []);
 
   return (
-    <div css={gameStyle}>
+    <StyledGame>
       <Opponents />
       <GameBoard />
       <Player />
       <GameOverDialog />
       <WaitingForOthersDialog />
-    </div>
+    </StyledGame>
   );
 };
 

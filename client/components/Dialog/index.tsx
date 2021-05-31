@@ -1,14 +1,15 @@
 import { useAtom } from "jotai";
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { StyleVariation } from "../../../shared/@types";
 import { soundAtom } from "../../atoms";
 import { COLOR } from "../../constants";
 import { shadeColor } from "../../utils";
 import Button from "../Button";
-import { dialogContentStyle, dialogFooterStyle, dialogHeaderStyle, dialogStyle, showDialogStyle } from "./styles";
+import { DialogContent, DialogFooter, DialogHeader, StyledDialog } from "./styles";
 
 type DialogProps = {
-  color?: string;
+  variation?: StyleVariation;
   title?: string;
   children?: ReactNode;
   show?: boolean;
@@ -17,14 +18,9 @@ type DialogProps = {
   noFooter?: boolean;
 };
 
-type NoCancelButtonDialogProps = DialogProps & { noMessage?: string };
-type WithCancelButtonDialogProps = DialogProps & { noMessage: string; onNo?: () => void };
-
-function Dialog(props: NoCancelButtonDialogProps): JSX.Element;
-function Dialog(props: WithCancelButtonDialogProps): JSX.Element;
 function Dialog({
-  show,
-  color = COLOR.Coal,
+  show = false,
+  variation = "Normal",
   title,
   children,
   noFooter,
@@ -46,12 +42,12 @@ function Dialog({
   };
 
   return createPortal(
-    <div css={[dialogStyle, show && showDialogStyle]}>
-      <div css={dialogContentStyle(shadeColor(color, 70))}>
-        {title && <div css={dialogHeaderStyle(color)}>{title}</div>}
+    <StyledDialog show={show}>
+      <DialogContent css={{ borderColor: shadeColor(COLOR[variation], 70) }}>
+        {title && <DialogHeader variation={variation}>{title}</DialogHeader>}
         {children}
         {!noFooter && (
-          <div css={dialogFooterStyle}>
+          <DialogFooter>
             <Button variation="Safe" onClick={onAccept}>
               {yesMessage}
             </Button>
@@ -60,10 +56,10 @@ function Dialog({
                 {noMessage}
               </Button>
             )}
-          </div>
+          </DialogFooter>
         )}
-      </div>
-    </div>,
+      </DialogContent>
+    </StyledDialog>,
     document.getElementById("dialog") as HTMLDivElement
   );
 }

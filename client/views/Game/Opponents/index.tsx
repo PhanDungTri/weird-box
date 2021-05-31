@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { PlayerInfo } from "../../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../../shared/constants";
-import socket from "../../../services/socket";
 import EmptySlot from "../../../components/EmptySlot";
+import socket from "../../../services/socket";
 import Opponent from "./Opponent";
-import { opponentsStyle } from "./styles";
+import { StyledOpponents } from "./styles";
 
 const Opponents = (): JSX.Element => {
   const [opponents, setOpponents] = useState<PlayerInfo[]>([]);
@@ -27,7 +27,7 @@ const Opponents = (): JSX.Element => {
     return elm;
   };
 
-  return <div css={opponentsStyle}>{showOpponents()}</div>;
+  return <StyledOpponents>{showOpponents()}</StyledOpponents>;
 };
 
 export default Opponents;

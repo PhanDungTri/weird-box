@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Dialog from "../components/Dialog";
 import Loading from "../components/Loading";
-import { COLOR } from "../constants";
 import { useListenServerEvent } from "../hooks";
 import useShowDialog from "../hooks/useShowDialog";
 import socket from "../services/socket";
@@ -28,7 +27,7 @@ const ReconnectDialog = (): JSX.Element => {
       title="connection error"
       yesMessage="reconnect"
       onYes={onReconnect}
-      color={COLOR.Danger}
+      variation={"Danger"}
       noFooter={shouldReconnect}
     >
       {shouldReconnect ? <Loading text="Reconnecting..." /> : <p>Failed to contact with the server!</p>}

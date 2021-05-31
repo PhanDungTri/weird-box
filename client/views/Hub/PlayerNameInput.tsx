@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { useCallback, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import { IntegrateInput } from "../../components/Input";
+import IntegrateInput from "../../components/IntegrateInput";
 import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
 import { playerNameAtom } from "./atom";

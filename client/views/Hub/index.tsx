@@ -2,20 +2,21 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
+import IconSprites from "../../assets/sprites/icons.png";
+import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
 import { routeAtom, soundAtom } from "../../atoms";
+import CenterizedGrid from "../../components/CenterizedGrid";
+import Page from "../../components/Page";
 import { ROUTE } from "../../constants";
 import withSpriteLoading from "../../HOCs/withSpriteLoading";
 import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
-import { centerizeContainerStyle, gridStyle, pageStyle } from "../../styles";
 import FindingGame from "./FindingGame";
 import GameConfirmDialog from "./GameConfirmDialog";
+import Header from "./Header";
 import Menu from "./Menu";
 import PlayerNameInput from "./PlayerNameInput";
 import Room from "./Room";
-import IconSprites from "../../assets/sprites/icons.png";
-import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
-import Header from "./Header";
 
 const Hub = (): JSX.Element => {
   const [sound] = useAtom(soundAtom);
@@ -34,20 +35,22 @@ const Hub = (): JSX.Element => {
   useListenServerEvent(SERVER_EVENT_NAME.JoinedRoom, () => sound?.play("KnockDoor"));
 
   return (
-    <div css={[pageStyle, gridStyle, centerizeContainerStyle]}>
-      <Header />
-      <div>UNTITLED CARD GAME</div>
-      <PlayerNameInput />
-      {isMatching ? (
-        <FindingGame />
-      ) : (
-        <>
-          <Menu />
-          <Room />
-        </>
-      )}
-      <GameConfirmDialog />
-    </div>
+    <Page>
+      <CenterizedGrid css={{ height: "100%", width: "100%" }}>
+        <Header />
+        <div>UNTITLED CARD GAME</div>
+        <PlayerNameInput />
+        {isMatching ? (
+          <FindingGame />
+        ) : (
+          <>
+            <Menu />
+            <Room />
+          </>
+        )}
+        <GameConfirmDialog />
+      </CenterizedGrid>
+    </Page>
   );
 };
 

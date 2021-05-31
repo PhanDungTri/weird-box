@@ -1,12 +1,12 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { StyleVariant } from "../../shared/@types";
+import { StyleVariation } from "../../shared/@types";
 import { COLOR } from "../constants";
 import { pixelBorderStyle } from "../styles";
-import { isDarkColor, shadeColor, tintColor } from "../utils";
+import { autoTextColor, shadeColor, tintColor } from "../utils";
 
 type ButtonProps = {
-  variation?: StyleVariant;
+  variation?: StyleVariation;
   disabled?: boolean;
 };
 
@@ -14,7 +14,7 @@ const Button = styled.button<ButtonProps>`
   ${({ variation = "Primary", disabled = false }) => css`
     ${pixelBorderStyle(2, [shadeColor(COLOR[variation], 70)])};
     background-color: ${COLOR[variation]};
-    color: ${isDarkColor(COLOR[variation]) ? COLOR.White : COLOR.Black};
+    color: ${autoTextColor(COLOR[variation])};
     border: 2px solid ${COLOR[variation]};
     border-style: solid none;
 

@@ -1,6 +1,5 @@
 import { ReactNode, useState } from "react";
 import { animated } from "react-spring";
-import { COLOR } from "../../constants";
 import { useOnClickOutside, useRevealAnimation } from "../../hooks";
 import Button from "../Button";
 import Icon from "../Icon";
@@ -9,11 +8,10 @@ import { dropDownContentStyle, dropDownIconStyle } from "./styles";
 type DropDownProps = {
   header?: ReactNode;
   children: ReactNode;
-  top?: boolean;
-  background?: string;
+  onTop?: boolean;
 };
 
-const DropDown = ({ header, children, top = false, background = COLOR.White }: DropDownProps): JSX.Element => {
+const DropDown = ({ header, children, onTop = false }: DropDownProps): JSX.Element => {
   const [shouldShow, show] = useState(false);
   const ref = useOnClickOutside<HTMLDivElement>(() => show(false));
   const transitions = useRevealAnimation(shouldShow);
@@ -21,7 +19,7 @@ const DropDown = ({ header, children, top = false, background = COLOR.White }: D
   const toggleShow = () => show(!shouldShow);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div css={{ position: "relative" }}>
       <div ref={ref} onClick={toggleShow}>
         {!header || typeof header === "string" ? (
           <Button>
@@ -35,7 +33,7 @@ const DropDown = ({ header, children, top = false, background = COLOR.White }: D
       {transitions.map(
         ({ item, props }) =>
           item && (
-            <animated.div style={props} css={dropDownContentStyle(top, background)}>
+            <animated.div style={props} css={dropDownContentStyle(onTop)}>
               {children}
             </animated.div>
           )

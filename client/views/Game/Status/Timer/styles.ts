@@ -1,7 +1,8 @@
-import { css, keyframes, SerializedStyles } from "@emotion/react";
+import { keyframes } from "@emotion/react";
+import styled from "@emotion/styled";
 import { COLOR } from "../../../../constants";
 
-const countdownKeyframes = keyframes`
+export const countdownKeyframes = keyframes`
   from {
     width: calc(100% - 8px);
     background-color: ${COLOR.Safe};
@@ -13,8 +14,7 @@ const countdownKeyframes = keyframes`
   }
 `;
 
-export const countdownBarStyle = (duration: number): SerializedStyles => css`
+export const StyledTimer = styled.div`
   margin: 4px;
   height: 8px;
-  animation: ${countdownKeyframes} ${duration}ms linear forwards;
 `;

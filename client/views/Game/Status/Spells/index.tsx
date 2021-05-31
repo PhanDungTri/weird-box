@@ -6,14 +6,14 @@ import { SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { useListenServerEvent } from "../../../../hooks";
 import { fadeOut } from "../../../../styles";
 import SpellIndicator from "./SpellIndicator";
-import { spellsStyle } from "./styles";
+import { StyledSpells } from "./styles";
 
 type SpellsProps = {
   id: string;
-  align?: "center" | "left";
+  justifyContent?: "center" | "left";
 };
 
-const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
+const Spells = ({ id, justifyContent = "center" }: SpellsProps): JSX.Element => {
   const [spells, setSpells] = useState<Record<string, SpellInfo>>({});
   const transitions = useTransition(Object.values(spells), (s) => s.id, {
     from: { opacity: 0, maxWidth: "0px" },
@@ -49,13 +49,13 @@ const Spells = ({ id, align = "center" }: SpellsProps): JSX.Element => {
   );
 
   return (
-    <div css={spellsStyle(align)}>
+    <StyledSpells css={{ justifyContent }}>
       {transitions.map(({ item, props, key }) => (
         <animated.div key={key} style={props}>
           <SpellIndicator {...item} />
         </animated.div>
       ))}
-    </div>
+    </StyledSpells>
   );
 };
 

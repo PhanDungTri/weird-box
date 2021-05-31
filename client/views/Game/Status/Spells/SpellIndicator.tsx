@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from "react";
 import { SpellInfo } from "../../../../../shared/@types";
 import Icon from "../../../../components/Icon";
-import { spellIndicatorBadge, spellTriggerAnimation } from "./styles";
+import { SpellIndicatorBadge, spellTriggerAnimation } from "./styles";
 
 const SpellIndicator = ({ duration, name, power }: SpellInfo): JSX.Element => {
   const [shouldTrigger, trigger] = useState(false);
@@ -15,9 +15,9 @@ const SpellIndicator = ({ duration, name, power }: SpellInfo): JSX.Element => {
   }, [duration, power]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div css={{ position: "relative" }}>
       <Icon name={name} onTransitionEnd={stopTransition} css={spellTriggerAnimation(shouldTrigger)} />
-      <div css={spellIndicatorBadge}>{power}</div>
+      <SpellIndicatorBadge>{power}</SpellIndicatorBadge>
     </div>
   );
 };

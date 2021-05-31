@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 import { useAtom } from "jotai";
 import { memo, useCallback, useRef, useState } from "react";
 import { PassiveAction, SpellInfo } from "../../../shared/@types";
@@ -85,12 +84,7 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
           row={SPELL_ANIMATION_POS.indexOf(spell)}
           onAnimationEnd={onAnimationEnd}
           onReachFrame={spellSounds.current[spell]}
-          css={[
-            centerizeStyle,
-            css`
-              z-index: 2;
-            `,
-          ]}
+          css={[centerizeStyle, { zIndex: 2 }]}
         />
       )}
     </>

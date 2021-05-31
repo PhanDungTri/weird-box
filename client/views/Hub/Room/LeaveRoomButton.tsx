@@ -1,7 +1,6 @@
 import { CLIENT_EVENT_NAME } from "../../../../shared/constants";
 import Button from "../../../components/Button";
 import Dialog from "../../../components/Dialog";
-import { COLOR } from "../../../constants";
 import useShowDialog from "../../../hooks/useShowDialog";
 import socket from "../../../services/socket";
 
@@ -19,7 +18,7 @@ const LeaveRoomButton = (): JSX.Element => {
         Leave
       </Button>
       <Dialog
-        color={COLOR.Danger}
+        variation={"Danger"}
         title="leave game"
         yesMessage="yes"
         onYes={leave}

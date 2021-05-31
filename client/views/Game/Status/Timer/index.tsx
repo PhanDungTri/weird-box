@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useInTurn } from "../../../../hooks";
-import { countdownBarStyle } from "./styles";
+import { countdownKeyframes, StyledTimer } from "./styles";
 
 type TimerProps = {
   id: string;
@@ -14,14 +14,14 @@ const Timer = ({ id, timePerTurn, fluid = false }: TimerProps): JSX.Element => {
   return (
     <>
       {shouldShow && (
-        <div
-          css={[
-            countdownBarStyle(timePerTurn),
+        <StyledTimer
+          css={
             fluid &&
-              css`
-                grid-column: 1/3;
-              `,
-          ]}
+            css`
+              grid-column: 1/3;
+              animation: ${countdownKeyframes} ${timePerTurn}ms linear forwards;
+            `
+          }
         />
       )}
     </>

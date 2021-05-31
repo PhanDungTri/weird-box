@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { CLIENT_EVENT_NAME, PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "./constants";
 
 export type GameMatchingStatus = "Finding" | "Found" | "Canceled";
-export type StyleVariant = "Primary" | "Danger" | "Safe" | "Info" | "Warning";
+export type StyleVariation = "Primary" | "Danger" | "Safe" | "Info" | "Warning" | "Normal";
 
 export type ClientInfo = {
   id: string;
@@ -40,7 +40,7 @@ export type RoomInfo = {
 };
 
 export interface EventsFromServer {
-  [SERVER_EVENT_NAME.Notify]: (msg: string, variant: StyleVariant) => void;
+  [SERVER_EVENT_NAME.Notify]: (msg: string, variant: StyleVariation) => void;
   [SERVER_EVENT_NAME.UpdateGameMatchingStatus]: (status: GameMatchingStatus) => void;
   [SERVER_EVENT_NAME.GetGameSettings]: (maxHP: number, timePerTurn: number) => void;
   [SERVER_EVENT_NAME.GetPlayerList]: (list: PlayerInfo[]) => void;

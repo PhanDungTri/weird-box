@@ -1,8 +1,8 @@
 import { css } from "@emotion/react";
-import { gridStyle } from "../../../styles";
+import styled from "@emotion/styled";
+import Grid from "../../../components/Grid";
 
-export const statusStyle = css`
-  ${gridStyle};
+export const StyledStatus = styled(Grid)`
   box-sizing: border-box;
   grid-template-rows: 32px 32px 16px;
 `;

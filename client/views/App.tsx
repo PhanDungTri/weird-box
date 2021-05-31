@@ -5,10 +5,12 @@ import { ClientInfo, GameMatchingStatus, RoomInfo } from "../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../shared/constants";
 import { roomAtom, routeAtom } from "../atoms";
 import Loading from "../components/Loading";
+import Page from "../components/Page";
 import { ROUTE } from "../constants";
 import { useListenServerEvent } from "../hooks";
-import { centerizeStyle, pageStyle } from "../styles";
+import { centerizeStyle } from "../styles";
 import ReconnectDialog from "./ReconnectDialog";
+import Test from "./Test";
 //import Test from "./Test";
 
 const Game = lazy(() => import("./Game"));
@@ -49,14 +51,15 @@ const App = (): JSX.Element => {
     <>
       <Suspense
         fallback={
-          <div css={pageStyle}>
+          <Page>
             <Loading css={centerizeStyle} scale={4} />{" "}
-          </div>
+          </Page>
         }
       >
         {route === ROUTE.Init && <Initiator />}
         {route === ROUTE.Hub && <Hub />}
         {route === ROUTE.InGame && <Game />}
+        {route === ROUTE.Test && <Test />}
       </Suspense>
       <ReconnectDialog />
     </>

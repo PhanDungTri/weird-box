@@ -2,12 +2,12 @@ import { memo, useCallback, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { CardInfo } from "../../../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/constants";
+import Card from "../../../../components/Card";
 import { useInTurn, useListenServerEvent, useOnClickOutside, useOnEliminate } from "../../../../hooks";
 import { useNotify } from "../../../../hooks/useNotify";
 import socket from "../../../../services/socket";
 import { fadeOut } from "../../../../styles";
-import Card from "../../Card";
-import { handStyle } from "./styles";
+import { StyledHand } from "./styles";
 
 const Hand = (): JSX.Element => {
   const isInTurn = useInTurn(socket.id);
@@ -41,13 +41,13 @@ const Hand = (): JSX.Element => {
   useListenServerEvent(SERVER_EVENT_NAME.GetCards, (cards: CardInfo[]) => setCards((list) => [...list, ...cards]));
 
   return (
-    <div ref={ref} css={handStyle}>
+    <StyledHand ref={ref}>
       {transitions.map(({ item, props, key }) => (
         <animated.div key={key} style={props}>
           <Card disabled={isEliminated} card={item} onClick={playCard} chosen={chosenCard === item.id} />
         </animated.div>
       ))}
-    </div>
+    </StyledHand>
   );
 };
 

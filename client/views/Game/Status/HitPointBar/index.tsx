@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 import { memo, useState } from "react";
 import { SERVER_EVENT_NAME } from "../../../../../shared/constants";
 import { getNumberSign } from "../../../../../shared/utils";
@@ -11,10 +10,10 @@ import { HPDiff } from "./styles";
 type HitPointBarProps = {
   id: string;
   maxHP: number;
-  reverse?: boolean;
+  goUp?: boolean;
 };
 
-const HitPointBar = ({ id, maxHP, reverse }: HitPointBarProps): JSX.Element => {
+const HitPointBar = ({ id, maxHP, goUp }: HitPointBarProps): JSX.Element => {
   const [hp, setHP] = useState(maxHP);
   const [diff, setDiff] = useState(0);
 
@@ -28,15 +27,13 @@ const HitPointBar = ({ id, maxHP, reverse }: HitPointBarProps): JSX.Element => {
   });
 
   return (
-    <div style={{ position: "relative" }}>
+    <div css={{ position: "relative" }}>
       <ProgressBar max={maxHP} current={hp} />
       {diff !== 0 && (
         <HPDiff
-          css={css`
-            color: ${shadeColor(diff < 0 ? COLOR.Danger : COLOR.Safe, 20)};
-          `}
+          css={{ color: shadeColor(diff < 0 ? COLOR.Danger : COLOR.Safe, 20) }}
           onAnimationEnd={() => setDiff(0)}
-          reverse={reverse}
+          goUp={goUp}
         >
           {getNumberSign(diff) + Math.abs(diff)}
         </HPDiff>

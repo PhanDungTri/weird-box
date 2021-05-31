@@ -5,7 +5,6 @@ import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants"
 import { soundAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
-import { COLOR } from "../../constants";
 import { useListenServerEvent } from "../../hooks";
 import socket from "../../services/socket";
 
@@ -43,7 +42,7 @@ const GameConfirmDialog = (): JSX.Element => {
       onYes={onYes}
       noMessage="Reject"
       onNo={onNo}
-      color={confirm === "pending" ? COLOR.Info : confirm === "accepted" ? COLOR.Safe : COLOR.Danger}
+      variation={confirm === "pending" ? "Info" : confirm === "accepted" ? "Safe" : "Danger"}
       noFooter={confirm !== "pending"}
     >
       {confirm !== "pending" ? (

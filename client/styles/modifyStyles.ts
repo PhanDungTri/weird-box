@@ -7,12 +7,6 @@ export const centerizeStyle = css`
   transform: translate(-50%, -50%);
 `;
 
-export const centerizeContainerStyle = css`
-  justify-content: center;
-  justify-items: center;
-  align-content: center;
-`;
-
 export const disabledStyle = css`
   filter: grayscale(100%);
 `;

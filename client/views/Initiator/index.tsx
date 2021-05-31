@@ -10,10 +10,11 @@ import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
 import SpellAnimations from "../../assets/sprites/spell_animations.png";
 import { musicAtom, routeAtom, soundAtom } from "../../atoms";
 import Loading from "../../components/Loading";
+import Page from "../../components/Page";
 import ProgressBar from "../../components/ProgressBar";
 import { ROUTE } from "../../constants";
 import socket from "../../services/socket";
-import { centerizeStyle, pageStyle } from "../../styles";
+import { centerizeStyle } from "../../styles";
 import { LoadingProgress } from "./styles";
 
 const Initiator = (): JSX.Element => {
@@ -92,17 +93,17 @@ const Initiator = (): JSX.Element => {
   }, [loadedAssetCounter]);
 
   return (
-    <div css={[pageStyle]}>
+    <Page>
       <Loading css={centerizeStyle} scale={4} />
       <LoadingProgress>
-        <p style={{ textAlign: "center", fontSize: "16px", fontWeight: "bold" }}>{message}</p>
+        <p css={{ textAlign: "center", fontSize: "16px", fontWeight: "bold" }}>{message}</p>
         <ProgressBar
           css={{ centerizeStyle }}
           current={Math.floor((loadedAssetCounter * 100) / total.current)}
           suffix="%"
         />
       </LoadingProgress>
-    </div>
+    </Page>
   );
 };
 

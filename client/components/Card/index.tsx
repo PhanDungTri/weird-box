@@ -1,10 +1,9 @@
-import { css } from "@emotion/react";
 import { memo } from "react";
-import { CardInfo } from "../../../../shared/@types";
-import { SPELL_NAME } from "../../../../shared/constants";
-import Icon from "../../../components/Icon";
-import { centerizeStyle, disabledStyle } from "../../../styles";
-import { getNumberSign } from "../../../../shared/utils";
+import { CardInfo } from "../../../shared/@types";
+import { SPELL_NAME } from "../../../shared/constants";
+import { getNumberSign } from "../../../shared/utils";
+import Icon from "../Icon";
+import { centerizeStyle, disabledStyle } from "../../styles";
 import { CardAction, cardChosenStyle, CardContent, CardPower, NormalCard, SmallCard } from "./styles";
 
 type CardProps = {
@@ -37,12 +36,7 @@ const Card = ({
   return small ? (
     <SmallCard className={className} css={[chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
       <div>{getNumberSign(card.power) + Math.abs(card.power)}</div>
-      <Icon
-        name={handleSpellName(card)}
-        css={css`
-          position: relative;
-        `}
-      />
+      <Icon name={handleSpellName(card)} css={{ position: "relative" }} />
     </SmallCard>
   ) : (
     <NormalCard className={className} css={[chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>

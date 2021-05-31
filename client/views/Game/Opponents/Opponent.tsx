@@ -4,17 +4,17 @@ import { useOnEliminate } from "../../../hooks";
 import { disabledStyle } from "../../../styles";
 import SpellAnimation from "../SpellAnimation";
 import Status from "../Status";
-import { opponentNameStyle, opponentStyle } from "./styles";
+import { OpponentName, StyledOpponent } from "./styles";
 
 const Opponent = ({ id, name }: PlayerInfo): JSX.Element => {
   const isEliminated = useOnEliminate(id);
 
   return (
-    <div css={[opponentStyle, isEliminated && disabledStyle]}>
+    <StyledOpponent css={isEliminated && disabledStyle}>
       <Status id={id} />
-      <div css={opponentNameStyle}>{name}</div>
+      <OpponentName>{name}</OpponentName>
       <SpellAnimation id={id} />
-    </div>
+    </StyledOpponent>
   );
 };
 

@@ -1,13 +1,12 @@
-import { css } from "@emotion/react";
 import { useAtom } from "jotai";
 import { CLIENT_EVENT_NAME } from "../../../../shared/constants";
 import { roomAtom } from "../../../atoms";
-import { IntegrateInput } from "../../../components/Input";
+import H1 from "../../../components/H1";
+import IntegrateInput from "../../../components/IntegrateInput";
 import socket from "../../../services/socket";
-import { headingStyle } from "../../../styles";
 import LeaveRoomButton from "./LeaveRoomButton";
 import Members from "./Members";
-import { roomStyle } from "./styles";
+import { StyledRoom } from "./styles";
 
 const Room = (): JSX.Element => {
   const [room] = useAtom(roomAtom);
@@ -15,19 +14,10 @@ const Room = (): JSX.Element => {
   const join = (id?: string) => id && socket.emit(CLIENT_EVENT_NAME.JoinRoom, id);
 
   return (
-    <div css={roomStyle}>
+    <StyledRoom>
       {room ? (
         <>
-          <div
-            css={[
-              css`
-                text-align: center;
-              `,
-              headingStyle,
-            ]}
-          >
-            {room.id}
-          </div>
+          <H1 css={{ textAlign: "center" }}>{room.id}</H1>
           <Members />
           <LeaveRoomButton />
         </>
@@ -36,7 +26,7 @@ const Room = (): JSX.Element => {
           Join
         </IntegrateInput>
       )}
-    </div>
+    </StyledRoom>
   );
 };
 

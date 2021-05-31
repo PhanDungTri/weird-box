@@ -1,14 +1,15 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import ContentFrameSprite from "../../../assets/sprites/card_content_frame.png";
-import { COLOR } from "../../../constants";
-import { BorderColors, centerizeContainerStyle, centerizeStyle, gridStyle, pixelBorderStyle } from "../../../styles";
-import { shadeColor, tintColor } from "../../../utils";
+import ContentFrameSprite from "../../assets/sprites/card_content_frame.png";
+import { COLOR } from "../../constants";
+import { BorderColors, centerizeStyle, pixelBorderStyle } from "../../styles";
+import { shadeColor, tintColor } from "../../utils";
+import CenterizedGrid from "../CenterizedGrid";
 
 const CONTENT_BORDER_WIDTH = 12;
 
 const commonStyle = css`
-  ${pixelBorderStyle(2, [COLOR.Coal], [
+  ${pixelBorderStyle(2, [COLOR.Normal], [
     COLOR.White,
     ...new Array<string>(3).fill(shadeColor(COLOR.Primary, 20)),
   ] as BorderColors)};
@@ -16,7 +17,7 @@ const commonStyle = css`
   box-sizing: border-box;
   background-color: ${COLOR.Primary};
   user-select: none;
-  color: ${tintColor(COLOR.Coal, 20)};
+  color: ${tintColor(COLOR.Normal, 20)};
   font-family: "Dogica Pixel";
   font-size: 10px;
   font-weight: bold;
@@ -26,10 +27,8 @@ export const cardChosenStyle = css`
   transform: translateY(-30px);
 `;
 
-export const SmallCard = styled.div`
+export const SmallCard = styled(CenterizedGrid)`
   ${commonStyle};
-  ${gridStyle};
-  ${centerizeContainerStyle};
   width: ${8 / 3}rem;
   height: 4rem;
   padding: 2px;

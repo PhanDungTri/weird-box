@@ -2,9 +2,10 @@ import { useAtom } from "jotai";
 import { JSXElementConstructor, useEffect, useRef, useState } from "react";
 import { routeAtom } from "../atoms";
 import Loading from "../components/Loading";
+import Page from "../components/Page";
 import { ROUTE } from "../constants";
 import { useNotify } from "../hooks/useNotify";
-import { centerizeStyle, pageStyle } from "../styles";
+import { centerizeStyle } from "../styles";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function withSpriteLoading<P, C>(WrappedComponent: JSXElementConstructor<P> & C, paths: string[]) {
@@ -33,9 +34,9 @@ function withSpriteLoading<P, C>(WrappedComponent: JSXElementConstructor<P> & C,
     return status === "Loaded" ? (
       <WrappedComponent {...(props as any)} />
     ) : (
-      <div css={pageStyle}>
+      <Page>
         <Loading css={centerizeStyle} scale={4} />{" "}
-      </div>
+      </Page>
     );
   };
 

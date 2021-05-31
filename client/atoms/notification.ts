@@ -1,10 +1,10 @@
 import { atom } from "jotai";
-import { StyleVariant } from "../../shared/@types";
+import { StyleVariation } from "../../shared/@types";
 
 type Notification = {
   id: string;
   message: string;
-  variant: StyleVariant;
+  variation: StyleVariation;
 };
 
 export const notificationsAtom = atom<Notification[]>([]);

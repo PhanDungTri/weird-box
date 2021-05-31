@@ -1,7 +1,6 @@
-import { css } from "@emotion/react";
 import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
 import Sprite from "../Sprite";
-import { loadingStyle } from "./styles";
+import { StyledLoading } from "./styles";
 
 type LoadingProps = {
   text?: string;
@@ -9,9 +8,9 @@ type LoadingProps = {
   className?: string;
 };
 
-const Loading = ({ text, scale, ...props }: LoadingProps): JSX.Element => {
+const Loading = ({ text, scale, className }: LoadingProps): JSX.Element => {
   return (
-    <div css={loadingStyle}>
+    <StyledLoading>
       <Sprite
         scale={scale}
         size={[16, 22]}
@@ -19,14 +18,12 @@ const Loading = ({ text, scale, ...props }: LoadingProps): JSX.Element => {
         fps={5}
         steps={10}
         loop
-        css={css`
-          position: relative;
-        `}
-        {...props}
+        css={{ position: "relative" }}
+        className={className}
       />
       {text && (
         <span
-          style={{
+          css={{
             lineHeight: 0.7,
             fontSize: `${scale}rem`,
           }}
@@ -34,7 +31,7 @@ const Loading = ({ text, scale, ...props }: LoadingProps): JSX.Element => {
           {text}
         </span>
       )}
-    </div>
+    </StyledLoading>
   );
 };
 

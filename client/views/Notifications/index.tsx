@@ -4,7 +4,6 @@ import { createPortal } from "react-dom";
 import { animated, useTransition } from "react-spring";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
 import { notificationsAtom } from "../../atoms";
-import { COLOR } from "../../constants";
 import { useNotify } from "../../hooks/useNotify";
 import socket from "../../services/socket";
 import { notificationStyle } from "./styles";
@@ -27,7 +26,7 @@ const Notifications = (): JSX.Element => {
 
   return createPortal(
     transitions.map(({ item, props, key }, i, arr) => (
-      <animated.div key={key} style={props} css={notificationStyle(COLOR[item.variant], arr.length - i - 1)}>
+      <animated.div key={key} style={props} css={notificationStyle(item.variation, arr.length - i - 1)}>
         {item.message}
       </animated.div>
     )),

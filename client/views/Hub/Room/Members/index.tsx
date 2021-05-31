@@ -5,11 +5,10 @@ import Button from "../../../../components/Button";
 import Dialog from "../../../../components/Dialog";
 import DropDown from "../../../../components/Dropdown";
 import EmptySlot from "../../../../components/EmptySlot";
-import { COLOR } from "../../../../constants";
 import useShowDialog from "../../../../hooks/useShowDialog";
 import socket from "../../../../services/socket";
 import Member from "./Member";
-import { memberListStyle } from "./styles";
+import { StyledMembers } from "./styles";
 
 const Members = (): JSX.Element => {
   const [room] = useAtom(roomAtom);
@@ -31,7 +30,7 @@ const Members = (): JSX.Element => {
         arr.push(
           socket.id === room?.owner && member.id !== socket.id ? (
             <>
-              <DropDown key={member.id} header={component} top>
+              <DropDown key={member.id} header={component} onTop>
                 <Button variation="Danger" onClick={dialogAction.reveal}>
                   Kick
                 </Button>
@@ -39,7 +38,7 @@ const Members = (): JSX.Element => {
 
               <Dialog
                 key={"dialog-" + member.id}
-                color={COLOR.Danger}
+                variation={"Danger"}
                 title="kick player"
                 yesMessage="yes"
                 onYes={kick}
@@ -60,7 +59,7 @@ const Members = (): JSX.Element => {
     return arr;
   };
 
-  return <div css={memberListStyle}>{generateList()}</div>;
+  return <StyledMembers>{generateList()}</StyledMembers>;
 };
 
 export default Members;

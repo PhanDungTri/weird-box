@@ -7,14 +7,14 @@ export const dropDownIconStyle = css`
   margin-left: 10px;
 `;
 
-export const dropDownContentStyle = (top: boolean, background: string): SerializedStyles => css`
-  ${pixelBorderStyle(2, [COLOR.Coal])}
+export const dropDownContentStyle = (top: boolean): SerializedStyles => css`
+  ${pixelBorderStyle(2, [COLOR.Normal])}
   padding: 4px;
   display: grid;
   gap: 2px;
   position: absolute;
   grid-area: ${top ? "top" : "bottom"};
-  background-color: ${background};
+  background-color: ${COLOR.White};
   ${top
     ? css`
         top: 0;

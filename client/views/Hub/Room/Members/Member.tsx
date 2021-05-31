@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { useAtom } from "jotai";
 import { roomAtom } from "../../../../atoms";
 import Icon from "../../../../components/Icon";
-import { keyStyle, memberStyle } from "./styles";
+import { keyStyle, MemberName, StyledMember } from "./styles";
 
 type MemberProps = {
   id: string;
@@ -13,7 +13,7 @@ const Member = ({ id, name }: MemberProps): JSX.Element => {
   const [room] = useAtom(roomAtom);
 
   return (
-    <div css={memberStyle} key={id}>
+    <StyledMember key={id}>
       <Icon
         css={css`
           position: relative;
@@ -21,16 +21,9 @@ const Member = ({ id, name }: MemberProps): JSX.Element => {
         `}
         name="gamepad"
       />
-      <div
-        css={css`
-          text-align: center;
-          word-break: break-all;
-        `}
-      >
-        {name}
-      </div>
+      <MemberName>{name}</MemberName>
       {id === room?.owner && <Icon name="key" css={keyStyle} />}
-    </div>
+    </StyledMember>
   );
 };
 

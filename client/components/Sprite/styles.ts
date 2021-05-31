@@ -1,6 +1,8 @@
-import { css, keyframes, SerializedStyles } from "@emotion/react";
+import { keyframes } from "@emotion/react";
+import styled from "@emotion/styled";
 
-const spriteAnimation = (sheetWidth: number) => keyframes`
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const spriteAnimation = (sheetWidth: number) => keyframes`
   from {
     background-position-x: 0px;
   }
@@ -9,10 +11,8 @@ const spriteAnimation = (sheetWidth: number) => keyframes`
   }
 `;
 
-const spriteSheetStyle = (steps: number, fps: number, loop: boolean, sheetWidth: number): SerializedStyles => css`
+export const StyledSprite = styled.div`
   position: absolute;
   display: inline-block;
-  animation: ${spriteAnimation(sheetWidth)} ${steps / fps}s steps(${steps}) ${loop ? "infinite" : ""};
+  overflow: hidden;
 `;
-
-export { spriteSheetStyle };

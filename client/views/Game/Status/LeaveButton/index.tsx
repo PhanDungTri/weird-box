@@ -3,7 +3,7 @@ import { CLIENT_EVENT_NAME } from "../../../../../shared/constants";
 import { routeAtom } from "../../../../atoms";
 import Dialog from "../../../../components/Dialog";
 import Icon from "../../../../components/Icon";
-import { COLOR, ROUTE } from "../../../../constants";
+import { ROUTE } from "../../../../constants";
 import useShowDialog from "../../../../hooks/useShowDialog";
 import socket from "../../../../services/socket";
 import { leaveButtonStyle } from "./styles";
@@ -21,7 +21,7 @@ const LeaveButton = (): JSX.Element => {
     <>
       <Icon name="exit" onClick={dialogAction.reveal} css={leaveButtonStyle} />
       <Dialog
-        color={COLOR.Danger}
+        variation={"Danger"}
         title="leave game"
         yesMessage="yes"
         onYes={leave}

@@ -34,7 +34,7 @@ const GameOverDialog = (): JSX.Element => {
       title={shouldVictory ? "victory" : "defeated"}
       yesMessage="Continue"
       onYes={backToHub}
-      color={shouldVictory ? "#ece236" : "#122c4f"}
+      variation={shouldVictory ? "Warning" : "Normal"}
     >
       {shouldVictory ? <p>You are the Winner!</p> : <p>Better luck next time!</p>}
     </Dialog>

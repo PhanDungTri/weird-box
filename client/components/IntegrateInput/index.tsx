@@ -1,12 +1,10 @@
-import { css } from "@emotion/react";
 import { ReactNode, useRef } from "react";
-import { StyleVariant } from "../../../../shared/@types";
-import { disabledStyle } from "../../../styles";
-import Button from "../../Button";
-import { integrateButtonStyle, integrateInputStyle } from "./styles";
+import { StyleVariation } from "../../../shared/@types";
+import { disabledStyle } from "../../styles";
+import { StyledIntegrateButton, StyledIntegrateInput } from "./styles";
 
 type IntegrateInputProps = {
-  variation?: StyleVariant;
+  variation?: StyleVariation;
   children?: ReactNode;
   onClick?: (value?: string) => void;
   disabled?: boolean;
@@ -32,24 +30,17 @@ const IntegrateInput = ({
   const submit = () => onClick(input.current?.value);
 
   return (
-    <div
-      css={[
-        css`
-          display: flex;
-        `,
-        disabled && disabledStyle,
-      ]}
-    >
-      <input
+    <div css={[{ display: "flex" }, disabled && disabledStyle]}>
+      <StyledIntegrateInput
         placeholder={placeholder}
         disabled={disabled}
         defaultValue={defaultValue}
         ref={input}
-        css={integrateInputStyle(variation)}
+        variation={variation}
       />
-      <Button disabled={disabled} ref={button} css={integrateButtonStyle(variation)} onClick={submit}>
+      <StyledIntegrateButton disabled={disabled} ref={button} onClick={submit}>
         {children}
-      </Button>
+      </StyledIntegrateButton>
     </div>
   );
 };

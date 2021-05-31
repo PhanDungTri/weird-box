@@ -1,12 +1,13 @@
+import { css } from "@emotion/react";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { CardInfo } from "../../../../../shared/@types";
 import { SERVER_EVENT_NAME, SPELL_NAME } from "../../../../../shared/constants";
 import { soundAtom } from "../../../../atoms";
+import Card from "../../../../components/Card";
 import { useListenServerEvent } from "../../../../hooks";
 import { centerizeStyle } from "../../../../styles";
-import Card from "../../Card";
-import { cardPlayedAnimation, recentPlayedCard } from "./styles";
+import { cardPlayedKeyframes, recentPlayedCard } from "./styles";
 
 const RecentPlayedCard = (): JSX.Element => {
   const [sound] = useAtom(soundAtom);
@@ -30,7 +31,14 @@ const RecentPlayedCard = (): JSX.Element => {
   return (
     <>
       {shouldAnimate && (
-        <div css={[cardPlayedAnimation, centerizeStyle]}>
+        <div
+          css={[
+            centerizeStyle,
+            css`
+              animation: ${cardPlayedKeyframes} 1s forwards;
+            `,
+          ]}
+        >
           <Card card={card} />
         </div>
       )}

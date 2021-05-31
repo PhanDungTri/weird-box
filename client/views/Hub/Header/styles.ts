@@ -1,8 +1,7 @@
-import { css } from "@emotion/react";
-import { gridStyle } from "../../../styles";
+import styled from "@emotion/styled";
+import Grid from "../../../components/Grid";
 
-export const headerStyle = css`
-  ${gridStyle};
+export const StyledHeader = styled(Grid)`
   box-sizing: border-box;
   grid-template-columns: auto auto;
   position: fixed;

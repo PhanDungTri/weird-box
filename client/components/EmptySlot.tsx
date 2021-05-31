@@ -6,9 +6,9 @@ type EmptySlotProps = {
   className?: string;
 };
 
-const EmptySlot = ({ scale = 1, ...props }: EmptySlotProps): JSX.Element => {
+const EmptySlot = ({ scale = 1, className }: EmptySlotProps): JSX.Element => {
   return (
-    <div css={slotStyle(scale)} {...props}>
+    <div css={slotStyle(scale)} className={className}>
       <Icon name="sleep_bubble" scale={scale} css={centerizeStyle} />
     </div>
   );
