@@ -29,15 +29,15 @@ export const cardChosenStyle = css`
 
 export const SmallCard = styled(CenterizedGrid)`
   ${commonStyle};
-  width: ${8 / 3}rem;
-  height: 4rem;
+  width: 32px;
+  height: 48px;
   padding: 2px;
 `;
 
 export const NormalCard = styled.div`
   ${commonStyle};
-  width: 4rem;
-  height: 6rem;
+  width: 48px;
+  height: 72px;
   transition: transform 0.3s;
 `;
 
@@ -45,8 +45,8 @@ export const CardContent = styled.div`
   ${centerizeStyle};
   border: ${CONTENT_BORDER_WIDTH}px solid transparent;
   border-image: url(${ContentFrameSprite}) ${CONTENT_BORDER_WIDTH} round;
-  width: 1rem;
-  height: 3rem;
+  width: 12px;
+  height: 36px;
 `;
 
 const cardInfoStyle = css`

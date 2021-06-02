@@ -15,7 +15,7 @@ class InTurnState extends InGameState {
   public enter(): void {
     super.enter();
 
-    this.socket.emit(SERVER_EVENT_NAME.Notify, "It's your turn", "Info");
+    this.socket.emit(SERVER_EVENT_NAME.Notify, "notiInTurn", "Info");
     this.socket.on(CLIENT_EVENT_NAME.PlayCard, this.playCard);
   }
 

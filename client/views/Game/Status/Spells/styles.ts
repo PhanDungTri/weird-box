@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { SerializedStyles } from "@emotion/utils";
 import { COLOR } from "../../../../constants";
 
-const BADGE_SIZE = 12;
+const BADGE_SIZE = 14;
 
 export const StyledSpells = styled.div`
   padding: 4px;

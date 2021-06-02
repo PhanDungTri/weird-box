@@ -5,11 +5,11 @@
 
 @font-face {
   font-family: "Main Font";
-  src: url("./assets/fonts/c&cra.ttf");
+  src: url("./assets/fonts/VT323-Regular.ttf");
 }
 
 html {
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Main Font";
   color: black;
   image-rendering: optimizeSpeed;

@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import Grid from "../../../components/Grid";
+import { xCenterStyle } from "../../../styles";
 
 export const StyledRoom = styled(Grid)`
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 8px;
+  ${xCenterStyle}
+  bottom: 14px;
 `;

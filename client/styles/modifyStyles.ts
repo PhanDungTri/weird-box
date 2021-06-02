@@ -7,6 +7,11 @@ export const centerizeStyle = css`
   transform: translate(-50%, -50%);
 `;
 
+export const xCenterStyle = css`
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
 export const disabledStyle = css`
   filter: grayscale(100%);
 `;

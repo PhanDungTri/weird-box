@@ -1,11 +1,11 @@
 import { atom } from "jotai";
 
-type Settings = {
+type AudioSettings = {
   music: boolean;
   sound: boolean;
 };
 
-export const settingsAtom = atom<Settings>({
+export const audioSettingsAtom = atom<AudioSettings>({
   music: true,
   sound: true,
 });

@@ -24,7 +24,7 @@ export const StyledDialog = styled(Page)<{ show: boolean }>`
 
 export const DialogContent = styled.div`
   background-color: ${COLOR.White};
-  margin: 25vh auto;
+  margin: 25% auto;
   width: 80%;
   color: ${COLOR.Black};
   border: 4px solid;

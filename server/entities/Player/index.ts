@@ -66,7 +66,7 @@ class Player extends ClientDerived {
 
       await waitFor(1000);
       await this.game.consumeCard(card);
-    } else this.socket.emit(SERVER_EVENT_NAME.Notify, "Invalid card!", "Danger");
+    } else this.socket.emit(SERVER_EVENT_NAME.Notify, "errGeneric", "Danger");
   }
 
   public changeHitPoint(difference: number): void {

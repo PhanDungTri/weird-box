@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { CLIENT_EVENT_NAME } from "../../../../../shared/constants";
-import { routeAtom } from "../../../../atoms";
+import { languageAtom, routeAtom } from "../../../../atoms";
 import Dialog from "../../../../components/Dialog";
 import Icon from "../../../../components/Icon";
 import { ROUTE } from "../../../../constants";
@@ -10,6 +10,7 @@ import { leaveButtonStyle } from "./styles";
 
 const LeaveButton = (): JSX.Element => {
   const [, setRoute] = useAtom(routeAtom);
+  const [language] = useAtom(languageAtom);
   const [shouldDialogShow, dialogAction] = useShowDialog();
 
   const leave = () => {
@@ -22,14 +23,14 @@ const LeaveButton = (): JSX.Element => {
       <Icon name="exit" onClick={dialogAction.reveal} css={leaveButtonStyle} />
       <Dialog
         variation={"Danger"}
-        title="leave game"
-        yesMessage="yes"
+        title={language.confirmation}
+        yesMessage={language.yes}
         onYes={leave}
-        noMessage="no"
+        noMessage={language.no}
         onNo={dialogAction.hide}
         show={shouldDialogShow}
       >
-        <p>Are you sure to leave this game?</p>
+        <p>{language.leaveMessage}</p>
       </Dialog>
     </>
   );

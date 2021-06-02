@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
-import { musicAtom } from "../../atoms";
+import { languageAtom, musicAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
 import useShowDialog from "../../hooks/useShowDialog";
@@ -10,6 +10,7 @@ import socket from "../../services/socket";
 const WaitingForOthersDialog = (): JSX.Element => {
   const [shouldShow, action] = useShowDialog(true);
   const [music] = useAtom(musicAtom);
+  const [language] = useAtom(languageAtom);
 
   useEffect(
     () =>
@@ -21,8 +22,8 @@ const WaitingForOthersDialog = (): JSX.Element => {
   );
 
   return (
-    <Dialog show={shouldShow} title="Prepare" yesMessage="Accept" noFooter>
-      <Loading text="Waiting other players to connect ..." />
+    <Dialog show={shouldShow} title={language.prepare} noFooter>
+      <Loading text={language.waitingPlayers + "..."} />
     </Dialog>
   );
 };

@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { CLIENT_EVENT_NAME } from "../../../../../shared/constants";
-import { roomAtom } from "../../../../atoms";
+import { languageAtom, roomAtom } from "../../../../atoms";
 import Button from "../../../../components/Button";
 import Dialog from "../../../../components/Dialog";
 import DropDown from "../../../../components/Dropdown";
@@ -12,6 +12,7 @@ import { StyledMembers } from "./styles";
 
 const Members = (): JSX.Element => {
   const [room] = useAtom(roomAtom);
+  const [language] = useAtom(languageAtom);
   const [shouldDialogShow, dialogAction] = useShowDialog();
 
   const generateList = () => {
@@ -32,21 +33,23 @@ const Members = (): JSX.Element => {
             <>
               <DropDown key={member.id} header={component} onTop>
                 <Button variation="Danger" onClick={dialogAction.reveal}>
-                  Kick
+                  {language.kick}
                 </Button>
               </DropDown>
 
               <Dialog
                 key={"dialog-" + member.id}
                 variation={"Danger"}
-                title="kick player"
-                yesMessage="yes"
+                title={language.confirmation}
+                yesMessage={language.yes}
                 onYes={kick}
-                noMessage="no"
+                noMessage={language.no}
                 onNo={dialogAction.hide}
                 show={shouldDialogShow}
               >
-                <p>Are you sure to kick {member.name}? This player can not join this room anymore!</p>
+                <p>
+                  {language.kick} {member.name}? {language.roomKickMessage}
+                </p>
               </Dialog>
             </>
           ) : (

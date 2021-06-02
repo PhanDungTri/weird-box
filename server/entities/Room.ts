@@ -37,9 +37,9 @@ class Room {
   }
 
   public add(client: Client): void {
-    if (this.members.length >= MAX_PLAYERS_PER_GAME - 1) throw Error("Room is full!");
-    if (this.members.includes(client)) throw Error("You are already in room!");
-    if (this.blacklist.includes(client)) throw Error("You aren't permitted to join this room!");
+    if (this.members.length >= MAX_PLAYERS_PER_GAME - 1) throw Error("errRoomFull");
+    if (this.members.includes(client)) throw Error("errGeneric");
+    if (this.blacklist.includes(client)) throw Error("errNoPremission");
 
     this.members.forEach((m) => m.getSocket().emit(SERVER_EVENT_NAME.FriendJoined, client.getInfo()));
     this.members.push(client);
@@ -67,15 +67,15 @@ class Room {
   }
 
   public kick(id: string): void {
-    if (id === this.ownerId) throw new Error("Can't kick yourself!");
+    if (id === this.ownerId) throw new Error("errGeneric");
 
     const client = this.members.find((m) => m.getId() === id);
 
     if (client) {
       this.remove(client);
       this.blacklist.push(client);
-      client.getSocket().emit(SERVER_EVENT_NAME.Notify, "You got kicked!", "Warning");
-    } else throw new Error("Invalid member!");
+      client.getSocket().emit(SERVER_EVENT_NAME.Notify, "notiKick", "Warning");
+    } else throw new Error("errGeneric");
   }
 
   public back(client: Client): void {

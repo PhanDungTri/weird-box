@@ -1,4 +1,6 @@
+import { useAtom } from "jotai";
 import { CLIENT_EVENT_NAME } from "../../../../shared/constants";
+import { languageAtom } from "../../../atoms";
 import Button from "../../../components/Button";
 import Dialog from "../../../components/Dialog";
 import useShowDialog from "../../../hooks/useShowDialog";
@@ -6,6 +8,7 @@ import socket from "../../../services/socket";
 
 const LeaveRoomButton = (): JSX.Element => {
   const [shouldDialogShow, dialogAction] = useShowDialog();
+  const [language] = useAtom(languageAtom);
 
   const leave = () => {
     socket.emit(CLIENT_EVENT_NAME.LeaveRoom);
@@ -15,18 +18,18 @@ const LeaveRoomButton = (): JSX.Element => {
   return (
     <>
       <Button variation="Danger" onClick={dialogAction.reveal}>
-        Leave
+        {language.leave}
       </Button>
       <Dialog
         variation={"Danger"}
-        title="leave game"
-        yesMessage="yes"
+        title={language.confirmation}
+        yesMessage={language.yes}
         onYes={leave}
-        noMessage="no"
+        noMessage={language.no}
         onNo={dialogAction.hide}
         show={shouldDialogShow}
       >
-        <p>Are you sure to leave this room?</p>
+        <p>{language.leaveMessage}</p>
       </Dialog>
     </>
   );

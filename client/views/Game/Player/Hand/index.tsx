@@ -1,7 +1,9 @@
+import { useAtom } from "jotai";
 import { memo, useCallback, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { CardInfo } from "../../../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../../../shared/constants";
+import { languageAtom } from "../../../../atoms";
 import Card from "../../../../components/Card";
 import { useInTurn, useListenServerEvent, useOnClickOutside, useOnEliminate } from "../../../../hooks";
 import { useNotify } from "../../../../hooks/useNotify";
@@ -10,6 +12,7 @@ import { fadeOut } from "../../../../styles";
 import { StyledHand } from "./styles";
 
 const Hand = (): JSX.Element => {
+  const [language] = useAtom(languageAtom);
   const isInTurn = useInTurn(socket.id);
   const isEliminated = useOnEliminate(socket.id);
   const notify = useNotify();
@@ -33,7 +36,7 @@ const Hand = (): JSX.Element => {
       else if (isInTurn) {
         socket.emit(CLIENT_EVENT_NAME.PlayCard, chosenCard);
         setCards((list) => list.filter((c) => c.id !== chosenCard));
-      } else notify("Not your turn!", "Danger");
+      } else notify(language.errNotInTurn, "Danger");
     },
     [isInTurn, chosenCard]
   );

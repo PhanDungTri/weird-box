@@ -9,12 +9,13 @@ export const notificationStyle = (variation: StyleVariation, pos: number): Seria
   return css`
     position: absolute;
     width: calc(70% - ${pos * 15}px);
+    max-width: calc(420px - ${pos * 15}px);
     left: 50%;
     top: -${pos * 15}px;
     color: ${autoTextColor(COLOR[variation])};
     text-align: center;
     padding: 8px;
-    font-size: 16px;
+    font-size: 14px;
     box-shadow: 4px 0px 0px 0px ${borderColor}, -4px 0px 0px 0px ${borderColor}, 0px -4px 0px 0px ${borderColor},
       inset 0px -8px 0px 0px ${shadeColor(COLOR[variation], 30)};
     background-color: ${COLOR[variation]};

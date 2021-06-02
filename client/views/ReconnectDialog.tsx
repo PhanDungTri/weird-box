@@ -1,4 +1,6 @@
+import { useAtom } from "jotai";
 import { useState } from "react";
+import { languageAtom } from "../atoms";
 import Dialog from "../components/Dialog";
 import Loading from "../components/Loading";
 import { useListenServerEvent } from "../hooks";
@@ -8,6 +10,7 @@ import socket from "../services/socket";
 const ReconnectDialog = (): JSX.Element => {
   const [shouldShow, action] = useShowDialog();
   const [shouldReconnect, reconnect] = useState(false);
+  const [language] = useAtom(languageAtom);
 
   const onReconnect = () => {
     socket.connect();
@@ -24,13 +27,13 @@ const ReconnectDialog = (): JSX.Element => {
   return (
     <Dialog
       show={shouldShow}
-      title="connection error"
-      yesMessage="reconnect"
+      title={language.errConnectTitle}
+      yesMessage={language.reconnect}
       onYes={onReconnect}
       variation={"Danger"}
       noFooter={shouldReconnect}
     >
-      {shouldReconnect ? <Loading text="Reconnecting..." /> : <p>Failed to contact with the server!</p>}
+      {shouldReconnect ? <Loading text={`${language.reconnectMessage}...`} /> : <p>{language.failConnect}</p>}
     </Dialog>
   );
 };

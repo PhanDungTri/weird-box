@@ -31,7 +31,7 @@ abstract class ReadyChecker {
   private onUnqualified(): void {
     this.clients.forEach((c) => {
       c.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "Canceled");
-      c.getSocket().emit(SERVER_EVENT_NAME.Notify, "Failed to match! Return to previous situation!", "Warning");
+      c.getSocket().emit(SERVER_EVENT_NAME.Notify, "notiFailMatch", "Warning");
 
       if (this.room) this.room.back(c);
       else if (this.passes.includes(c)) {

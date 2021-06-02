@@ -1,11 +1,14 @@
 import styled from "@emotion/styled";
+import { COLOR } from "../constants";
+import { centerizeStyle, pixelBorderStyle } from "../styles";
 
 const Page = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
+  ${centerizeStyle}
   width: 100%;
   height: 100%;
+  max-width: 600px;
+  max-height: 800px;
+  ${pixelBorderStyle(4, [COLOR.Normal])}
 `;
 
 export default Page;

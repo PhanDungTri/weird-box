@@ -2,14 +2,16 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { animated, useTransition } from "react-spring";
+import { StyleVariation } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
-import { notificationsAtom } from "../../atoms";
+import { languageAtom, notificationsAtom } from "../../atoms";
 import { useNotify } from "../../hooks/useNotify";
 import socket from "../../services/socket";
 import { notificationStyle } from "./styles";
 
 const Notifications = (): JSX.Element => {
   const [notifications] = useAtom(notificationsAtom);
+  const [language] = useAtom(languageAtom);
   const notify = useNotify();
 
   const transitions = useTransition(notifications, (n) => n.id, {
@@ -19,9 +21,11 @@ const Notifications = (): JSX.Element => {
   });
 
   useEffect(() => {
-    socket.on(SERVER_EVENT_NAME.Notify, notify);
+    const onNotify = (message: string, variation: StyleVariation) => notify(language[message], variation);
 
-    return () => void socket.off(SERVER_EVENT_NAME.Notify, notify);
+    socket.on(SERVER_EVENT_NAME.Notify, onNotify);
+
+    return () => void socket.off(SERVER_EVENT_NAME.Notify, onNotify);
   }, [notify]);
 
   return createPortal(

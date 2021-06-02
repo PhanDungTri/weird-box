@@ -11,7 +11,7 @@ const hpDiffKeyframes = (goUp = false) => keyframes`
 export const HPDiff = styled.div<{ goUp?: boolean }>`
   ${centerizeStyle};
   top: ${({ goUp = false }) => (goUp ? 0 : 400)}%;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   z-index: 2;
   animation: ${({ goUp = false }) =>

@@ -30,12 +30,12 @@ class IdleState extends ClientState {
       } catch (e) {
         this.socket.emit(SERVER_EVENT_NAME.Notify, e.message, "Danger");
       }
-    } else this.socket.emit(SERVER_EVENT_NAME.Notify, "Room not found!", "Danger");
+    } else this.socket.emit(SERVER_EVENT_NAME.Notify, "errRoomNotFound", "Danger");
   }
 
   private setName(name: string) {
     this.client.name = name;
-    this.socket.emit(SERVER_EVENT_NAME.Notify, "Name changed!", "Safe");
+    this.socket.emit(SERVER_EVENT_NAME.Notify, "notiNameChanged", "Safe");
   }
 
   public enter(): void {

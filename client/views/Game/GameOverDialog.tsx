@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { memo, useEffect, useState } from "react";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import { musicAtom, routeAtom, soundAtom } from "../../atoms";
+import { languageAtom, musicAtom, routeAtom, soundAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import { ROUTE } from "../../constants";
 import socket from "../../services/socket";
@@ -10,6 +10,7 @@ const GameOverDialog = (): JSX.Element => {
   const [, changeRoute] = useAtom(routeAtom);
   const [sound] = useAtom(soundAtom);
   const [music] = useAtom(musicAtom);
+  const [language] = useAtom(languageAtom);
   const [shouldShow, show] = useState(false);
   const [shouldVictory, victory] = useState(false);
 
@@ -31,12 +32,12 @@ const GameOverDialog = (): JSX.Element => {
   return (
     <Dialog
       show={shouldShow}
-      title={shouldVictory ? "victory" : "defeated"}
-      yesMessage="Continue"
+      title={shouldVictory ? language.victory : language.defeat}
+      yesMessage={language.continue}
       onYes={backToHub}
       variation={shouldVictory ? "Warning" : "Normal"}
     >
-      {shouldVictory ? <p>You are the Winner!</p> : <p>Better luck next time!</p>}
+      {shouldVictory ? <p>{language.victoryMessage}</p> : <p>{language.defeatMessage}</p>}
     </Dialog>
   );
 };

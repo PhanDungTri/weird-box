@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { CLIENT_EVENT_NAME, SERVER_EVENT_NAME } from "../../../shared/constants";
-import { soundAtom } from "../../atoms";
+import { languageAtom, soundAtom } from "../../atoms";
 import Dialog from "../../components/Dialog";
 import Loading from "../../components/Loading";
 import { useListenServerEvent } from "../../hooks";
@@ -12,6 +12,7 @@ type ConfirmStatus = "pending" | "accepted" | "rejected";
 
 const GameConfirmDialog = (): JSX.Element => {
   const [sound] = useAtom(soundAtom);
+  const [language] = useAtom(languageAtom);
   const [shouldShow, show] = useState(false);
   const [confirm, setConfirm] = useState<ConfirmStatus>("pending");
 
@@ -37,19 +38,15 @@ const GameConfirmDialog = (): JSX.Element => {
   return (
     <Dialog
       show={shouldShow}
-      title="Game found"
-      yesMessage="Accept"
+      title={language.gameFound}
+      yesMessage={language.accept}
       onYes={onYes}
-      noMessage="Reject"
+      noMessage={language.reject}
       onNo={onNo}
       variation={confirm === "pending" ? "Info" : confirm === "accepted" ? "Safe" : "Danger"}
       noFooter={confirm !== "pending"}
     >
-      {confirm !== "pending" ? (
-        <Loading text="Waiting other players..." />
-      ) : (
-        <p>We found a game for you! Please confirm to join!</p>
-      )}
+      {confirm !== "pending" ? <Loading text={`${language.waitingPlayers}...`} /> : <p>{language.gameFoundMessage}</p>}
     </Dialog>
   );
 };

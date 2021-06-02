@@ -4,6 +4,7 @@ import Grid from "../Grid";
 import { CarouselContentProps } from "./types";
 
 export const StyledCarousel = styled.div`
+  box-sizing: border-box;
   position: relative;
   width: 100%;
   overflow: hidden;

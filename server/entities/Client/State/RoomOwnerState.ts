@@ -12,9 +12,9 @@ class RoomOwnerState extends InRoomState {
   }
 
   private startGame() {
-    if (this.room.getSize() < 2) this.socket.emit(SERVER_EVENT_NAME.Notify, "Not enough player!", "Danger");
+    if (this.room.getSize() < 2) this.socket.emit(SERVER_EVENT_NAME.Notify, "errNotEnoughPlayer", "Danger");
     else if (this.room.getMembers().some((c) => !(c.getState() instanceof InRoomState)))
-      this.socket.emit(SERVER_EVENT_NAME.Notify, "Some players are not ready!", "Danger");
+      this.socket.emit(SERVER_EVENT_NAME.Notify, "errNotReadyInRoom", "Danger");
     else new MatchingChecker(this.room.getMembers(), this.room);
   }
 
