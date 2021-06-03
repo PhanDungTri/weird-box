@@ -110,6 +110,7 @@ class Game {
 
   private end() {
     clearTimeout(this.timeout);
+    if (this.room) this.room.isInGame = false;
     this.broadcast(SERVER_EVENT_NAME.GameOver, this.players.find((p) => !p.isEliminated)?.id || "");
   }
 

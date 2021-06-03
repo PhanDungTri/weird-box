@@ -15,13 +15,15 @@ const Timer = ({ id, timePerTurn, fluid = false }: TimerProps): JSX.Element => {
     <>
       {shouldShow && (
         <StyledTimer
-          css={
+          css={[
             fluid &&
+              css`
+                grid-column: 1/3;
+              `,
             css`
-              grid-column: 1/3;
               animation: ${countdownKeyframes} ${timePerTurn}ms linear forwards;
-            `
-          }
+            `,
+          ]}
         />
       )}
     </>

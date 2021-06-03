@@ -10,6 +10,7 @@ import Server from "./Server";
 
 class Room {
   public readonly id = generateUniqueId();
+  public isInGame = false;
   private members: Client[] = [];
   private blacklist: Client[] = [];
   private ownerId: string;
@@ -37,6 +38,7 @@ class Room {
   }
 
   public add(client: Client): void {
+    if (this.isInGame) throw Error("errRoomInGame");
     if (this.members.length >= MAX_PLAYERS_PER_GAME - 1) throw Error("errRoomFull");
     if (this.members.includes(client)) throw Error("errGeneric");
     if (this.blacklist.includes(client)) throw Error("errNoPremission");

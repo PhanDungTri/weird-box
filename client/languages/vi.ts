@@ -9,8 +9,7 @@ const vi: Record<string, string> = {
   failConnect: "Không thể kết nối đến máy chủ",
   noEffectDescription: "Không có hiệu ứng.",
   punchDescription: "Lập tức gây sát thương lên toàn bộ đối thủ.",
-  poisonDescription:
-    "Gây sát thương cho toàn bộ đối thủ trong 3 lượt. HP của mục tiêu không thể giảm xuống 0 bằng hiệu ứng này. Có cộng dồn.",
+  poisonDescription: "Gây sát thương cho toàn bộ đối thủ trong 3 lượt. Có cộng dồn.",
   healDescription: "Hồi HP ngay lập tức",
   shieldDescription:
     "Cản một phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này. Nếu một phép vượt qua được phép Khiên, thì phép Khiên tiếp theo sẽ được kích hoạt, nếu có. Có cộng dồn",

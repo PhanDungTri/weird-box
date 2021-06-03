@@ -9,11 +9,7 @@ class PoisonSpell extends Spell {
   }
 
   public async trigger(): Promise<void> {
-    const newHP = this.target.getHitPoint() - this.power;
-
-    if (newHP <= 1) this.target.changeHitPoint(-this.target.getHitPoint() + 1);
-    else this.target.changeHitPoint(-this.power);
-
+    this.target.changeHitPoint(-this.power);
     this.duration--;
   }
 }

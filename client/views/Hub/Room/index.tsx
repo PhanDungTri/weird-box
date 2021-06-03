@@ -18,7 +18,7 @@ const Room = (): JSX.Element => {
     <StyledRoom>
       {room ? (
         <>
-          <H1 css={{ textAlign: "center" }}>{room.id}</H1>
+          <H1 css={{ textAlign: "center", fontSize: "16px" }}>{room.id}</H1>
           <Members />
           <LeaveRoomButton />
         </>

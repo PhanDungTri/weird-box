@@ -9,8 +9,7 @@ const en: Record<string, string> = {
   failConnect: "Failed to contact with server",
   noEffectDescription: "No effect.",
   punchDescription: "Instantly inflict damage to all opponents.",
-  poisonDescription:
-    "Make all opponents to suffer damage in 3 turns. The target HP can't be reduced to 0 by this effect. Can be stacked.",
+  poisonDescription: "Make all opponents to suffer damage in 3 turns. Can be stacked.",
   healDescription: "Instantly recover HP.",
   shieldDescription:
     "Block an incoming spell that has strength equal or less than this. When a spell pierces through a Shield spell, the next Shield spell will be activated, if available. Can be stacked.",

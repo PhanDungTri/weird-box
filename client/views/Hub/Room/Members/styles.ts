@@ -4,7 +4,7 @@ import Grid from "../../../../components/Grid";
 import { slotStyle } from "../../../../styles";
 
 export const StyledMembers = styled(Grid)`
-  grid-template-columns: repeat(4, 48px);
+  grid-template-columns: repeat(4, 75px);
 `;
 
 export const StyledMember = styled(Grid)`
@@ -14,6 +14,7 @@ export const StyledMember = styled(Grid)`
 `;
 
 export const MemberName = styled.div`
+  font-size: 12px;
   text-align: center;
   word-break: break-all;
 `;

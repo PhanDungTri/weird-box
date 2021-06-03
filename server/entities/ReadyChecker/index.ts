@@ -14,6 +14,7 @@ abstract class ReadyChecker {
   private timeout: NodeJS.Timeout;
 
   constructor(protected clients: Client[], protected room?: Room) {
+    if (this.room) this.room.isInGame = true;
     this.clients.forEach((c) => c.changeState(new ReadyCheckState(c, this)));
     this.timeout = setTimeout(this.onUnqualified.bind(this), DEFAULT_WAIT_TIME);
   }
@@ -29,6 +30,7 @@ abstract class ReadyChecker {
   }
 
   private onUnqualified(): void {
+    if (this.room) this.room.isInGame = true;
     this.clients.forEach((c) => {
       c.getSocket().emit(SERVER_EVENT_NAME.UpdateGameMatchingStatus, "Canceled");
       c.getSocket().emit(SERVER_EVENT_NAME.Notify, "notiFailMatch", "Warning");
