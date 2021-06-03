@@ -78,6 +78,7 @@ const vi: Record<string, string> = {
   
   - Roberto Mocci
   - Peter Hull
+  - Stefanie Koerner (pheist)
   
   Hiệu ứng âm thanh:
   

@@ -8,6 +8,7 @@ import ContentFrameSprite from "../../assets/sprites/card_content_frame.png";
 import IconSprites from "../../assets/sprites/icons.png";
 import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
 import SpellAnimations from "../../assets/sprites/spell_animations.png";
+import Logo from "../../assets/sprites/logo.png";
 import { languageAtom, musicAtom, routeAtom, soundAtom } from "../../atoms";
 import Loading from "../../components/Loading";
 import Page from "../../components/Page";
@@ -30,6 +31,7 @@ const Initiator = (): JSX.Element => {
     ContentFrameSprite,
     LoadingSpriteSheet,
     BoxOfCardSprites,
+    Logo,
   ]);
   const total = useRef(spriteSources.current.length + 2);
 

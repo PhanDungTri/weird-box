@@ -2,11 +2,14 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { GameMatchingStatus } from "../../../shared/@types";
 import { SERVER_EVENT_NAME } from "../../../shared/constants";
+import BoxOfCardsSprite from "../../assets/sprites/box_of_cards.png";
 import IconSprites from "../../assets/sprites/icons.png";
 import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
-import { routeAtom, soundAtom } from "../../atoms";
+import Logo from "../../assets/sprites/logo.png";
+import { chosenLanguageAtom, routeAtom, soundAtom } from "../../atoms";
 import CenterizedGrid from "../../components/CenterizedGrid";
 import Page from "../../components/Page";
+import Sprite from "../../components/Sprite";
 import { ROUTE } from "../../constants";
 import withSpriteLoading from "../../HOCs/withSpriteLoading";
 import { useListenServerEvent } from "../../hooks";
@@ -22,6 +25,7 @@ const Hub = (): JSX.Element => {
   const [sound] = useAtom(soundAtom);
   const [, changeRoute] = useAtom(routeAtom);
   const [isMatching, match] = useState(false);
+  const [chosenLanguage] = useAtom(chosenLanguageAtom);
 
   useEffect(() => void socket.once(SERVER_EVENT_NAME.NewGame, () => changeRoute(ROUTE.InGame)), []);
 
@@ -38,7 +42,13 @@ const Hub = (): JSX.Element => {
     <Page>
       <CenterizedGrid css={{ height: "100%", width: "100%" }}>
         <Header />
-        <div>UNTITLED CARD GAME</div>
+        <Sprite
+          src={Logo}
+          steps={1}
+          size={[240, 55]}
+          css={{ position: "relative" }}
+          row={chosenLanguage === "vi" ? 0 : 1}
+        />
         <PlayerNameInput />
         {isMatching ? (
           <FindingGame />
@@ -54,4 +64,4 @@ const Hub = (): JSX.Element => {
   );
 };
 
-export default withSpriteLoading(Hub, [IconSprites, LoadingSpriteSheet]);
+export default withSpriteLoading(Hub, [IconSprites, LoadingSpriteSheet, Logo, BoxOfCardsSprite]);
