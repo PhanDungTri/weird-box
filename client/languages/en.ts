@@ -9,10 +9,13 @@ const en: Record<string, string> = {
   failConnect: "Failed to contact with server",
   noEffectDescription: "No effect.",
   punchDescription: "Instantly inflict damage to all opponents.",
-  poisonDescription: "Make all opponents to suffer damage in 3 turns.",
-  healDescription: "Instantly recover hp.",
-  shieldDescription: "Block an incoming spell that has strength equal or less than this.",
-  mirrorDescription: "Block and recast an incoming spell that has strength equal or less than this to the caster.",
+  poisonDescription:
+    "Make all opponents to suffer damage in 3 turns. The target HP can't be reduced to 0 by this effect. Can be stacked.",
+  healDescription: "Instantly recover HP.",
+  shieldDescription:
+    "Block an incoming spell that has strength equal or less than this. When a spell pierces through a Shield spell, the next Shield spell will be activated, if available. Can be stacked.",
+  mirrorDescription:
+    "Block and recast an incoming spell that has strength equal or less than this to the caster. When a spell pierces through a Mirror spell, the next Mirror spell will be activated, if available. Can be stacked.",
   cardTutorialHeader: "Card",
   chargerTutorialHeader: "Weird Box - Charger",
   conclusionTutorialHeader: "Conclusion",
@@ -39,7 +42,7 @@ const en: Record<string, string> = {
   
   Don't  make the charger drop below 0 or raise above 10.
   
-  Defeat all opponents by decreasing their hp to 0.
+  Survive and defeat all opponents by using spells.
   
   GLHF.
   `,

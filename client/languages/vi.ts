@@ -9,10 +9,13 @@ const vi: Record<string, string> = {
   failConnect: "Không thể kết nối đến máy chủ",
   noEffectDescription: "Không có hiệu ứng.",
   punchDescription: "Lập tức gây sát thương lên toàn bộ đối thủ.",
-  poisonDescription: "Gây sát thương cho toàn bộ đối thủ trong 3 lượt.",
-  healDescription: "Hồi hp ngay lập tức",
-  shieldDescription: "Cản một phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này.",
-  mirrorDescription: "Cản và phản đòn phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này.",
+  poisonDescription:
+    "Gây sát thương cho toàn bộ đối thủ trong 3 lượt. HP của mục tiêu không thể giảm xuống 0 bằng hiệu ứng này. Có cộng dồn.",
+  healDescription: "Hồi HP ngay lập tức",
+  shieldDescription:
+    "Cản một phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này. Nếu một phép vượt qua được phép Khiên, thì phép Khiên tiếp theo sẽ được kích hoạt, nếu có. Có cộng dồn",
+  mirrorDescription:
+    "Cản và phản đòn phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này. Nếu một phép vượt qua được phép Gương, thì phép Gương tiếp theo sẽ được kích hoạt, nếu có. Có cộng dồn",
   cardTutorialHeader: "Thẻ bài",
   chargerTutorialHeader: "Hộp kỳ quái - Bộ sạc",
   conclusionTutorialHeader: "Tổng kết",
@@ -39,7 +42,7 @@ const vi: Record<string, string> = {
   
   Đừng làm giá trị của bộ sạc thấp hơn 0 hay vượt quá 10.
   
-  Đánh bại mọi đối thủ bằng cách giảm hp của họ xuống còn 0.
+  Tồn tại và đánh bại mọi đối thủ bằng cách sử dụng các phép.
   
   GLHF - Vui vẻ không quạu.
   `,
