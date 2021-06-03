@@ -10,7 +10,6 @@ import { ROUTE } from "../constants";
 import { useListenServerEvent } from "../hooks";
 import { centerizeStyle } from "../styles";
 import ReconnectDialog from "./ReconnectDialog";
-import Test from "./Test";
 //import Test from "./Test";
 
 const Game = lazy(() => import("./Game"));
@@ -59,7 +58,7 @@ const App = (): JSX.Element => {
         {route === ROUTE.Init && <Initiator />}
         {route === ROUTE.Hub && <Hub />}
         {route === ROUTE.InGame && <Game />}
-        {route === ROUTE.Test && <Test />}
+        {route === ROUTE.Test && <div />}
       </Suspense>
       <ReconnectDialog />
     </>
