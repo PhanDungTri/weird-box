@@ -2,7 +2,10 @@
   "name": "untitled-card-game",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "./server/index.ts",
+  "engines": {
+    "node": "14.17.0"
+  },
   "scripts": {
     "dev-client": "parcel ./client/index.html",
     "dev-server": "ts-node-dev --respawn --project ./node.tsconfig.json ./server/index.ts",
