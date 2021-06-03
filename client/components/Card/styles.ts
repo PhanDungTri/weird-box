@@ -19,7 +19,6 @@ const commonStyle = css`
   user-select: none;
   color: ${tintColor(COLOR.Normal, 20)};
   font-family: "Dogica Pixel";
-  font-size: 10px;
   font-weight: bold;
   transition: transform 0.3s;
 `;
@@ -30,6 +29,7 @@ export const cardChosenStyle = css`
 
 export const SmallCard = styled(CenterizedGrid)`
   ${commonStyle};
+  font-size: 10px;
   width: 32px;
   height: 48px;
   padding: 2px;
@@ -58,12 +58,15 @@ const cardInfoStyle = css`
 
 export const CardPower = styled.div`
   ${cardInfoStyle};
+  font-size: 10px;
   top: ${-CONTENT_BORDER_WIDTH}px;
   transform: translate(-50%, -25%);
 `;
 
 export const CardAction = styled.div`
   ${cardInfoStyle};
-  bottom: ${-CONTENT_BORDER_WIDTH}px;
+  font-size: 12px;
+  font-weight: bold;
+  bottom: ${-CONTENT_BORDER_WIDTH - 1}px;
   transform: translate(-50%, 25%);
 `;

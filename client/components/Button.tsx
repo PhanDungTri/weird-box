@@ -17,6 +17,7 @@ const Button = styled.button<ButtonProps>`
     color: ${autoTextColor(COLOR[variation])};
     border: 2px solid ${COLOR[variation]};
     border-style: solid none;
+    cursor: ${disabled ? "initial" : "pointer"};
 
     &:hover {
       border-bottom-color: ${disabled ? COLOR[variation] : "rgba(0, 0, 0, 0.4)"};
@@ -25,10 +26,10 @@ const Button = styled.button<ButtonProps>`
     &:active {
       background-color: ${tintColor(COLOR[variation], 25)};
       border-color: ${tintColor(COLOR[variation], 25)};
+      ${pixelBorderStyle(2, [shadeColor(COLOR[variation], 50)])};
     }
   `}
   outline: none;
-  cursor: pointer;
   padding: 0px 6px;
 `;
 

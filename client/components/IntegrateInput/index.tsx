@@ -1,7 +1,7 @@
+import { css } from "@emotion/react";
 import { ReactNode, useRef } from "react";
 import { StyleVariation } from "../../../shared/@types";
-import { disabledStyle } from "../../styles";
-import { StyledIntegrateButton, StyledIntegrateInput } from "./styles";
+import { InnerButton, InnerInput, StyledIntegratedInput } from "./styles";
 
 type IntegrateInputProps = {
   variation?: StyleVariation;
@@ -30,18 +30,25 @@ const IntegrateInput = ({
   const submit = () => onClick(input.current?.value);
 
   return (
-    <div css={[{ display: "flex" }, disabled && disabledStyle]}>
-      <StyledIntegrateInput
+    <StyledIntegratedInput variation={variation}>
+      <InnerInput
         placeholder={placeholder}
         disabled={disabled}
         defaultValue={defaultValue}
         ref={input}
-        variation={variation}
+        css={
+          disabled &&
+          css`
+            text-align: center;
+          `
+        }
       />
-      <StyledIntegrateButton disabled={disabled} ref={button} onClick={submit}>
-        {children}
-      </StyledIntegrateButton>
-    </div>
+      {!disabled && (
+        <InnerButton disabled={disabled} ref={button} onClick={submit}>
+          {children}
+        </InnerButton>
+      )}
+    </StyledIntegratedInput>
   );
 };
 
