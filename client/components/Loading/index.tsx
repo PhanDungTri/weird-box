@@ -1,4 +1,4 @@
-import LoadingSpriteSheet from "../../assets/sprites/loading_animation.png";
+import LoadingSpriteSheet from "url:../../assets/sprites/loading_animation.png";
 import Sprite from "../Sprite";
 import { StyledLoading } from "./styles";
 

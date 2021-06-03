@@ -1,4 +1,4 @@
-import BoxOfCardsSprites from "../../../../assets/sprites/box_of_cards.png";
+import BoxOfCardsSprites from "url:../../../../assets/sprites/box_of_cards.png";
 
 export const BOX_OF_CARD_SIZE = 59;
 export const ANIMATION_STEP = 11;

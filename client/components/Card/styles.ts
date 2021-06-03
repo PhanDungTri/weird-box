@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import ContentFrameSprite from "../../assets/sprites/card_content_frame.png";
+import ContentFrameSprite from "url:../../assets/sprites/card_content_frame.png";
 import { COLOR } from "../../constants";
 import { BorderColors, centerizeStyle, pixelBorderStyle } from "../../styles";
 import { shadeColor, tintColor } from "../../utils";

@@ -1,5 +1,5 @@
 import { SPELL_NAME } from "../../shared/constants";
-import IconSprites from "../assets/sprites/icons.png";
+import IconSprites from "url:../assets/sprites/icons.png";
 import { SpriteProps } from "../types";
 import Sprite from "./Sprite";
 

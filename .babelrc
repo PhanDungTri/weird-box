@@ -1,4 +1,7 @@
 {
-  "presets": [["@babel/preset-react", { "runtime": "automatic", "importSource": "@emotion/react" }]],
+  "presets": [
+    "@babel/preset-typescript",
+    ["@babel/preset-react", { "runtime": "automatic", "importSource": "@emotion/react" }]
+  ],
   "plugins": ["transform-inline-environment-variables", "@emotion/babel-plugin"]
 }

@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { memo, useCallback, useRef, useState } from "react";
 import { PassiveAction, SpellInfo } from "../../../shared/@types";
 import { PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
-import SpellAnimationSprite from "../../assets/sprites/spell_animations.png";
+import SpellAnimationSprite from "url:../../assets/sprites/spell_animations.png";
 import { soundAtom } from "../../atoms";
 import Sprite from "../../components/Sprite";
 import { useListenServerEvent } from "../../hooks";

@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import ReactMarkdown from "react-markdown";
-import BoxOfCardsSprite from "../../../../assets/sprites/box_of_cards.png";
+import BoxOfCardsSprite from "url:../../../../assets/sprites/box_of_cards.png";
 import { languageAtom } from "../../../../atoms";
 import H1 from "../../../../components/H1";
 import Sprite from "../../../../components/Sprite";
