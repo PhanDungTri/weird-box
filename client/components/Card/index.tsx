@@ -5,6 +5,7 @@ import { getNumberSign } from "../../../shared/utils";
 import Icon from "../Icon";
 import { centerizeStyle, disabledStyle } from "../../styles";
 import { CardAction, cardChosenStyle, CardContent, CardPower, NormalCard, SmallCard } from "./styles";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 type CardProps = {
   card: CardInfo;
@@ -26,6 +27,8 @@ const Card = ({
   small = false,
   className,
 }: CardProps): JSX.Element => {
+  const matchMedia = useMediaQuery("(max-width: 325px)");
+
   const choose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     if (!disabled && onClick) {
       event.stopPropagation();
@@ -33,7 +36,7 @@ const Card = ({
     }
   };
 
-  return small ? (
+  return small || matchMedia ? (
     <SmallCard className={className} css={[chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
       <div>{getNumberSign(card.power) + Math.abs(card.power)}</div>
       <Icon name={handleSpellName(card)} css={{ position: "relative" }} />

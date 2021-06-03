@@ -15,3 +15,8 @@ export const xCenterStyle = css`
 export const disabledStyle = css`
   filter: grayscale(100%);
 `;
+
+export const clickableIconStyle = css`
+  position: relative;
+  cursor: pointer;
+`;

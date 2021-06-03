@@ -63,6 +63,30 @@ const vi: Record<string, string> = {
   - Phép có chỉ số **sức mạnh**, giá trị của nó dựa trên **giá trị hiện tại của bộ sạc** *(không phải năng lượng của thẻ bài)*.
   - Phép với **sức mạnh bằng 0 sẽ không có bất kỳ hiệu ứng nào**.
   `,
+  about: "Thông tin",
+  aboutDescription: `
+  Lập trình & Hình ảnh:
+  
+  - Phan Dũng Trí
+    - Email: phandungtri99@gmail.com
+  
+  Nhạc nền:
+  
+  - Harm-Jan "3xBlast" Wiechers
+  
+  Phông chữ:
+  
+  - Roberto Mocci
+  - Peter Hull
+  
+  Hiệu ứng âm thanh:
+  
+  - Từ Itch.io:
+    - ObsydianX
+    - edwardcufaude
+    - kronbits
+  - Và rất nhiều từ freesound.org
+  `,
   settingsTitle: "Cài đặt",
   tutorialTitle: "Hướng dẫn",
   language: "Ngôn ngữ",

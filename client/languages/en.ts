@@ -63,6 +63,30 @@ const en: Record<string, string> = {
   - Spell has the **strength** attribute, which has value based on **the current value of the charger** *(not the power of the card)*.
   - Spell with **0 strength has no effect**.
   `,
+  about: "About",
+  aboutDescription: `
+  Code & Art:
+  
+  - Phan Dung Tri (Me)
+    - Email: phandungtri99@gmail.com
+  
+  Music:
+  
+  - Harm-Jan "3xBlast" Wiechers
+  
+  Fonts:
+  
+  - Roberto Mocci
+  - Peter Hull
+  
+  Sound effects:
+  
+  - From Itch.io:
+    - ObsydianX
+    - edwardcufaude
+    - kronbits
+  - And many from freesound.org
+  `,
   settingsTitle: "Settings",
   tutorialTitle: "Tutorial",
   language: "Language",

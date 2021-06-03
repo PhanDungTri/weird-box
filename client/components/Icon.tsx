@@ -18,6 +18,7 @@ type IconName =
   | "book"
   | "vnFlag"
   | "usFlag"
+  | "info"
   | SPELL_NAME;
 
 const SIZE = [24, 24] as [number, number];
@@ -46,6 +47,7 @@ const SPRITE_POS: IconName[] = [
   "book",
   "vnFlag",
   "usFlag",
+  "info",
 ];
 
 const Icon = ({ name, ...props }: IconProps): JSX.Element => {

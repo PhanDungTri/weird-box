@@ -1,18 +1,19 @@
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { musicAtom, audioSettingsAtom, soundAtom, chosenLanguageAtom, languageAtom } from "../../../../atoms";
-import useShowDialog from "../../../../hooks/useShowDialog";
+import { audioSettingsAtom, chosenLanguageAtom, languageAtom, musicAtom, soundAtom } from "../../../../atoms";
 import CenterizedGrid from "../../../../components/CenterizedGrid";
 import Dialog from "../../../../components/Dialog";
 import H1 from "../../../../components/H1";
 import Icon from "../../../../components/Icon";
-import { PartialSettings, optionStyle, toggleStyle } from "./styles";
+import useShowDialog from "../../../../hooks/useShowDialog";
+import { clickableIconStyle } from "../../../../styles";
+import { PartialSettings, toggleStyle } from "./styles";
 
 const Settings = (): JSX.Element => {
   const [shouldDialogShow, dialogAction] = useShowDialog();
   const [sound] = useAtom(soundAtom);
   const [music] = useAtom(musicAtom);
-  const [, chooseLanguage] = useAtom(chosenLanguageAtom);
+  const [chosenLanguage, chooseLanguage] = useAtom(chosenLanguageAtom);
   const [language] = useAtom(languageAtom);
   const [settings, setSettings] = useAtom(audioSettingsAtom);
 
@@ -27,18 +28,26 @@ const Settings = (): JSX.Element => {
 
   return (
     <>
-      <Icon name="cog" onClick={dialogAction.reveal} css={{ cursor: "pointer", position: "relative" }} />
+      <Icon name="cog" onClick={dialogAction.reveal} css={clickableIconStyle} />
       <Dialog show={shouldDialogShow} title={language.settingsTitle} onYes={dialogAction.hide}>
         <CenterizedGrid>
           <PartialSettings>
             <H1>{language.audio}</H1>
-            <Icon name="sound" onClick={toggleSound} css={[!settings.sound && toggleStyle, optionStyle]} />
-            <Icon name="music" onClick={toggleMusic} css={[!settings.music && toggleStyle, optionStyle]} />
+            <Icon name="sound" onClick={toggleSound} css={[!settings.sound && toggleStyle, clickableIconStyle]} />
+            <Icon name="music" onClick={toggleMusic} css={[!settings.music && toggleStyle, clickableIconStyle]} />
           </PartialSettings>
           <PartialSettings>
             <H1>{language.language}</H1>
-            <Icon name="vnFlag" onClick={() => chooseLanguage("vi")} css={optionStyle} />
-            <Icon name="usFlag" onClick={() => chooseLanguage("en")} css={optionStyle} />
+            <Icon
+              name="vnFlag"
+              onClick={() => chooseLanguage("vi")}
+              css={[chosenLanguage !== "vi" && toggleStyle, clickableIconStyle]}
+            />
+            <Icon
+              name="usFlag"
+              onClick={() => chooseLanguage("en")}
+              css={[chosenLanguage !== "en" && toggleStyle, clickableIconStyle]}
+            />
           </PartialSettings>
         </CenterizedGrid>
       </Dialog>

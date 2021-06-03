@@ -8,7 +8,10 @@ const Page = styled.div`
   height: 100%;
   max-width: 600px;
   max-height: 800px;
-  ${pixelBorderStyle(4, [COLOR.Normal])}
+
+  @media screen and (min-width: 600px) {
+    ${pixelBorderStyle(4, [COLOR.Normal])};
+  }
 `;
 
 export default Page;

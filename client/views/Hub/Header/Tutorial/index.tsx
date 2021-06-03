@@ -11,6 +11,7 @@ import SpellDictionary from "./SpellDictionary";
 import Conclusion from "./Conclusion";
 import { useAtom } from "jotai";
 import { languageAtom } from "../../../../atoms";
+import { clickableIconStyle } from "../../../../styles";
 
 const Tutorial = (): JSX.Element => {
   const [shouldDialogShow, dialogAction] = useShowDialog();
@@ -18,7 +19,7 @@ const Tutorial = (): JSX.Element => {
 
   return (
     <>
-      <Icon name="book" css={{ position: "relative", cursor: "pointer" }} onClick={dialogAction.reveal} />
+      <Icon name="book" css={clickableIconStyle} onClick={dialogAction.reveal} />
       <Dialog show={shouldDialogShow} title={language.tutorialTitle} onYes={dialogAction.hide}>
         <Carousel>
           <CarouselItem>

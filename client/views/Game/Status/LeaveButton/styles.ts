@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
+import { clickableIconStyle } from "../../../../styles";
 
 export const leaveButtonStyle = css`
-  position: relative;
+  ${clickableIconStyle};
   margin: 4px 0px;
-  cursor: pointer;
 `;

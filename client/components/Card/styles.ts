@@ -21,6 +21,7 @@ const commonStyle = css`
   font-family: "Dogica Pixel";
   font-size: 10px;
   font-weight: bold;
+  transition: transform 0.3s;
 `;
 
 export const cardChosenStyle = css`
@@ -38,7 +39,6 @@ export const NormalCard = styled.div`
   ${commonStyle};
   width: 48px;
   height: 72px;
-  transition: transform 0.3s;
 `;
 
 export const CardContent = styled.div`
