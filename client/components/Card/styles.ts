@@ -65,7 +65,7 @@ export const CardPower = styled.div`
 
 export const CardAction = styled.div`
   ${cardInfoStyle};
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   bottom: ${-CONTENT_BORDER_WIDTH - 1}px;
   transform: translate(-50%, 25%);

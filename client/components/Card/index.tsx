@@ -6,6 +6,9 @@ import Icon from "../Icon";
 import { centerizeStyle, disabledStyle } from "../../styles";
 import { CardAction, cardChosenStyle, CardContent, CardPower, NormalCard, SmallCard } from "./styles";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { css } from "@emotion/react";
+import { COLOR } from "../../constants";
+import { shadeColor } from "../../utils";
 
 type CardProps = {
   card: CardInfo;
@@ -15,6 +18,8 @@ type CardProps = {
   className?: string;
   small?: boolean;
 };
+
+const powerColor = (power: number) => shadeColor(power >= 0 ? COLOR.Info : COLOR.Danger, 30);
 
 const handleSpellName = (card: CardInfo) =>
   card.spell !== SPELL_NAME.Void ? card.spell : card.power >= 0 ? "charge" : "consume";
@@ -44,9 +49,21 @@ const Card = ({
   ) : (
     <NormalCard className={className} css={[chosen && cardChosenStyle, disabled && disabledStyle]} onClick={choose}>
       <CardContent>
-        <CardPower>{Math.abs(card.power)}</CardPower>
+        <CardPower
+          css={css`
+            color: ${powerColor(card.power)};
+          `}
+        >
+          {Math.abs(card.power)}
+        </CardPower>
         <Icon name={handleSpellName(card)} css={centerizeStyle} />
-        <CardAction>{getNumberSign(card.power)}</CardAction>
+        <CardAction
+          css={css`
+            color: ${powerColor(card.power)};
+          `}
+        >
+          {getNumberSign(card.power)}
+        </CardAction>
       </CardContent>
     </NormalCard>
   );

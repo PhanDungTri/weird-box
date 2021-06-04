@@ -6,7 +6,7 @@ import Tutorial from "./Tutorial";
 const Header = (): JSX.Element => {
   return (
     <StyledHeader>
-      <div>v0.1.0</div>
+      <div>v0.1.1</div>
       <div>
         <About />
         <Tutorial />
