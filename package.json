@@ -16,7 +16,7 @@
   "scripts": {
     "dev-client": "if [ -d ./dist ]; then rm -r ./dist; fi && parcel ./client/index.html --target=frontend",
     "dev-server": "ts-node-dev --respawn --project ./node.tsconfig.json ./server/index.ts",
-    "prestart": "if [ -d ./dist ]; then rm -r ./dist; fi && parcel build ./client/index.html --no-source-maps",
+    "postinstall": "if [ -d ./dist ]; then rm -r ./dist; fi && parcel build ./client/index.html --no-source-maps",
     "start": "ts-node --transpile-only --project ./node.tsconfig.json ./server/index.ts"
   },
   "repository": {
