@@ -121,6 +121,7 @@ const en: Record<string, string> = {
   defeatMessage: "Try better next time!",
   prepare: "Prepare",
   errGeneric: "Something wrong happened!",
+  errNameLength: "Name length must be 2 - 24 characters!",
   errRoomInGame: "Game has started in this room!",
   errRoomFull: "Room is full!",
   errNoPermission: "You aren't permitted to join this room!",

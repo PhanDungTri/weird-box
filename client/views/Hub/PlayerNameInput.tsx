@@ -25,7 +25,7 @@ const PlayerNameInput = (): JSX.Element => {
   );
 
   return (
-    <IntegrateInput disabled={isDisabled} defaultValue={name} onClick={changeName}>
+    <IntegrateInput minLength={2} maxLength={24} disabled={isDisabled} defaultValue={name} onClick={changeName}>
       {language.change}
     </IntegrateInput>
   );

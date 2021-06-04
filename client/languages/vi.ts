@@ -121,6 +121,7 @@ const vi: Record<string, string> = {
   defeatMessage: "Lần sau cố gắng hơn nha!",
   prepare: "Chuẩn bị",
   errGeneric: "Điều gì đó không đúng vừa xảy ra!",
+  errNameLength: "Độ dài tên phải từ 2 - 24 ký tự!",
   errRoomInGame: "Trận đấu đã bắt đầu trong phòng này!",
   errRoomFull: "Phòng đã đầy!",
   errNoPermission: "Bạn không được phép tham gia phòng này!",

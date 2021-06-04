@@ -4,6 +4,8 @@ import { StyleVariation } from "../../../shared/@types";
 import { InnerButton, InnerInput, StyledIntegratedInput } from "./styles";
 
 type IntegrateInputProps = {
+  minLength?: number;
+  maxLength?: number;
   variation?: StyleVariation;
   children?: ReactNode;
   onClick?: (value?: string) => void;
@@ -23,6 +25,7 @@ const IntegrateInput = ({
   variation = "Primary",
   children = "Enter",
   onClick = dummyFn,
+  ...props
 }: IntegrateInputProps): JSX.Element => {
   const button = useRef<HTMLButtonElement>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -32,6 +35,7 @@ const IntegrateInput = ({
   return (
     <StyledIntegratedInput variation={variation}>
       <InnerInput
+        {...props}
         placeholder={placeholder}
         disabled={disabled}
         defaultValue={defaultValue}

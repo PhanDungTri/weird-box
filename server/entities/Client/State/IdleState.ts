@@ -34,8 +34,11 @@ class IdleState extends ClientState {
   }
 
   private setName(name: string) {
-    this.client.name = name;
-    this.socket.emit(SERVER_EVENT_NAME.Notify, "notiNameChanged", "Safe");
+    if (name.length < 2 || name.length > 24) this.socket.emit(SERVER_EVENT_NAME.Notify, "errNameLength", "Danger");
+    else {
+      this.client.name = name;
+      this.socket.emit(SERVER_EVENT_NAME.Notify, "notiNameChanged", "Safe");
+    }
   }
 
   public enter(): void {
