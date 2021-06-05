@@ -19,6 +19,8 @@ export enum SERVER_EVENT_NAME {
   FriendLeft = "friend left",
   LeftRoom = "left room",
   JoinedRoom = "join room",
+  Purify = "purify",
+  EmotionExpressed = "emotion expressed",
 }
 
 export enum CLIENT_EVENT_NAME {
@@ -32,4 +34,5 @@ export enum CLIENT_EVENT_NAME {
   JoinRoom = "join room",
   LeaveRoom = "leave room",
   Kick = "kick",
+  ExpressEmotion = "express emotion",
 }

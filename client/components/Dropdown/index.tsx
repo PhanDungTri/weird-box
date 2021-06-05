@@ -9,9 +9,10 @@ type DropDownProps = {
   header?: ReactNode;
   children: ReactNode;
   onTop?: boolean;
+  className?: string;
 };
 
-const DropDown = ({ header, children, onTop = false }: DropDownProps): JSX.Element => {
+const DropDown = ({ header, children, onTop = false, className }: DropDownProps): JSX.Element => {
   const [shouldShow, show] = useState(false);
   const ref = useOnClickOutside<HTMLDivElement>(() => show(false));
   const transitions = useRevealAnimation(shouldShow);
@@ -33,7 +34,7 @@ const DropDown = ({ header, children, onTop = false }: DropDownProps): JSX.Eleme
       {transitions.map(
         ({ item, props }) =>
           item && (
-            <animated.div style={props} css={dropDownContentStyle(onTop)}>
+            <animated.div style={props} className={className} css={dropDownContentStyle(onTop)}>
               {children}
             </animated.div>
           )

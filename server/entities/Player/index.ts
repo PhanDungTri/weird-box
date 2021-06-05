@@ -81,6 +81,10 @@ class Player extends ClientDerived {
   public async takeSpell(spell: Spell): Promise<void> {
     await this.spellManager.takeSpell(spell);
   }
+
+  public purify(): void {
+    this.spellManager.purify();
+  }
 }
 
 export default Player;

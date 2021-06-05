@@ -1,11 +1,11 @@
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { GameMatchingStatus } from "../../../shared/@types";
-import { SERVER_EVENT_NAME } from "../../../shared/constants";
 import BoxOfCardsSprite from "url:../../assets/sprites/box_of_cards.png";
 import IconSprites from "url:../../assets/sprites/icons.png";
 import LoadingSpriteSheet from "url:../../assets/sprites/loading_animation.png";
 import Logo from "url:../../assets/sprites/logo.png";
+import { GameMatchingStatus } from "../../../shared/@types";
+import { SERVER_EVENT_NAME } from "../../../shared/constants";
 import { chosenLanguageAtom, routeAtom, soundAtom } from "../../atoms";
 import CenterizedGrid from "../../components/CenterizedGrid";
 import Page from "../../components/Page";
@@ -20,6 +20,7 @@ import Header from "./Header";
 import Menu from "./Menu";
 import PlayerNameInput from "./PlayerNameInput";
 import Room from "./Room";
+import WhatsNew from "./WhatsNew";
 
 const Hub = (): JSX.Element => {
   const [sound] = useAtom(soundAtom);
@@ -60,6 +61,7 @@ const Hub = (): JSX.Element => {
         )}
         <GameConfirmDialog />
       </CenterizedGrid>
+      <WhatsNew />
     </Page>
   );
 };

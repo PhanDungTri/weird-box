@@ -1,13 +1,16 @@
+import { ReactNode } from "react-markdown";
+
 export type SpriteProps = {
   size: [number, number];
   src: string;
+  className?: string;
   steps?: number;
   fps?: number;
   row?: number;
   scale?: number;
-  className?: string;
-  loop?: boolean;
+  loop?: number;
   stop?: boolean;
+  children?: ReactNode;
   onAnimationEnd?: () => void;
   onTransitionEnd?: () => void;
   onClick?: () => void;

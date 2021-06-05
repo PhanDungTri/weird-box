@@ -133,6 +133,15 @@ const en: Record<string, string> = {
   notiNameChanged: "Name changed!",
   notiInTurn: "It's your turn!",
   notiFailMatch: "Someone hasn't accepted the game!",
+  shieldBlockMessage: "is blocked by",
+  mirrorReflectMessage: "is reflected by",
+  shieldPiercedMessage: "is reduced 1 damage but can't be stop by",
+  mirrorPiercedMessage: "can't be stop by",
+  of: "of",
+  bonk: "bonk!",
+  nervous: "nervous",
+  laugh: "laugh",
+  angry: "angry",
 };
 
 export default en;

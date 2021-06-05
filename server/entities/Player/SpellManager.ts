@@ -24,13 +24,8 @@ class SpellManager {
       const talisman = this.talismans[0];
       this.talismans = this.talismans.filter((t) => t !== talisman);
 
-      for await (const action of talisman.activate(spell)) {
-        this.broadcast(SERVER_EVENT_NAME.ActivatePassive, {
-          id: talisman.id,
-          target: this.player.id,
-          action,
-        });
-
+      for await (const info of talisman.activate(spell)) {
+        this.broadcast(SERVER_EVENT_NAME.ActivatePassive, info);
         await waitFor(1000);
       }
 
@@ -38,6 +33,15 @@ class SpellManager {
     }
 
     return false;
+  }
+
+  public purify(): void {
+    const removedDebuffs = this.debuffs.map((d) => d.id);
+    this.debuffs = [];
+    this.broadcast(SERVER_EVENT_NAME.Purify, {
+      target: this.player.id,
+      remove: removedDebuffs,
+    });
   }
 
   public async triggerPendingDebuffs(): Promise<void> {
@@ -50,7 +54,7 @@ class SpellManager {
   }
 
   public async takeSpell(spell: Spell): Promise<void> {
-    if (!(await this.activateTalisman(spell))) {
+    if (spell.getStrength() > 0 && !(await this.activateTalisman(spell))) {
       if (spell.getDuration() === 0) await spell.trigger();
       else if (spell.isDebuff()) this.debuffs.push(spell);
       else return this.addTalisman(spell as PassiveSpell);

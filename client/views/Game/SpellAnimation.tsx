@@ -1,8 +1,8 @@
 import { useAtom } from "jotai";
 import { memo, useCallback, useRef, useState } from "react";
-import { PassiveAction, SpellInfo } from "../../../shared/@types";
-import { PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
 import SpellAnimationSprite from "url:../../assets/sprites/spell_animations.png";
+import { PassiveActionInfo, SpellInfo } from "../../../shared/@types";
+import { PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
 import { soundAtom } from "../../atoms";
 import Sprite from "../../components/Sprite";
 import { useListenServerEvent } from "../../hooks";
@@ -70,7 +70,7 @@ const SpellAnimation = ({ id, scale = 2 }: SpellAnimationProps): JSX.Element => 
   useListenServerEvent(SERVER_EVENT_NAME.TakeSpell, (spell: SpellInfo) => spell.target === id && setSpell(spell.name));
   useListenServerEvent(
     SERVER_EVENT_NAME.ActivatePassive,
-    (passive: PassiveAction) => passive.target === id && setSpell(passive.action)
+    (passive: PassiveActionInfo) => passive.target === id && setSpell(passive.action)
   );
 
   return (

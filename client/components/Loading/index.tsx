@@ -17,7 +17,7 @@ const Loading = ({ text, scale, className }: LoadingProps): JSX.Element => {
         src={LoadingSpriteSheet}
         fps={5}
         steps={10}
-        loop
+        loop={-1}
         css={{ position: "relative" }}
         className={className}
       />

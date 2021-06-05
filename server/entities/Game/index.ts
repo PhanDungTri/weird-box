@@ -1,5 +1,5 @@
 import { EventsFromServer } from "../../../shared/@types";
-import { SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
+import { EMOTION, SERVER_EVENT_NAME, SPELL_NAME } from "../../../shared/constants";
 import { DEFAULT_MAX_HP, DEFAULT_TIME_PER_TURN } from "../../../shared/config";
 import { generateUniqueId } from "../../../shared/utils";
 import { waitFor } from "../../utilities";
@@ -68,16 +68,16 @@ class Game {
   }
 
   private async distributeSpell(spell: SPELL_NAME) {
-    if (this.chargePoint > 0)
-      await SpellFactory.create(
-        spell,
-        this.chargePoint,
-        this.players.filter((p) => !p.isEliminated),
-        this.getCurrentPlayer()
-      );
+    await SpellFactory.create(
+      spell,
+      this.chargePoint,
+      this.players.filter((p) => !p.isEliminated),
+      this.getCurrentPlayer()
+    );
   }
 
   private async newTurn() {
+    clearTimeout(this.timeout);
     this.nextPlayer();
     await this.updatePlayers();
 
@@ -179,6 +179,10 @@ class Game {
       if (this.shouldEnd()) this.room.back(client);
       else this.room.remove(client);
     else client.changeState(new IdleState(client));
+  }
+
+  public expressEmotion(player: Player, emotion: EMOTION): void {
+    this.broadcast(SERVER_EVENT_NAME.EmotionExpressed, player.id, emotion);
   }
 
   public broadcast(event: SERVER_EVENT_NAME, ...data: Parameters<EventsFromServer[SERVER_EVENT_NAME]>): void {

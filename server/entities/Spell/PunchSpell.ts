@@ -5,11 +5,11 @@ import Spell from ".";
 class PunchSpell extends Spell {
   constructor(chargePoint: number, target: Player, caster: Player) {
     super(SPELL_NAME.Punch, target, caster);
-    this.power = chargePoint;
+    this.strength = chargePoint;
   }
 
   public async trigger(): Promise<void> {
-    this.target.changeHitPoint(-this.power);
+    this.target.changeHitPoint(-this.strength);
   }
 }
 

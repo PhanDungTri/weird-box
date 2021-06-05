@@ -4,3 +4,4 @@ export * from "./room";
 export * from "./sound";
 export * from "./audioSettings";
 export * from "./language";
+export * from "./version";

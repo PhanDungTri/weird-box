@@ -23,7 +23,7 @@ const OverchargedTutorial = (): JSX.Element => {
         ]}
       >
         <Sprite src={BoxOfCardsSprite} row={0} size={[59, 59]} steps={1} />
-        <Sprite src={BoxOfCardsSprite} row={1} size={[59, 59]} steps={11} loop />
+        <Sprite src={BoxOfCardsSprite} row={1} size={[59, 59]} steps={11} loop={-1} />
       </div>
       <ReactMarkdown css={{ padding: "8px" }}>{language.overchargedTutorial}</ReactMarkdown>
     </div>

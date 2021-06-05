@@ -9,7 +9,7 @@ import IconSprites from "url:../../assets/sprites/icons.png";
 import LoadingSpriteSheet from "url:../../assets/sprites/loading_animation.png";
 import SpellAnimations from "url:../../assets/sprites/spell_animations.png";
 import Logo from "url:../../assets/sprites/logo.png";
-import { languageAtom, musicAtom, routeAtom, soundAtom } from "../../atoms";
+import { chosenLanguageAtom, languageAtom, musicAtom, routeAtom, soundAtom } from "../../atoms";
 import Loading from "../../components/Loading";
 import Page from "../../components/Page";
 import ProgressBar from "../../components/ProgressBar";
@@ -23,6 +23,8 @@ const Initiator = (): JSX.Element => {
   const [, setSound] = useAtom(soundAtom);
   const [, setMusic] = useAtom(musicAtom);
   const [language] = useAtom(languageAtom);
+  const [, setChosenLanguage] = useAtom(chosenLanguageAtom);
+  const [isFirstLoading, firstLoad] = useState(true);
   const [message, setMessage] = useState(language.loadSprite);
   const [loadedAssetCounter, setLoadedAssetCounter] = useState(0);
   const spriteSources = useRef<string[]>([
@@ -36,6 +38,18 @@ const Initiator = (): JSX.Element => {
   const total = useRef(spriteSources.current.length + 2);
 
   useEffect(() => {
+    fetch("https://extreme-ip-lookup.com/json/")
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.countryCode === "VN") setChosenLanguage("vi");
+        else setChosenLanguage("en");
+      })
+      .catch(() => setChosenLanguage("en"))
+      .finally(() => firstLoad(false));
+  }, []);
+
+  useEffect(() => {
+    if (isFirstLoading) return;
     if (loadedAssetCounter < spriteSources.current.length) {
       const img = new Image();
       img.src = spriteSources.current[loadedAssetCounter];
@@ -85,7 +99,7 @@ const Initiator = (): JSX.Element => {
           autoplay: true,
           loop: true,
           volume: 0.1,
-          onplay: () => setLoadedAssetCounter(loadedAssetCounter + 1),
+          onload: () => setLoadedAssetCounter(loadedAssetCounter + 1),
         })
       );
     } else if (loadedAssetCounter === total.current) {
@@ -93,7 +107,7 @@ const Initiator = (): JSX.Element => {
       socket.connect();
       socket.on("connect", () => setTimeout(() => setRoute(ROUTE.Hub), 1000));
     }
-  }, [loadedAssetCounter]);
+  }, [loadedAssetCounter, isFirstLoading]);
 
   return (
     <Page>

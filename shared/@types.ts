@@ -1,8 +1,30 @@
 import { Server, Socket } from "socket.io";
-import { CLIENT_EVENT_NAME, PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "./constants";
+import { CLIENT_EVENT_NAME, EMOTION, PASSIVE_ACTION, SERVER_EVENT_NAME, SPELL_NAME } from "./constants";
 
 export type GameMatchingStatus = "Finding" | "Found" | "Canceled";
 export type StyleVariation = "Primary" | "Danger" | "Safe" | "Info" | "Warning" | "Normal";
+
+export type PassiveActionInfo = {
+  id: string;
+  target: string;
+  action: PASSIVE_ACTION;
+  message: string;
+  attacker: {
+    name: string;
+    spell: SPELL_NAME;
+    strength: number;
+  };
+  defender: {
+    name: string;
+    spell: SPELL_NAME;
+    strength: number;
+  };
+};
+
+export type PurifyInfo = {
+  target: string;
+  remove: string[];
+};
 
 export type ClientInfo = {
   id: string;
@@ -22,7 +44,7 @@ export type CardInfo = {
 export type SpellInfo = {
   id: string;
   name: SPELL_NAME;
-  power: number;
+  strength: number;
   duration: number;
   target: string;
 };
@@ -54,12 +76,14 @@ export interface EventsFromServer {
   [SERVER_EVENT_NAME.GameOver]: (id: string) => void;
   [SERVER_EVENT_NAME.NewTurn]: (id: string, deck: number) => void;
   [SERVER_EVENT_NAME.TakeSpell]: (spell: SpellInfo) => void;
-  [SERVER_EVENT_NAME.ActivatePassive]: (passive: PassiveAction) => void;
+  [SERVER_EVENT_NAME.ActivatePassive]: (passive: PassiveActionInfo) => void;
   [SERVER_EVENT_NAME.FriendJoined]: (friend: ClientInfo) => void;
   [SERVER_EVENT_NAME.FriendLeft]: (id: string, owner: string) => void;
   [SERVER_EVENT_NAME.GetRoomInfo]: (info: RoomInfo) => void;
   [SERVER_EVENT_NAME.LeftRoom]: () => void;
   [SERVER_EVENT_NAME.JoinedRoom]: () => void;
+  [SERVER_EVENT_NAME.Purify]: (info: PurifyInfo) => void;
+  [SERVER_EVENT_NAME.EmotionExpressed]: (sender: string, emotion: EMOTION) => void;
 }
 
 export interface EventsFromClient {
@@ -73,6 +97,7 @@ export interface EventsFromClient {
   [CLIENT_EVENT_NAME.LeaveRoom]: () => void;
   [CLIENT_EVENT_NAME.CancelFindGame]: () => void;
   [CLIENT_EVENT_NAME.Kick]: (id: string) => void;
+  [CLIENT_EVENT_NAME.ExpressEmotion]: (emotion: EMOTION) => void;
 }
 
 export type ClientSocket = Socket<EventsFromClient, EventsFromServer>;

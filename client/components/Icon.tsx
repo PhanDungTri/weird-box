@@ -1,5 +1,5 @@
-import { SPELL_NAME } from "../../shared/constants";
 import IconSprites from "url:../assets/sprites/icons.png";
+import { SPELL_NAME } from "../../shared/constants";
 import { SpriteProps } from "../types";
 import Sprite from "./Sprite";
 
@@ -19,11 +19,13 @@ type IconName =
   | "vnFlag"
   | "usFlag"
   | "info"
+  | "bubble_text"
+  | "smiley"
   | SPELL_NAME;
 
 const SIZE = [24, 24] as [number, number];
 
-type IconProps = Omit<SpriteProps, "src" | "size"> & {
+type IconProps = Omit<SpriteProps, "src" | "size" | "row"> & {
   name: IconName;
 };
 
@@ -48,10 +50,16 @@ const SPRITE_POS: IconName[] = [
   "vnFlag",
   "usFlag",
   "info",
+  "bubble_text",
+  "smiley",
 ];
 
-const Icon = ({ name, ...props }: IconProps): JSX.Element => {
-  return <Sprite src={IconSprites} size={SIZE} {...props} row={SPRITE_POS.indexOf(name)} />;
+const Icon = ({ name, children, ...props }: IconProps): JSX.Element => {
+  return (
+    <Sprite src={IconSprites} size={SIZE} {...props} row={SPRITE_POS.indexOf(name)}>
+      {children}
+    </Sprite>
+  );
 };
 
 export default Icon;

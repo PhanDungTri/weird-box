@@ -4,6 +4,7 @@ import BoxOfCardSprites from "url:../../assets/sprites/box_of_cards.png";
 import ContentFrameSprite from "url:../../assets/sprites/card_content_frame.png";
 import IconSprites from "url:../../assets/sprites/icons.png";
 import SpellAnimations from "url:../../assets/sprites/spell_animations.png";
+import EmotionSprites from "url:../../assets/sprites/emotions.png";
 import withSpriteLoading from "../../HOCs/withSpriteLoading";
 import socket from "../../services/socket";
 import GameBoard from "./GameBoard";
@@ -27,4 +28,10 @@ const Game = (): JSX.Element => {
   );
 };
 
-export default withSpriteLoading(Game, [BoxOfCardSprites, ContentFrameSprite, IconSprites, SpellAnimations]);
+export default withSpriteLoading(Game, [
+  BoxOfCardSprites,
+  ContentFrameSprite,
+  IconSprites,
+  SpellAnimations,
+  EmotionSprites,
+]);

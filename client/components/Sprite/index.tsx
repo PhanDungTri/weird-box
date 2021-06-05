@@ -11,8 +11,9 @@ const Sprite = ({
   row = 0,
   fps = 12,
   steps = 1,
-  loop = false,
+  loop = 1,
   stop = false,
+  children,
   ...props
 }: SpriteProps): JSX.Element => {
   const [naturalWidth, setNaturalWidth] = useState(0);
@@ -47,11 +48,13 @@ const Sprite = ({
         !stop &&
           css`
             animation: ${spriteAnimation(width * scale * steps)} ${steps / fps}s steps(${steps})
-              ${loop ? "infinite" : ""};
+              ${loop === -1 ? "infinite" : loop > 0 ? loop : 0};
           `,
       ]}
       {...props}
-    />
+    >
+      {children}
+    </StyledSprite>
   );
 };
 

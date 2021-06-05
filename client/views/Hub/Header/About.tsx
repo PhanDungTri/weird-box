@@ -1,10 +1,10 @@
 import { useAtom } from "jotai";
 import ReactMarkdown from "react-markdown";
-import { languageAtom } from "../../../../atoms";
-import Dialog from "../../../../components/Dialog";
-import Icon from "../../../../components/Icon";
-import useShowDialog from "../../../../hooks/useShowDialog";
-import { clickableIconStyle } from "../../../../styles";
+import { languageAtom } from "../../../atoms";
+import Dialog from "../../../components/Dialog";
+import Icon from "../../../components/Icon";
+import useShowDialog from "../../../hooks/useShowDialog";
+import { clickableIconStyle } from "../../../styles";
 
 const About = (): JSX.Element => {
   const [shouldDialogShow, dialogAction] = useShowDialog();

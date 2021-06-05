@@ -133,6 +133,15 @@ const vi: Record<string, string> = {
   notiNameChanged: "Đã đổi tên!",
   notiInTurn: "Đến lượt bạn rồi!",
   notiFailMatch: "Ai đó đã không chấp nhận trận đấu!",
+  shieldBlockMessage: "bị cản bởi",
+  mirrorReflectMessage: "bị phản đòn bởi",
+  shieldPiercedMessage: "bị giảm 1 sát thương nhưng không thể bị cản bởi",
+  mirrorPiercedMessage: "không thể bị cản bởi",
+  of: "của",
+  bonk: "bonk!",
+  nervous: "Lắng lo",
+  laugh: "Cười",
+  angry: "Tứk",
 };
 
 export default vi;

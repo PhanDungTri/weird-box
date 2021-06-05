@@ -6,7 +6,7 @@ import Player from "../Player";
 const debuffs = [SPELL_NAME.Poison, SPELL_NAME.Punch];
 
 abstract class Spell {
-  protected power = 0;
+  protected strength = 0;
   public readonly id: string;
 
   constructor(
@@ -20,8 +20,8 @@ abstract class Spell {
 
   public abstract trigger(): Promise<void>;
 
-  public getPower(): number {
-    return this.power;
+  public getStrength(): number {
+    return this.strength;
   }
 
   public getDuration(): number {
@@ -40,6 +40,10 @@ abstract class Spell {
     this.caster = caster;
   }
 
+  public setStrength(strength: number): void {
+    this.strength = strength;
+  }
+
   public isDebuff(): boolean {
     return debuffs.includes(this.name);
   }
@@ -48,7 +52,7 @@ abstract class Spell {
     return {
       id: this.id,
       name: this.name,
-      power: this.power,
+      strength: this.strength,
       duration: this.duration,
       target: this.target.id,
     };

@@ -6,7 +6,7 @@ import Icon from "../../../../components/Icon";
 import { ROUTE } from "../../../../constants";
 import useShowDialog from "../../../../hooks/useShowDialog";
 import socket from "../../../../services/socket";
-import { leaveButtonStyle } from "./styles";
+import { iconButtonStyle } from "./styles";
 
 const LeaveButton = (): JSX.Element => {
   const [, setRoute] = useAtom(routeAtom);
@@ -20,7 +20,7 @@ const LeaveButton = (): JSX.Element => {
 
   return (
     <>
-      <Icon name="exit" onClick={dialogAction.reveal} css={leaveButtonStyle} />
+      <Icon name="exit" onClick={dialogAction.reveal} css={iconButtonStyle} />
       <Dialog
         variation={"Danger"}
         title={language.confirmation}
