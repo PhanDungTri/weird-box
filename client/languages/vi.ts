@@ -10,61 +10,12 @@ const vi: Record<string, string> = {
   noEffectDescription: "Không có hiệu ứng.",
   punchDescription: "Lập tức gây sát thương lên toàn bộ đối thủ.",
   poisonDescription: "Gây sát thương cho toàn bộ đối thủ trong 3 lượt. Có cộng dồn.",
-  healDescription: "Hồi HP ngay lập tức",
+  healDescription: "Hồi HP ngay lập tức và huỷ toàn bộ các hiệu ứng bất lợi.",
   shieldDescription:
-    "Cản một phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này. Nếu một phép vượt qua được phép Khiên, thì phép Khiên tiếp theo sẽ được kích hoạt, nếu có. Có cộng dồn",
+    "Cản một phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này. Nếu một phép vượt qua được phép Khiên, **phép đó sẽ bị giảm 1 sức mạnh** và phép Khiên tiếp theo sẽ được kích hoạt, nếu có. Có cộng dồn",
   mirrorDescription:
     "Cản và phản đòn phép từ đối thủ có sức mạnh bằng hoặc nhỏ hơn phép này. Nếu một phép vượt qua được phép Gương, thì phép Gương tiếp theo sẽ được kích hoạt, nếu có. Có cộng dồn",
-  cardTutorialHeader: "Thẻ bài",
-  chargerTutorialHeader: "Hộp kỳ quái - Bộ sạc",
-  conclusionTutorialHeader: "Tổng kết",
-  hpTutorialHeader: "Hit Point",
-  overchargedTutorialHeader: "Hộp kỳ quái - Quá tải",
-  spellTutorialHeader: "Phép",
   spellDictionary: "Từ điển phép",
-  cardTutorial: `
-  Mỗi lượt, người chơi **bắt buộc phải** đánh một thẻ bài.
-  
-  Có 3 thuộc tính được thể hiện trên thẻ bài:
-  
-  - Trên đầu thẻ bài là chỉ số **năng lượng**.
-  - Ở giữa là **phép**, phép này sẽ được thi triển khi thẻ bài được đánh ra.
-  - Và ở cuối thẻ bài là **hành động**, chỉ số **năng lượng** sẽ được cộng vào hộp kỳ quái nếu **hành động** là "+" hoặc sẽ bị tiêu thụ nếu **hành động** là "-".
-  `,
-  chargerTutorial: `
-  Khi một thẻ bài được đánh ra, giá trị của bộ sạc thẻ thay đổi **dựa trên năng lượng và hành động của thẻ bài đó**.
-  
-  Bộ sạc có **giá trị tối đa là 10 và giá trị tối thiểu là 0**. Nếu giá trị sạc vượt quá giới hạn, chiếc hộp sẽ bị **quá tải**.
-  `,
-  conclusionTutorial: `
-  Đánh thẻ bài ở mỗi lượt.
-  
-  Đừng làm giá trị của bộ sạc thấp hơn 0 hay vượt quá 10.
-  
-  Tồn tại và đánh bại mọi đối thủ bằng cách sử dụng các phép.
-  
-  GLHF - Vui vẻ không quạu.
-  `,
-  hpTutorial: `
-  Mỗi người chơi chỉ có một nhiệm vụ đơn giản: **GIẢM TOÀN BỘ HIT POINT CỦA ĐỐI THỦ XUỐNG CÒN 0**.
-  
-  Hit point có thể bị thay đổi khi người chơi dính phép hay bị phạt.
-  `,
-  overchargedTutorial: `
-  Sau đây là một vài sự kiện sẽ xảy ra khi chiếc hộp bị quá tải:
-  
-  - Bộ sạc đặt lại giá trị **về còn 0**.
-  - Người chơi gây ra sự cố này sẽ phải **bị phạt**, nhận 10 HP sát thương.
-  - Phép của thẻ bài được đánh ra trong lượt này **sẽ không có hiệu ứng gì**.
-  `,
-  spellTutorial: `
-  Ngoài việc thay đổi giá trị của bộ sạc, có vài thẻ bài còn có thêm một khả năng đặc biệt khác, gọi là **phép**.
-  
-  Có rất nhiều phép với các hiệu ứng khác nhau, nhưng chúng đầu có chung một cơ chế như sau:
-  
-  - Phép có chỉ số **sức mạnh**, giá trị của nó dựa trên **giá trị hiện tại của bộ sạc** *(không phải năng lượng của thẻ bài)*.
-  - Phép với **sức mạnh bằng 0 sẽ không có bất kỳ hiệu ứng nào**.
-  `,
   about: "Thông tin",
   aboutDescription: `
   Lập trình & Hình ảnh:
@@ -142,6 +93,15 @@ const vi: Record<string, string> = {
   nervous: "Lắng lo",
   laugh: "Cười",
   angry: "Tứk",
+  gameplayStarting: `Mỗi người chơi trong trận đấu sẽ bắt đầu với **5 thẻ bài và 100 HP**. Ở đầu mỗi lượt chơi, bạn sẽ nhận thêm một thẻ nữa.`,
+  gameplayCard: `Đây là **thẻ bài**. Mỗi lượt, bạn **bắt buộc phải đánh ra một thẻ** từ trên tay, hoặc bạn sẽ bị loại khi hết thời gian.\n
+  Khi một thẻ bài được đánh ra, con số nằm ở phía trên cùng của thẻ bài, gọi là **năng lượng**, sẽ được sạc vào hoặc tiêu thụ từ bộ sạc của chiếc hộp, dựa vào ký hiệu ở phía dưới cùng của thẻ bài, gọi là **hành động**. **+** là sạc và **-** là tiêu thụ.\n
+  Ví dụ với thẻ bài bên trên, nó sẽ sạc 3 điểm vào chiếc hộp.`,
+  gameplayBox: `Chiếc hộp tích được **tối đa 10 điểm**. Nếu nó bị sạc quá nhiều hay tiêu thụ quá nhiều, nó sẽ bị quá tải.\n
+  Khi chiếc hộp bị quá tải, nó mất toàn bộ số điểm và gây 10 sát thương lên người chơi gây ra sự cố này.`,
+  gameplaySpell: `Biểu tượng ở giữa thẻ bài là khả năng đặc biệt của nó, gọi là **phép**. Một phép được thi triển khi thẻ bài được đánh ra và nó sẽ sử dụng số điểm hiện tại của chiếc hộp làm **sức mạnh**.\n
+  Ví dụ chiếc hộp có 5 điểm thì khi thẻ bài bên trên được đánh ra, phép Độc sẽ có sức mạnh là 5 và chiếc hộp được sạc lên 8 điểm.\n
+  Phép với sức mạnh bằng 0 hay phép của thẻ bài gây ra quá tải sẽ không có hiệu ứng gì hết.`,
 };
 
 export default vi;

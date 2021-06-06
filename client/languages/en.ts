@@ -9,62 +9,13 @@ const en: Record<string, string> = {
   failConnect: "Failed to contact with server",
   noEffectDescription: "No effect.",
   punchDescription: "Instantly inflict damage to all opponents.",
-  poisonDescription: "Make all opponents to suffer damage in 3 turns. Can be stacked.",
-  healDescription: "Instantly recover HP.",
+  poisonDescription: `Make all opponents to suffer damage in 3 turns. Can be stacked.`,
+  healDescription: "Instantly recover HP and remove all debuffs.",
   shieldDescription:
-    "Block an incoming spell that has strength equal or less than this. When a spell pierces through a Shield spell, the next Shield spell will be activated, if available. Can be stacked.",
+    "Block an incoming spell that has strength equal or less than this. When a spell pierces through a Shield spell, **that spell strength will be reduced by 1**, and the next Shield spell will be activated, if available. Can be stacked.",
   mirrorDescription:
     "Block and recast an incoming spell that has strength equal or less than this to the caster. When a spell pierces through a Mirror spell, the next Mirror spell will be activated, if available. Can be stacked.",
-  cardTutorialHeader: "Card",
-  chargerTutorialHeader: "Weird Box - Charger",
-  conclusionTutorialHeader: "Conclusion",
-  hpTutorialHeader: "Hit Point",
-  overchargedTutorialHeader: "Weird Box - Overcharged",
-  spellTutorialHeader: "Spell",
   spellDictionary: "Spell Dictionary",
-  cardTutorial: `
-  In each turn, the player **have to** play one card.
-  
-  There are 3 properties represented on the card:
-  
-  - On the top of the card is its **power**.
-  - In the middle is the **spell** which is casted when the card is played.
-  - And at the bottom is the **action**, the **power** will be added to the Weird Box if the **action** is "+" or it will be taken away from Weird Box if the **action** is "-".
-  `,
-  chargerTutorial: `
-  When a card is played, the charger will change its value **based on that card power and action**.
-  
-  The charger has **maximum value is 10 and minimum value is 0**. If the charged value exceeds the limit, the box will be **overcharged**.
-  `,
-  conclusionTutorial: `
-  Play a card in each turn.
-  
-  Don't  make the charger drop below 0 or raise above 10.
-  
-  Survive and defeat all opponents by using spells.
-  
-  GLHF.
-  `,
-  hpTutorial: `
-  Every player has only one simple objective: **REDUCE ALL OPPONENTS HIT POINT TO ZERO**.
-  
-  Hit point can be changed when players take a spell or penalty.
-  `,
-  overchargedTutorial: `
-  These are the things that will happen when the box is overcharged:
-  
-  - The charger will reset its value **back to 0**.
-  - The player who makes this mistake will **pay a penalty**, which costs 10 HP.
-  - Any spell of the card played in this turn has **no effect**.
-  `,
-  spellTutorial: `
-  Beside changing the value of charger, some cards have one more special ability, called **spell**.
-  
-  There are many different spells with different effects, but they share the same following mechanic:
-  
-  - Spell has the **strength** attribute, which has value based on **the current value of the charger** *(not the power of the card)*.
-  - Spell with **0 strength has no effect**.
-  `,
   about: "About",
   aboutDescription: `
   Code & Art:
@@ -142,6 +93,15 @@ const en: Record<string, string> = {
   nervous: "nervous",
   laugh: "laugh",
   angry: "angry",
+  gameplayStarting: `Everyone in the game will start with **5 cards and 100 HP**. At the beginning of each turn, you will receive one more card.`,
+  gameplayCard: `This is the **card**. Every turn, you **have to play one card** from your hand, or you will be eliminated when the timer runs out.\n
+  When a card is played, a number on the top of that card, called **power**, will be charged to or consumed from the charger of the box, based on what symbol at the bottom that a card has, called **action**. **+** for charging and **-** for consuming.\n
+  Example with the card above, it will add 3 points to the box.`,
+  gameplayBox: `The box can hold **maximum 10 points**. If it's charged too many or consumed too many, it will be overcharged.\n
+  When the box is overcharged, it loses all of its points and deal 10 damages to the player who caused this incident.`,
+  gameplaySpell: `The icon in the middle of a card is its special ability, called **spell**. A spell is casted when the card is played and it will use current points of the box as its **strength**.\n
+  Example the box has 5 points then when the above card is played, the Poison spell will have 5 strength and the box will charged to 8 points.\n
+  Spell with 0 strength or spell of the overcharging card will have no effect.`,
 };
 
 export default en;

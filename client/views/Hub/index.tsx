@@ -20,7 +20,6 @@ import Header from "./Header";
 import Menu from "./Menu";
 import PlayerNameInput from "./PlayerNameInput";
 import Room from "./Room";
-import WhatsNew from "./WhatsNew";
 
 const Hub = (): JSX.Element => {
   const [sound] = useAtom(soundAtom);
@@ -61,7 +60,6 @@ const Hub = (): JSX.Element => {
         )}
         <GameConfirmDialog />
       </CenterizedGrid>
-      <WhatsNew />
     </Page>
   );
 };

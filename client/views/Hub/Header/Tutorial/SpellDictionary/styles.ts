@@ -4,4 +4,5 @@ import Grid from "../../../../../components/Grid";
 export const SpellDescription = styled(Grid)`
   grid-template-columns: 48px auto;
   align-items: center;
+  gap: 8px;
 `;

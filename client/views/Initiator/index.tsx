@@ -9,7 +9,7 @@ import IconSprites from "url:../../assets/sprites/icons.png";
 import LoadingSpriteSheet from "url:../../assets/sprites/loading_animation.png";
 import SpellAnimations from "url:../../assets/sprites/spell_animations.png";
 import Logo from "url:../../assets/sprites/logo.png";
-import { chosenLanguageAtom, languageAtom, musicAtom, routeAtom, soundAtom } from "../../atoms";
+import { chosenLanguageAtom, languageAtom, musicAtom, routeAtom, soundAtom, versionAtom } from "../../atoms";
 import Loading from "../../components/Loading";
 import Page from "../../components/Page";
 import ProgressBar from "../../components/ProgressBar";
@@ -17,14 +17,19 @@ import { ROUTE } from "../../constants";
 import socket from "../../services/socket";
 import { centerizeStyle } from "../../styles";
 import { LoadingProgress } from "./styles";
+import WhatsNew from "./WhatsNew";
+import { useLocalStorage } from "../../hooks";
 
 const Initiator = (): JSX.Element => {
+  const [clientVersion] = useLocalStorage("version", "");
+  const [version] = useAtom(versionAtom);
   const [, setRoute] = useAtom(routeAtom);
   const [, setSound] = useAtom(soundAtom);
   const [, setMusic] = useAtom(musicAtom);
   const [language] = useAtom(languageAtom);
   const [, setChosenLanguage] = useAtom(chosenLanguageAtom);
   const [isFirstLoading, firstLoad] = useState(true);
+  const [shouldConnect, connect] = useState(false);
   const [message, setMessage] = useState(language.loadSprite);
   const [loadedAssetCounter, setLoadedAssetCounter] = useState(0);
   const spriteSources = useRef<string[]>([
@@ -36,6 +41,10 @@ const Initiator = (): JSX.Element => {
     Logo,
   ]);
   const total = useRef(spriteSources.current.length + 2);
+
+  useEffect(() => {
+    if (shouldConnect && clientVersion === version) setTimeout(() => setRoute(ROUTE.Hub), 1000);
+  }, [shouldConnect]);
 
   useEffect(() => {
     fetch("https://extreme-ip-lookup.com/json/")
@@ -105,7 +114,7 @@ const Initiator = (): JSX.Element => {
     } else if (loadedAssetCounter === total.current) {
       setMessage(language.connectServer);
       socket.connect();
-      socket.on("connect", () => setTimeout(() => setRoute(ROUTE.Hub), 1000));
+      socket.on("connect", () => connect(true));
     }
   }, [loadedAssetCounter, isFirstLoading]);
 
@@ -120,6 +129,7 @@ const Initiator = (): JSX.Element => {
           suffix="%"
         />
       </LoadingProgress>
+      {shouldConnect && clientVersion !== version && <WhatsNew />}
     </Page>
   );
 };

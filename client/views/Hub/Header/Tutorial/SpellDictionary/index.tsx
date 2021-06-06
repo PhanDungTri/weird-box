@@ -12,7 +12,7 @@ const SpellDictionary = (): JSX.Element => {
   return (
     <div>
       <H1 css={{ textAlign: "center" }}>{language.spellDictionary}</H1>
-      <Grid css={{ padding: "8px" }}>
+      <Grid>
         <SpellDescription>
           <div>
             <Icon css={{ position: "relative" }} name="charge" />
