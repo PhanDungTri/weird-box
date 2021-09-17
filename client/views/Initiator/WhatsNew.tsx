@@ -10,12 +10,12 @@ const content = {
   en: {
     in: "in",
     title: "What's new",
-    text: `### Change:\n- Tutorial now will show up on the first time visit.\n- Re-write tutorial.`,
+    text: `### Change:\n- Poison Spell: reduce effect duration from 3 turns to 2 turns.`,
   },
   vi: {
     in: "trong",
     title: "Có gì mới",
-    text: `### Thay đổi:\n- Hướng dẫn cách chơi sẽ tự động mở cho lần đầu ghé thăm trò chơi.\n- Viết lại hướng dẫn.`,
+    text: `### Thay đổi:\n- Phép Độc: giảm thời gian hiệu lực của hiệu ứng từ 3 lượt xuống còn 2 lượt.`,
   },
 };
 
