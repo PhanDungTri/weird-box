@@ -39,7 +39,7 @@
     "@parcel/transformer-image": "^2.0.0-nightly.2325",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "dotenv": "^8.6.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "howler": "^2.2.1",
     "immer": "^9.0.1",
     "jotai": "^0.16.8",
